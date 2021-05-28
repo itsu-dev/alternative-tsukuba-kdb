@@ -345,7 +345,7 @@ input[type="checkbox"].bookmark  {
 	font-weight: bold;
 	position: relative;
 	vertical-align: middle;
-	margin-bottom: 0.5em;
+	margin-bottom: 0.2em;
 }
 
 input[type="checkbox"].bookmark:before {
