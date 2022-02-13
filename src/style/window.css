@@ -25,13 +25,33 @@
   user-select: none;
 }
 
-.window .body {
-  cursor: initial;
+.window .controls .closing {
+  border: solid 1px hsl(360, 100%, 70%);
+  background: radial-gradient(
+    circle,
+    hsl(360, 100%, 65%) 0%,
+    hsl(360, 100%, 70%) 70%,
+    hsl(360, 100%, 90%) 100%
+  );
 }
 
 .window .controls li {
   float: left;
   margin-left: 0.1rem;
+}
+
+.window .controls li.title {
+  font-size: 0.8rem;
+  text-align: center;
+  display: grid;
+  width: calc(100% - 2rem);
+  word-break: keep-all;
+  white-space: pre;
+  text-overflow: ellipsis;
+}
+
+.window .body {
+  cursor: initial;
 }
 
 iframe {
