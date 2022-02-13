@@ -1,4 +1,4 @@
 import './main.ts';
 import './window/index.ts';
-import './index.scss';
-import './bookmark.scss';
+import './style/index.scss';
+import './style/bookmark.scss';
