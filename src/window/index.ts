@@ -26,7 +26,7 @@ class DraggableWindow extends HTMLElement {
     controls.className = 'controls';
 
     const closing = document.createElement('li');
-    closing.style.background = 'radial-gradient(circle, rgb(255,0,0) 0%, rgb(255,231,192) 100%)';
+    closing.className = 'closing';
 
     const title = document.createElement('li');
     title.className = 'title';
@@ -86,6 +86,9 @@ class DraggableWindow extends HTMLElement {
     win.draggable = true;
     const pointerUpHandler = this.dragEnd.bind(this);
     const pointerMoveHandler = this.drag.bind(this);
+
+    win.style.top = '10px';
+    win.style.left = '10px';
 
     win.addEventListener('dragstart', this.dragStart.bind(this));
     window.addEventListener('pointerup', pointerUpHandler);
