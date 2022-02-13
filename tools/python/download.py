@@ -2,6 +2,7 @@
 """
 from typing import Optional, TypedDict
 
+import argparse
 import requests
 
 
@@ -127,12 +128,15 @@ def main() -> None:
     import datetime
     import os
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("output_dir", help="the output directory")
+    args = parser.parse_args()
+
     date = datetime.datetime.now()
-    csv_dir = "../csv"
-    filename = "%s/kdb-%04d%02d%02d.csv" % (csv_dir,
+    filename = "%s/kdb-%04d%02d%02d.csv" % (args.output_dir,
                                             date.year, date.month, date.day)
 
-    os.makedirs(csv_dir, exist_ok=True)
+    os.makedirs(args.output_dir, exist_ok=True)
     KdbDownloader().download(filename)
 
 
