@@ -193,6 +193,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("csv", help="an input csv file")
     parser.add_argument(
         "types", help="a text file of the relation between requirement classification and subject codes")
+    parser.add_argument("output_dir", help="the output directory of kdb.json and code-types.json")
     parser.add_argument("-c", "--contains_graduate", action="store_true",
                         help="contains subjects for graduate school")
 
@@ -207,10 +208,10 @@ def main() -> None:
     k = KdbCSVtoJSON(csvpath, typespath, contains_graduate)
 
     # output
-    with open("../kdb.json", "w", encoding="utf-8") as fp:
+    with open(f"{args.output_dir}/kdb.json", "w", encoding="utf-8") as fp:
         json.dump(k.get_output(), fp, indent="\t", ensure_ascii=False)
 
-    with open("../code-types.json", "w", encoding="utf-8") as fp:
+    with open(f"{args.output_dir}/code-types.json", "w", encoding="utf-8") as fp:
         json.dump(k.get_types(), fp, indent="\t", ensure_ascii=False)
 
     k.print_empty_typed_subjects()
