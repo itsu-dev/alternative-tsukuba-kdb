@@ -1,11 +1,15 @@
 import desktopStyle from '../style/window_desktop.css';
 import mobileStyle from '../style/window_mobile.css';
 
+const positionStorageKey = 'draggable-window-position';
+const minSize = 100;
+
 class DraggableWindow extends HTMLElement {
   private start: [number, number] | null;
   private previousWindowPosition: [number, number] | null;
   private windowElement: HTMLDivElement | null;
   private willDisposed: [string, Function][] = [];
+  private position = { x: 10, y: 10, width: 300, height: 300 };
 
   constructor() {
     super();
@@ -87,8 +91,31 @@ class DraggableWindow extends HTMLElement {
     const pointerUpHandler = this.dragEnd.bind(this);
     const pointerMoveHandler = this.drag.bind(this);
 
-    win.style.top = '10px';
-    win.style.left = '10px';
+    const positionItem = localStorage.getItem(positionStorageKey);
+    console.log(positionItem);
+    if (positionItem) {
+      const parsed = JSON.parse(positionItem);
+      if ('x' in parsed && 'y' in parsed && 'width' in parsed && 'height' in parsed) {
+        this.position = parsed;
+        this.position.x = Math.max(this.position.x, 0);
+        this.position.y = Math.max(this.position.y, 0);
+        this.position.width = Math.max(this.position.width, minSize);
+        this.position.height = Math.max(this.position.height, minSize);
+      }
+    }
+    win.style.left = this.position.x + 'px';
+    win.style.top = this.position.y + 'px';
+    win.style.width = this.position.width + 'px';
+    win.style.height = this.position.height + 'px';
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (entries[0].contentRect.width > 10 && entries[0].contentRect.height > 10) {
+        this.position.width = entries[0].contentRect.width;
+        this.position.height = entries[0].contentRect.height;
+        localStorage.setItem(positionStorageKey, JSON.stringify(this.position));
+      }
+    });
+    resizeObserver.observe(win);
 
     win.addEventListener('dragstart', this.dragStart.bind(this));
     window.addEventListener('pointerup', pointerUpHandler);
@@ -134,9 +161,13 @@ class DraggableWindow extends HTMLElement {
       return;
     }
     const delta = [evt.pageX - this.start![0], evt.pageY - this.start![1]];
-    this.windowElement!.style.left = `${delta[0] + this.previousWindowPosition![0]}px`;
-    this.windowElement!.style.top = `${delta[1] + this.previousWindowPosition![1]}px`;
+    this.position.x = delta[0] + this.previousWindowPosition![0];
+    this.position.y = delta[1] + this.previousWindowPosition![1];
+    this.windowElement!.style.left = `${this.position.x}px`;
+    this.windowElement!.style.top = `${this.position.y}px`;
     this.start = null;
+
+    localStorage.setItem(positionStorageKey, JSON.stringify(this.position));
   }
 
   /**
