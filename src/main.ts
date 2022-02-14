@@ -3,7 +3,7 @@ import * as timetable from './timetable';
 import * as bookmark from './bookmark';
 import codeTypes from './code-types.json';
 import { matchesSearchOptions, SearchOptions } from './subject/search';
-import { RenderSubjectAsTableRow } from './subject/render';
+import { renderSubjectAsTableRow, renderSubjectForMobile } from './subject/render';
 
 let dom: {
   form: HTMLFormElement;
@@ -31,6 +31,7 @@ let dom: {
   bookmarkInfo: HTMLDivElement;
   table: HTMLTableElement;
   tbody: HTMLElement;
+  bodyMobile: HTMLDivElement;
 };
 
 let isUnder1100px: boolean;
@@ -56,12 +57,18 @@ const updateTable = (options: SearchOptions, index: number, displayedIndex: numb
       index++;
       continue;
     }
-    const tr = RenderSubjectAsTableRow(subject);
-    dom.tbody.appendChild(tr);
 
-    // Make bookmarked buttons active
-    (document.getElementById('bookmark-' + subject.code) as HTMLInputElement).checked =
-      bookmarks.includes(subject.code);
+    if (isUnder1100px) {
+      const div = renderSubjectForMobile(subject, index == 0);
+      dom.bodyMobile.appendChild(div);
+    } else {
+      const tr = renderSubjectAsTableRow(subject);
+      dom.tbody.appendChild(tr);
+
+      // Make bookmarked buttons active
+      (document.getElementById('bookmark-' + subject.code) as HTMLInputElement).checked =
+        bookmarks.includes(subject.code);
+    }
 
     timeout = setTimeout(() => updateTable(options, index + 1, ++displayedIndex), 0);
     break;
@@ -73,6 +80,7 @@ const search = (e: Event | null) => {
     e.stopPropagation();
   }
   dom.tbody.innerHTML = '';
+  dom.bodyMobile.innerHTML = '';
 
   let season: string | null = null;
   let module: string | null = null;
@@ -145,6 +153,7 @@ window.onload = function () {
     bookmarkInfo: document.getElementById('bookmark-info') as HTMLDivElement,
     table: document.getElementById('body') as HTMLTableElement,
     tbody: document.querySelector('table#body tbody') as HTMLElement,
+    bodyMobile: document.getElementById('body-mobile') as HTMLDivElement,
   };
   timetable.initialize();
   bookmark.initialize();

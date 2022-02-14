@@ -1,0 +1,235 @@
+@import 'variables.css';
+
+@mixin mobile {
+  @media screen and (max-width: 1100px) {
+    @content;
+  }
+}
+
+header#top {
+  width: 100%;
+  top: 0;
+  background: linear-gradient(90deg, rgba(242, 230, 255, 0.95), rgba(255, 255, 255, 0.95) 250px);
+
+  form {
+    position: sticky;
+    top: 0;
+
+    form * {
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+  }
+
+  .content {
+    width: 1100px;
+    margin: auto;
+    padding: 0.6rem 1rem;
+
+    @include mobile {
+      width: 100%;
+    }
+  }
+
+  div.line {
+    line-height: 1.8rem;
+    margin: 0;
+  }
+
+  .h4 {
+    width: 6rem;
+    text-align: justify;
+    margin-right: 1.4rem;
+    display: inline-block;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .no-mobile {
+    @include mobile {
+      display: none !important;
+    }
+  }
+
+  .only-mobile {
+    display: none;
+    @include mobile {
+      display: block;
+    }
+  }
+
+  input#keyword,
+  select {
+    height: 1.8rem;
+    line-height: 1.8rem;
+    padding: 0 0.4rem;
+    border: none;
+    border-radius: 4px;
+    box-sizing: content-box;
+    box-shadow: var(--shallow-shadow);
+    vertical-align: top;
+    -webkit-appearance: none;
+    background: #fff;
+  }
+
+  input#keyword {
+    width: calc(var(--input-size) - 0.4rem * 2);
+    z-index: 1;
+    position: relative;
+
+    @include mobile {
+      height: 2rem;
+      line-height: 2rem;
+    }
+  }
+
+  #keyword-options-sp {
+    width: 22rem;
+    display: none;
+
+    @include mobile {
+      display: block;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      background: var(--color-purple-gradient);
+      box-shadow: var(--shallow-shadow);
+      overflow: hidden;
+    }
+
+    li {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: -8px;
+      padding-top: 10px;
+      padding-bottom: 2px;
+      flex-grow: 1;
+      cursor: pointer;
+
+      + li {
+        border-left: solid 1px #eee;
+      }
+
+      &.selected {
+        color: #fff;
+        border: none;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.4) inset;
+        background: var(--color-purple-dark);
+
+        + li {
+          border: none;
+        }
+      }
+    }
+  }
+
+  #requirement {
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+
+    .wrapper {
+      width: var(--input-size);
+      display: inline-flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+
+      select {
+        width: calc((100% - 1rem) / 3);
+      }
+    }
+  }
+
+  .button {
+    width: 8rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    text-decoration: none;
+    padding: 0.45rem 0.4rem;
+    border-radius: 4px;
+    box-shadow: var(--shallow-shadow);
+    display: inline-block;
+
+    &.right {
+      margin-left: 0.5rem;
+    }
+
+    &.sub {
+      color: var(--color-purple-dark);
+      background: var(--color-purple-gradient);
+    }
+  }
+
+  #selected-periods {
+    width: var(--input-size);
+    line-height: 1em;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+
+  #selected-periods .day-label + .day-label,
+  #display-timetable-sp .day-label + .day-label {
+    margin-left: 0.4rem;
+  }
+
+  #selected-periods .day,
+  #display-timetable-sp .day {
+    color: var(--color-purple-dark);
+    line-height: 1em;
+    margin-right: 0.1rem;
+    border-bottom: solid 1px var(--color-purple);
+  }
+
+  #period-sp {
+    line-height: 1.8rem;
+    margin-top: 0.4rem;
+    display: none;
+
+    @include mobile {
+      display: block;
+    }
+
+    .module {
+      height: 1.8rem;
+      line-height: 1.8rem;
+    }
+  }
+
+  #select-module {
+    margin-right: 0.4rem;
+  }
+
+  #display-timetable-sp {
+    width: 12.9rem;
+    margin-left: 0.5rem;
+    vertical-align: top;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #submit {
+    margin-right: 1rem;
+  }
+
+  #submit,
+  #submit-sp {
+    color: #fff;
+    background: var(--color-purple);
+  }
+
+  #clear-sp {
+    margin: 0 0.2rem 0 4.8rem;
+  }
+}

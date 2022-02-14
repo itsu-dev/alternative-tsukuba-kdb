@@ -1,4 +1,4 @@
-@import 'window.css';
+@import 'variables.css';
 
 .window {
   width: calc(100vw - 0.7rem);

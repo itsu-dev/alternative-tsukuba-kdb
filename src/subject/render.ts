@@ -6,7 +6,7 @@ import { onBookmarkChanged } from '../bookmark';
  * @param {Subject} subject もとになるSubjectのインスタンス。
  * @returns {HTMLTableRowElement} 表示するべきtr要素
  */
-export function RenderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
+export function renderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
   const methods = ['対面', 'オンデマンド', '同時双方向'].filter(
     (it) => subject.note.indexOf(it) > -1
   );
@@ -14,18 +14,8 @@ export function RenderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
   const tr = document.createElement('tr');
   const lineBreak = () => document.createElement('br');
 
-  const anchorOfficial = document.createElement('a');
-  anchorOfficial.href = `https://kdb.tsukuba.ac.jp/syllabi/2021/${subject.code}/jpn`;
-  anchorOfficial.className = 'syllabus';
-  anchorOfficial.target = '_blank';
-  anchorOfficial.append('シラバス');
-
-  const anchorMirror = document.createElement('a');
-  anchorMirror.href = `https://make-it-tsukuba.github.io/alternative-tsukuba-syllabus/syllabus/${subject.code}.html`;
-  anchorMirror.className = 'syllabus';
-  anchorMirror.target = '_blank';
-  anchorMirror.append('シラバス（ミラー)');
-
+  const anchorOfficial = createAnchorOfficial(subject.code);
+  const anchorMirror = createAnchorMirror(subject.code);
   anchorMirror.addEventListener('click', (evt) => {
     evt.preventDefault();
     let win = document.createElement('draggable-window');
@@ -50,7 +40,7 @@ export function RenderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
       anchorMirror,
       bookmarkCheckbox
     ),
-    createColumn(`${subject.credit}単位`, lineBreak(), `${subject.year}年次`),
+    createColumn(`${subject.credit.toFixed(1)}単位`, lineBreak(), `${subject.year}年次`),
     createColumn(subject.termStr, lineBreak(), subject.periodStr),
     createColumn(...subject.room.split(/,/g).flatMap((it) => [it, lineBreak()])),
     createColumn(...subject.person.split(/,/g).flatMap((it) => [it, lineBreak()])),
@@ -72,4 +62,66 @@ function createColumn(...content: (string | Node)[]) {
   const td = document.createElement('td');
   td.append(...content);
   return td;
+}
+
+const createAnchorOfficial = (code: string) => {
+  const anchor = document.createElement('a');
+  anchor.href = `https://kdb.tsukuba.ac.jp/syllabi/2021/${code}/jpn`;
+  anchor.className = 'syllabus';
+  anchor.target = '_blank';
+  anchor.append('シラバス');
+  return anchor;
+};
+
+const createAnchorMirror = (code: string) => {
+  const anchor = document.createElement('a');
+  anchor.href = `https://make-it-tsukuba.github.io/alternative-tsukuba-syllabus/syllabus/${code}.html`;
+  anchor.className = 'syllabus';
+  anchor.target = '_blank';
+  anchor.append('シラバス（ミラー）');
+  return anchor;
+};
+
+export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
+  const div = document.createElement('div');
+  div.className = 'subject';
+
+  const abstract = document.createElement('div');
+  abstract.className = 'abstract';
+
+  const left = document.createElement('div');
+  left.className = 'left';
+  left.innerHTML = `${subject.code}<br/><strong>${
+    subject.name
+  }</strong><br/>${subject.person.replaceAll(',', '、')}`;
+
+  const right = document.createElement('div');
+  right.className = 'right';
+  right.innerHTML = `${subject.termStr} ${subject.periodStr}<br/>
+  ${subject.credit.toFixed(1)}<span class="sub">単位</span>
+  ${subject.year}<span class="sub">年次</span>
+  ${subject.room}`;
+
+  const details = document.createElement('div');
+  details.className = 'details';
+  details.innerHTML = `${subject.abstract}`;
+
+  abstract.appendChild(left);
+  abstract.appendChild(right);
+  div.appendChild(abstract);
+  div.appendChild(details);
+
+  if (isFirst) {
+    const firstNotation = document.createElement('p');
+    firstNotation.className = 'first-notation';
+    firstNotation.innerHTML = '科目をタップして詳細を表示します';
+    div.appendChild(firstNotation);
+  }
+
+  //const anchorOfficial = createAnchorOfficial(subject.code);
+  //const anchorMirror = createAnchorMirror(subject.code);
+  //left.appendChild(anchorOfficial);
+  //left.appendChild(anchorMirror);
+
+  return div;
 }
