@@ -34,7 +34,7 @@ let dom: {
   bodyMobile: HTMLDivElement;
 };
 
-let isUnder1100px: boolean;
+export let isUnder1100px: boolean;
 let lineLimit: number;
 let timeout: any;
 

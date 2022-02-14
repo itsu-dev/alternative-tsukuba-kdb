@@ -3,26 +3,28 @@
 .window {
   display: block;
   background: white;
-  padding: 0.2rem;
   box-shadow: var(--shadow);
   border-radius: 0.3rem;
   overflow: hidden;
   display: grid;
   grid-template-rows: 1.2rem 1fr;
+  position: fixed;
+  z-index: 5;
 }
 
 .window .controls {
   margin: 0;
-  padding: 0 4px;
-  padding-bottom: 0.2rem;
+  padding: 6px 6px;
   list-style: none;
-  display: block;
-  height: 1.1rem;
-  padding-top: 0.1rem;
+  display: flex;
+  height: 0.8rem;
   cursor: initial;
   border-bottom: solid 1px #ccc;
   cursor: grab;
   user-select: none;
+  background: #fff;
+  position: relative;
+  z-index: 1;
 }
 
 .window .controls .closing {
@@ -35,12 +37,20 @@
   );
 }
 
+.window .controls li:not(.title) {
+  width: 12px;
+  height: 12px;
+  margin: calc((0.8rem - 12px) / 2) 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 .window .controls li {
-  float: left;
   margin-left: 0.1rem;
 }
 
 .window .controls li.title {
+  line-height: 0.8rem;
   font-size: 0.8rem;
   text-align: center;
   display: grid;

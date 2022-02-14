@@ -27,7 +27,7 @@
       <div class="content">
         <form>
           <div class="line">
-            <span class="h4">キーワード</span
+            <span class="h4 no-mobile">キーワード</span
             ><input
               type="text"
               placeholder="科目番号は前方一致、その他は正規表現に対応"
@@ -41,19 +41,19 @@
               <label><input type="checkbox" id="check-abstract" />概要</label>
               <label><input type="checkbox" id="check-bookmark" />お気に入り</label>
             </span>
-            <div id="keyword-options-sp">
-              <ul>
-                <li>科目名</li>
-                <li>科目番号</li>
-                <li>教室</li>
-                <li>教員名</li>
-                <li>概要</li>
-                <li>お気に入り</li>
-              </ul>
-            </div>
+          </div>
+          <div id="keyword-options-sp" class="mobile-options">
+            <ul>
+              <li>科目名</li>
+              <li>科目番号</li>
+              <li>教室</li>
+              <li>教員名</li>
+              <li>概要</li>
+              <li>お気に入り</li>
+            </ul>
           </div>
           <div id="requirement" class="line">
-            <span class="h4">要件</span>
+            <span class="h4 no-mobile">要件</span>
             <div class="wrapper">
               <select id="req-a" class="requirement">
                 <option value="null">指定なし</option></select
@@ -111,7 +111,8 @@
             </div>
           </div>
           <div class="only-mobile">
-            <div id="keyword-options-sp">
+            <div class="class-way mobile-options">
+              <span class="h4">実施形態</span>
               <ul>
                 <li>指定なし</li>
                 <li>対面</li>
@@ -119,8 +120,10 @@
                 <li>同時双方向</li>
               </ul>
             </div>
-            <div id="keyword-options-sp">
+            <div class="mobile-options">
+              <span class="h4">履修年次</span>
               <ul>
+                <li>指定なし</li>
                 <li>1</li>
                 <li>2</li>
                 <li>3</li>
@@ -130,9 +133,11 @@
               </ul>
             </div>
           </div>
-          <div class="line only-mobile">
-            <a href="#" id="clear-sp" class="button sub">検索条件をクリア</a>
-            <a href="#" id="submit-sp" class="button">検索</a>
+          <div class="only-mobile">
+            <div class="line mobile-button">
+              <a href="#" id="clear-sp" class="button sub">検索条件をクリア</a>
+              <a href="#" id="submit-sp" class="button">検索</a>
+            </div>
           </div>
         </form>
       </div>

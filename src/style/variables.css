@@ -7,4 +7,5 @@
   --color-purple-gradient: linear-gradient(30deg, #f2e6ff, #fff);
 
   --input-size: 22rem;
+  --mobile-width: 1000px;
 }

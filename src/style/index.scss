@@ -1,10 +1,5 @@
 @import 'variables.css';
-
-@mixin mobile {
-  @media screen and (max-width: 1100px) {
-    @content;
-  }
-}
+@import 'mixin.scss';
 
 html,
 body {
