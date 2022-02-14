@@ -158,7 +158,7 @@ window.onload = function () {
   timetable.initialize();
   bookmark.initialize();
 
-  // associate the keyword options
+  // associate the display on mobile and desktop
   const keywordOptionsMobile = Array.from(document.querySelectorAll('#keyword-options-sp li'));
   const keywordOptionsDesktop = [
     dom.checkbox.name,
@@ -168,12 +168,51 @@ window.onload = function () {
     dom.checkbox.abstract,
     dom.checkbox.bookmark,
   ];
+
+  const syncKeywordOptionsDisplay = (index: number) => {
+    if (keywordOptionsDesktop[index].checked) {
+      keywordOptionsMobile[index].classList.add('selected');
+    } else {
+      keywordOptionsMobile[index].classList.remove('selected');
+    }
+  };
+
   keywordOptionsMobile.forEach((li, index) => {
     li.addEventListener('click', () => {
       keywordOptionsDesktop[index].checked = !keywordOptionsDesktop[index].checked;
-      syncOptionsMobileDisplay(index);
+      syncKeywordOptionsDisplay(index);
     });
   });
+
+  const syncRadio = (lists: Element[], options: RadioNodeList) => {
+    lists.forEach((list, index) => {
+      if ((options[index] as HTMLInputElement).value == options.value) {
+        list.classList.add('selected');
+      } else {
+        list.classList.remove('selected');
+      }
+    });
+  };
+
+  const initializeRadio = (lists: Element[], options: RadioNodeList) => {
+    lists.forEach((li, index) => {
+      li.addEventListener('click', () => {
+        options.value = (options[index] as HTMLInputElement).value;
+        syncRadio(lists, options);
+      });
+      syncRadio(lists, options);
+    });
+  };
+
+  keywordOptionsDesktop.forEach((element, index) => {
+    element.addEventListener('change', () => syncKeywordOptionsDisplay(index));
+    syncKeywordOptionsDisplay(index);
+  });
+
+  const classWayMobileLists = Array.from(document.querySelectorAll('#class-way-mobile li'));
+  const yearMobileLists = Array.from(document.querySelectorAll('#year-mobile li'));
+  initializeRadio(classWayMobileLists, dom.form.online);
+  initializeRadio(yearMobileLists, dom.form.year);
 
   // if the device is iOS, displayed lines are limited 100.
   const isIOS = ['iPhone', 'iPad', 'iPod'].some((name) => navigator.userAgent.indexOf(name) > -1);
@@ -200,8 +239,10 @@ window.onload = function () {
     timetable.clear();
 
     keywordOptionsDesktop.forEach((_, index) => {
-      syncOptionsMobileDisplay(index);
+      syncKeywordOptionsDisplay(index);
     });
+    syncRadio(classWayMobileLists, dom.form.online);
+    syncRadio(yearMobileLists, dom.form.year);
   };
 
   const resized = () => {
@@ -233,18 +274,6 @@ window.onload = function () {
   };
   resized();
   window.addEventListener('resize', resized, { passive: true });
-
-  const syncOptionsMobileDisplay = (index: number) => {
-    if (keywordOptionsDesktop[index].checked) {
-      keywordOptionsMobile[index].classList.add('selected');
-    } else {
-      keywordOptionsMobile[index].classList.remove('selected');
-    }
-  };
-  keywordOptionsDesktop.forEach((li, index) => {
-    li.addEventListener('change', () => syncOptionsMobileDisplay(index));
-    syncOptionsMobileDisplay(index);
-  });
 
   // search
   dom.keyword.addEventListener('keydown', (evt) => {

@@ -87,10 +87,6 @@ header#top {
       display: flex;
     }
 
-    &.class-way {
-      margin-top: 0.4rem;
-    }
-
     .h4 {
       width: 4rem;
       line-height: 1.8rem;
@@ -134,6 +130,10 @@ header#top {
         }
       }
     }
+  }
+
+  #class-way-mobile {
+    margin-top: 0.4rem;
   }
 
   #keyword-options-sp {
