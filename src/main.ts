@@ -41,27 +41,6 @@ const deleteOptions = (select: HTMLSelectElement) => {
   select.innerHTML = '';
 };
 
-const clear = (evt: Event) => {
-  evt.stopPropagation();
-  dom.keyword.value = '';
-  dom.reqA.selectedIndex = 0;
-  deleteOptions(dom.reqB);
-  deleteOptions(dom.reqC);
-  dom.form.season.value = 'null';
-  dom.form.module.value = 'null';
-  dom.form.online.value = 'null';
-  dom.form.year.value = 'null';
-
-  dom.checkbox.name.checked = true;
-  dom.checkbox.no.checked = true;
-  dom.checkbox.person.checked = false;
-  dom.checkbox.room.checked = false;
-  dom.checkbox.abstract.checked = false;
-  dom.checkbox.bookmark.checked = false;
-
-  timetable.clear();
-};
-
 const updateTable = (options: SearchOptions, index: number, displayedIndex: number) => {
   let bookmarks = bookmark.getBookmarks();
   if (displayedIndex >= lineLimit) {
@@ -170,9 +149,51 @@ window.onload = function () {
   timetable.initialize();
   bookmark.initialize();
 
+  // associate the keyword options
+  const keywordOptionsMobile = Array.from(document.querySelectorAll('#keyword-options-sp li'));
+  const keywordOptionsDesktop = [
+    dom.checkbox.name,
+    dom.checkbox.no,
+    dom.checkbox.room,
+    dom.checkbox.person,
+    dom.checkbox.abstract,
+    dom.checkbox.bookmark,
+  ];
+  keywordOptionsMobile.forEach((li, index) => {
+    li.addEventListener('click', () => {
+      keywordOptionsDesktop[index].checked = !keywordOptionsDesktop[index].checked;
+      syncOptionsMobileDisplay(index);
+    });
+  });
+
   // if the device is iOS, displayed lines are limited 100.
   const isIOS = ['iPhone', 'iPad', 'iPod'].some((name) => navigator.userAgent.indexOf(name) > -1);
   lineLimit = isIOS ? 100 : 1000;
+
+  const clear = (evt: Event) => {
+    evt.stopPropagation();
+    dom.keyword.value = '';
+    dom.reqA.selectedIndex = 0;
+    deleteOptions(dom.reqB);
+    deleteOptions(dom.reqC);
+    dom.form.season.value = 'null';
+    dom.form.module.value = 'null';
+    dom.form.online.value = 'null';
+    dom.form.year.value = 'null';
+
+    dom.checkbox.name.checked = true;
+    dom.checkbox.no.checked = true;
+    dom.checkbox.person.checked = false;
+    dom.checkbox.room.checked = false;
+    dom.checkbox.abstract.checked = false;
+    dom.checkbox.bookmark.checked = false;
+
+    timetable.clear();
+
+    keywordOptionsDesktop.forEach((_, index) => {
+      syncOptionsMobileDisplay(index);
+    });
+  };
 
   const resized = () => {
     dom.clear.removeEventListener('click', clear);
@@ -203,6 +224,18 @@ window.onload = function () {
   };
   resized();
   window.addEventListener('resize', resized, { passive: true });
+
+  const syncOptionsMobileDisplay = (index: number) => {
+    if (keywordOptionsDesktop[index].checked) {
+      keywordOptionsMobile[index].classList.add('selected');
+    } else {
+      keywordOptionsMobile[index].classList.remove('selected');
+    }
+  };
+  keywordOptionsDesktop.forEach((li, index) => {
+    li.addEventListener('change', () => syncOptionsMobileDisplay(index));
+    syncOptionsMobileDisplay(index);
+  });
 
   // search
   dom.keyword.addEventListener('keydown', (evt) => {
