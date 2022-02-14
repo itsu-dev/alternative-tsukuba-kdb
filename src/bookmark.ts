@@ -26,27 +26,21 @@ const removeBookmark = (subjectCode: string) => {
   }
 };
 
-export const onBookmarkChanged = (event: Event) => {
-  const input = event.target as HTMLInputElement;
-  const subjectCode = input.value;
-
-  if (input.checked) {
+export const onBookmarkChanged = (checked: boolean, code: string) => {
+  if (checked) {
     let bookmarks = getBookmarks();
-    if (bookmarks.includes(subjectCode)) {
+    if (bookmarks.includes(code)) {
       return;
     } else {
-      bookmarks.push(subjectCode);
+      bookmarks.push(code);
       saveBookmark(bookmarks);
     }
   } else {
-    removeBookmark(subjectCode);
+    removeBookmark(code);
   }
   update();
-  if (
-    subjectMap[subjectCode].termCodes.length > 0 &&
-    subjectMap[subjectCode].termCodes[0].length > 0
-  ) {
-    switchTimetable(subjectMap[subjectCode].termCodes[0][0]);
+  if (subjectMap[code].termCodes.length > 0 && subjectMap[code].termCodes[0].length > 0) {
+    switchTimetable(subjectMap[code].termCodes[0][0]);
   }
 };
 

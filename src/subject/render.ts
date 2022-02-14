@@ -7,10 +7,7 @@ import { onBookmarkChanged } from '../bookmark';
  * @returns {HTMLTableRowElement} 表示するべきtr要素
  */
 export function renderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
-  const methods = ['対面', 'オンデマンド', '同時双方向'].filter(
-    (it) => subject.note.indexOf(it) > -1
-  );
-
+  const methods = createClassMethod(subject.note);
   const tr = document.createElement('tr');
   const lineBreak = () => document.createElement('br');
 
@@ -20,7 +17,9 @@ export function renderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
   const bookmarkCheckbox = document.createElement('input');
   bookmarkCheckbox.type = 'checkbox';
   bookmarkCheckbox.className = 'bookmark';
-  bookmarkCheckbox.addEventListener('click', onBookmarkChanged);
+  bookmarkCheckbox.addEventListener('click', () =>
+    onBookmarkChanged(bookmarkCheckbox.checked, subject.code)
+  );
   bookmarkCheckbox.id = `bookmark-${subject.code}`;
   bookmarkCheckbox.value = subject.code;
 
@@ -67,6 +66,9 @@ const createAnchorOfficial = (code: string) => {
   return anchor;
 };
 
+const createClassMethod = (note: string) =>
+  ['対面', 'オンデマンド', '同時双方向'].filter((it) => note.indexOf(it) > -1);
+
 const createAnchorMirror = (code: string, name: string) => {
   const anchor = document.createElement('a');
   anchor.href = `https://make-it-tsukuba.github.io/alternative-tsukuba-syllabus/syllabus/${code}.html`;
@@ -90,8 +92,12 @@ export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
   abstract.className = 'abstract';
 
   const left = document.createElement('div');
+  const classMethodList = createClassMethod(subject.note);
+  let classMethod = classMethodList.length > 0 ? classMethodList.join('・') : '不詳';
   left.className = 'left';
-  left.innerHTML = `${subject.code}<br/><strong>${
+  left.innerHTML = `<div class="first">${
+    subject.code
+  }<span class="class-method">${classMethod}</span></div><strong>${
     subject.name
   }</strong><br/>${subject.person.replaceAll(',', '、')}`;
 
@@ -111,14 +117,30 @@ export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
   const anchors = document.createElement('div');
   anchors.className = 'anchors';
 
-  const bookmarkAnchor = document.createElement('a');
-  bookmarkAnchor.className = 'link';
-  bookmarkAnchor.append('お気に入りに追加');
+  const addBookmark = document.createElement('a');
+  const removeBookmark = document.createElement('a');
+
+  addBookmark.className = 'link add-bookmark';
+  addBookmark.append('お気に入りに追加');
+  addBookmark.addEventListener('click', () => {
+    onBookmarkChanged(true, subject.code);
+    addBookmark.style.display = 'none';
+    removeBookmark.style.display = 'block';
+  });
+
+  removeBookmark.className = 'link bookmark';
+  removeBookmark.append('★お気に入り');
+  removeBookmark.addEventListener('click', () => {
+    onBookmarkChanged(false, subject.code);
+    addBookmark.style.display = 'block';
+    removeBookmark.style.display = 'none';
+  });
 
   const anchorOfficial = createAnchorOfficial(subject.code);
   const anchorMirror = createAnchorMirror(subject.code, subject.name);
 
-  anchors.appendChild(bookmarkAnchor);
+  anchors.appendChild(addBookmark);
+  anchors.appendChild(removeBookmark);
   anchors.appendChild(anchorOfficial);
   anchors.appendChild(anchorMirror);
   details.appendChild(abstractParagraph);

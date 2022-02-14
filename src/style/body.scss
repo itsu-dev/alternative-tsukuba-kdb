@@ -123,6 +123,23 @@ div#body-mobile {
       .left {
         flex-grow: 1;
 
+        .first {
+          display: flex;
+        }
+
+        .class-method {
+          width: 8rem;
+          flex-grow: 1;
+          line-height: 1.2rem;
+          color: #444;
+          font-size: 0.7rem;
+          text-overflow: ellipsis;
+          margin-left: 0.4rem;
+          white-space: nowrap;
+          display: inline-block;
+          overflow: hidden;
+        }
+
         strong {
           font-size: 1rem;
         }
@@ -160,6 +177,11 @@ div#body-mobile {
         padding: 5px;
         border-radius: 4px;
         display: block;
+
+        &.bookmark {
+          color: #fff;
+          background: var(--color-purple-dark);
+        }
       }
     }
 

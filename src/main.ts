@@ -61,11 +61,23 @@ const updateTable = (options: SearchOptions, index: number, displayedIndex: numb
     if (isUnder1100px) {
       const div = renderSubjectForMobile(subject, index == 0);
       dom.bodyMobile.appendChild(div);
+
+      // Make bookmark buttons active
+      (div.querySelector('.add-bookmark') as HTMLElement).style.display = bookmarks.includes(
+        subject.code
+      )
+        ? 'none'
+        : 'block';
+      (div.querySelector('.bookmark') as HTMLElement).style.display = bookmarks.includes(
+        subject.code
+      )
+        ? 'block'
+        : 'none';
     } else {
       const tr = renderSubjectAsTableRow(subject);
       dom.tbody.appendChild(tr);
 
-      // Make bookmarked buttons active
+      // Make bookmark buttons active
       (document.getElementById('bookmark-' + subject.code) as HTMLInputElement).checked =
         bookmarks.includes(subject.code);
     }
@@ -209,9 +221,9 @@ window.onload = function () {
     syncKeywordOptionsDisplay(index);
   });
 
-  const classWayMobileLists = Array.from(document.querySelectorAll('#class-way-mobile li'));
+  const classMethodMobileLists = Array.from(document.querySelectorAll('#class-method-mobile li'));
   const yearMobileLists = Array.from(document.querySelectorAll('#year-mobile li'));
-  initializeRadio(classWayMobileLists, dom.form.online);
+  initializeRadio(classMethodMobileLists, dom.form.online);
   initializeRadio(yearMobileLists, dom.form.year);
 
   // if the device is iOS, displayed lines are limited 100.
@@ -241,7 +253,7 @@ window.onload = function () {
     keywordOptionsDesktop.forEach((_, index) => {
       syncKeywordOptionsDisplay(index);
     });
-    syncRadio(classWayMobileLists, dom.form.online);
+    syncRadio(classMethodMobileLists, dom.form.online);
     syncRadio(yearMobileLists, dom.form.year);
   };
 
