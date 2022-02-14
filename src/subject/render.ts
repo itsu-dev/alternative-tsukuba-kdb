@@ -6,37 +6,20 @@ import { onBookmarkChanged } from '../bookmark';
  * @param {Subject} subject もとになるSubjectのインスタンス。
  * @returns {HTMLTableRowElement} 表示するべきtr要素
  */
-export function RenderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
-  const methods = ['対面', 'オンデマンド', '同時双方向'].filter(
-    (it) => subject.note.indexOf(it) > -1
-  );
-
+export function renderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
+  const methods = createClassMethod(subject.note);
   const tr = document.createElement('tr');
   const lineBreak = () => document.createElement('br');
 
-  const anchorOfficial = document.createElement('a');
-  anchorOfficial.href = `https://kdb.tsukuba.ac.jp/syllabi/2021/${subject.code}/jpn`;
-  anchorOfficial.className = 'syllabus';
-  anchorOfficial.target = '_blank';
-  anchorOfficial.append('シラバス');
-
-  const anchorMirror = document.createElement('a');
-  anchorMirror.href = `https://make-it-tsukuba.github.io/alternative-tsukuba-syllabus/syllabus/${subject.code}.html`;
-  anchorMirror.className = 'syllabus';
-  anchorMirror.target = '_blank';
-  anchorMirror.append('シラバス（ミラー)');
-
-  anchorMirror.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    let win = document.createElement('draggable-window');
-    win.innerHTML = `<div slot='title'>${subject.name} - シラバス</div><iframe slot='body' src='${anchorMirror.href}' />`;
-    document.body.append(win);
-  });
+  const anchorOfficial = createAnchorOfficial(subject.code);
+  const anchorMirror = createAnchorMirror(subject.code, subject.name);
 
   const bookmarkCheckbox = document.createElement('input');
   bookmarkCheckbox.type = 'checkbox';
   bookmarkCheckbox.className = 'bookmark';
-  bookmarkCheckbox.addEventListener('click', onBookmarkChanged);
+  bookmarkCheckbox.addEventListener('click', () =>
+    onBookmarkChanged(bookmarkCheckbox.checked, subject.code)
+  );
   bookmarkCheckbox.id = `bookmark-${subject.code}`;
   bookmarkCheckbox.value = subject.code;
 
@@ -50,7 +33,7 @@ export function RenderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
       anchorMirror,
       bookmarkCheckbox
     ),
-    createColumn(`${subject.credit}単位`, lineBreak(), `${subject.year}年次`),
+    createColumn(`${subject.credit.toFixed(1)}単位`, lineBreak(), `${subject.year}年次`),
     createColumn(subject.termStr, lineBreak(), subject.periodStr),
     createColumn(...subject.room.split(/,/g).flatMap((it) => [it, lineBreak()])),
     createColumn(...subject.person.split(/,/g).flatMap((it) => [it, lineBreak()])),
@@ -72,4 +55,120 @@ function createColumn(...content: (string | Node)[]) {
   const td = document.createElement('td');
   td.append(...content);
   return td;
+}
+
+const createAnchorOfficial = (code: string) => {
+  const anchor = document.createElement('a');
+  anchor.href = `https://kdb.tsukuba.ac.jp/syllabi/2021/${code}/jpn`;
+  anchor.className = 'link';
+  anchor.target = '_blank';
+  anchor.append('シラバス');
+  return anchor;
+};
+
+const createClassMethod = (note: string) =>
+  ['対面', 'オンデマンド', '同時双方向'].filter((it) => note.indexOf(it) > -1);
+
+const createAnchorMirror = (code: string, name: string) => {
+  const anchor = document.createElement('a');
+  anchor.href = `https://make-it-tsukuba.github.io/alternative-tsukuba-syllabus/syllabus/${code}.html`;
+  anchor.className = 'link';
+  anchor.target = '_blank';
+  anchor.append('シラバス（ミラー）');
+  anchor.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    let win = document.createElement('draggable-window');
+    win.innerHTML = `<div slot='title'>${name} - シラバス</div><iframe slot='body' src='${anchor.href}' />`;
+    document.body.append(win);
+  });
+  return anchor;
+};
+
+export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
+  const div = document.createElement('div');
+  div.className = 'subject';
+
+  const abstract = document.createElement('div');
+  abstract.className = 'abstract';
+
+  const left = document.createElement('div');
+  const classMethodList = createClassMethod(subject.note);
+  let classMethod = classMethodList.length > 0 ? classMethodList.join('・') : '不詳';
+  left.className = 'left';
+  left.innerHTML = `<div class="first">${
+    subject.code
+  }<span class="class-method">${classMethod}</span></div><strong>${
+    subject.name
+  }</strong><br/>${subject.person.replaceAll(',', '、')}`;
+
+  const right = document.createElement('div');
+  right.className = 'right';
+  right.innerHTML = `${subject.termStr} ${subject.periodStr}<br/>
+  ${subject.credit.toFixed(1)}<span class="sub">単位</span>
+  ${subject.year}<span class="sub">年次</span></br>${subject.room.replaceAll(',', ', ')}`;
+
+  // details
+  const details = document.createElement('div');
+  details.className = 'details';
+
+  const abstractParagraph = document.createElement('p');
+  abstractParagraph.innerHTML = `${subject.abstract}`;
+
+  const anchors = document.createElement('div');
+  anchors.className = 'anchors';
+
+  const addBookmark = document.createElement('a');
+  const removeBookmark = document.createElement('a');
+
+  addBookmark.className = 'link add-bookmark';
+  addBookmark.id = `add-bookmark-${subject.code}`;
+  addBookmark.append('お気に入りに追加');
+  addBookmark.addEventListener('click', () => {
+    onBookmarkChanged(true, subject.code);
+    addBookmark.style.display = 'none';
+    removeBookmark.style.display = 'block';
+  });
+
+  removeBookmark.id = `remove-bookmark-${subject.code}`;
+  removeBookmark.className = 'link bookmark';
+  removeBookmark.append('★お気に入り');
+  removeBookmark.addEventListener('click', () => {
+    onBookmarkChanged(false, subject.code);
+    addBookmark.style.display = 'block';
+    removeBookmark.style.display = 'none';
+  });
+
+  const anchorOfficial = createAnchorOfficial(subject.code);
+  const anchorMirror = createAnchorMirror(subject.code, subject.name);
+
+  anchors.appendChild(addBookmark);
+  anchors.appendChild(removeBookmark);
+  anchors.appendChild(anchorOfficial);
+  anchors.appendChild(anchorMirror);
+  details.appendChild(abstractParagraph);
+  details.appendChild(anchors);
+
+  abstract.appendChild(left);
+  abstract.appendChild(right);
+  div.appendChild(abstract);
+  div.appendChild(details);
+
+  let firstNotation: HTMLParagraphElement | null = null;
+  if (isFirst) {
+    firstNotation = document.createElement('p');
+    firstNotation.className = 'first-notation';
+    firstNotation.innerHTML = '科目をタップして詳細を表示します';
+    div.appendChild(firstNotation);
+  }
+
+  div.addEventListener('click', () => {
+    if (!details.classList.contains('displayed')) {
+      details.classList.add('displayed');
+      if (isFirst) {
+        firstNotation!.style.display = 'none';
+      }
+    }
+  });
+
+  return div;
 }

@@ -1,3 +1,4 @@
+import { isMobile } from '../main';
 import desktopStyle from '../style/window_desktop.css';
 import mobileStyle from '../style/window_mobile.css';
 
@@ -75,7 +76,7 @@ class DraggableWindow extends HTMLElement {
       body.append(...nodes);
     });
 
-    if (window.matchMedia('screen and (max-width: 1100px)').matches) {
+    if (isMobile()) {
       this.connectedCallbackForMobile(shadow);
     } else {
       this.connectedCallbackForDesktop(shadow, win);
@@ -92,7 +93,6 @@ class DraggableWindow extends HTMLElement {
     const pointerMoveHandler = this.drag.bind(this);
 
     const positionItem = localStorage.getItem(positionStorageKey);
-    console.log(positionItem);
     if (positionItem) {
       const parsed = JSON.parse(positionItem);
       if ('x' in parsed && 'y' in parsed && 'width' in parsed && 'height' in parsed) {
@@ -129,10 +129,6 @@ class DraggableWindow extends HTMLElement {
     const style = document.createElement('style');
     style.innerHTML = mobileStyle;
     shadow.append(style);
-    this.style.position = 'fixed';
-    this.style.left = '0';
-    this.style.top = 'calc(70vh - 0.7rem)';
-    this.style.zIndex = '5';
   }
 
   disconnectedCallback() {

@@ -1,22 +1,7 @@
 @import 'window.css';
 
 .window {
-  position: fixed;
   resize: both;
-  z-index: 5;
   cursor: grab;
   will-change: top, left;
-}
-
-.window .controls {
-  background: inherit;
-  z-index: 1;
-}
-
-.window .controls li:not(.title) {
-  width: calc(1.1rem - 6px);
-  height: calc(1.1rem - 6px);
-  margin: 2px 0;
-  border-radius: 50%;
-  cursor: pointer;
 }

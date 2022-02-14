@@ -1,3 +1,4 @@
+import { isMobile } from './main';
 import * as timetable from './timetable';
 import { subjectMap } from './subject';
 
@@ -26,27 +27,37 @@ const removeBookmark = (subjectCode: string) => {
   }
 };
 
-export const onBookmarkChanged = (event: Event) => {
-  const input = event.target as HTMLInputElement;
-  const subjectCode = input.value;
-
-  if (input.checked) {
+export const onBookmarkChanged = (checked: boolean, code: string) => {
+  if (checked) {
     let bookmarks = getBookmarks();
-    if (bookmarks.includes(subjectCode)) {
+    if (bookmarks.includes(code)) {
       return;
     } else {
-      bookmarks.push(subjectCode);
+      bookmarks.push(code);
       saveBookmark(bookmarks);
     }
   } else {
-    removeBookmark(subjectCode);
+    removeBookmark(code);
   }
   update();
-  if (
-    subjectMap[subjectCode].termCodes.length > 0 &&
-    subjectMap[subjectCode].termCodes[0].length > 0
-  ) {
-    switchTimetable(subjectMap[subjectCode].termCodes[0][0]);
+  if (subjectMap[code].termCodes.length > 0 && subjectMap[code].termCodes[0].length > 0) {
+    switchTimetable(subjectMap[code].termCodes[0][0]);
+  }
+};
+
+const changeBookmarkButton = (code: string) => {
+  // desktop
+  let bookmark = document.getElementById('bookmark-' + code);
+  if (bookmark != null) {
+    (bookmark as HTMLInputElement).checked = false;
+  }
+
+  // mobile
+  let addBookmarkAnchor = document.getElementById('add-bookmark-' + code);
+  let removeBookmarkAnchor = document.getElementById('remove-bookmark-' + code);
+  if (addBookmarkAnchor != null) {
+    (addBookmarkAnchor as HTMLAnchorElement).style.display = 'block';
+    (removeBookmarkAnchor as HTMLAnchorElement).style.display = 'none';
   }
 };
 
@@ -59,10 +70,7 @@ const clearBookmarks = () => {
   const bookmarks = getBookmarks();
   for (let subjectId of bookmarks) {
     removeBookmark(subjectId);
-    let bookmark = document.getElementById('bookmark-' + subjectId);
-    if (bookmark != null) {
-      (bookmark as HTMLInputElement).checked = false;
-    }
+    changeBookmarkButton(subjectId);
   }
   update();
 };
@@ -85,7 +93,8 @@ let dom: {
   clear: HTMLAnchorElement;
 };
 
-const switchDisplayTimetable = () => {
+const switchDisplayTimetable = (animates: boolean) => {
+  dom.main.style.transition = animates ? 'margin-bottom 0.5s ease' : '';
   dom.main.style.marginBottom = displaysTimetable
     ? `calc(${-dom.main.clientHeight}px + 1.8rem)`
     : '0';
@@ -129,10 +138,12 @@ export const initialize = () => {
     clear: document.querySelector('#clear-bookmarks') as HTMLAnchorElement,
   };
 
-  dom.clear.addEventListener('clear', () => clearBookmarks());
+  dom.clear.addEventListener('click', () => clearBookmarks());
   dom.previous.addEventListener('click', () => shiftTimetable(false));
   dom.next.addEventListener('click', () => shiftTimetable(true));
-  dom.close.addEventListener('click', () => switchDisplayTimetable());
+  dom.close.addEventListener('click', () => switchDisplayTimetable(true));
+
+  dom.tableList.style.width = (dom.main.clientWidth - 20) * 6 + 'px';
 
   // create HTML elements for a table
   let firstTable = null;
@@ -161,6 +172,10 @@ export const initialize = () => {
 
   timetableWidth = (firstTable as HTMLLIElement).clientWidth;
   update();
+
+  if (isMobile()) {
+    switchDisplayTimetable(false);
+  }
 };
 
 export const update = () => {
@@ -226,10 +241,8 @@ export const update = () => {
                 });
                 remove.addEventListener('click', () => {
                   removeBookmark(code);
-                  let bookmark = document.getElementById('bookmark-' + code);
-                  if (bookmark != null) {
-                    (bookmark as HTMLInputElement).checked = false;
-                  }
+                  changeBookmarkButton(code);
+
                   update();
                 });
               }
