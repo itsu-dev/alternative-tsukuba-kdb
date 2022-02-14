@@ -1,4 +1,4 @@
-import { isUnder1100px } from '../main';
+import { isMobile } from '../main';
 import desktopStyle from '../style/window_desktop.css';
 import mobileStyle from '../style/window_mobile.css';
 
@@ -76,7 +76,7 @@ class DraggableWindow extends HTMLElement {
       body.append(...nodes);
     });
 
-    if (isUnder1100px) {
+    if (isMobile()) {
       this.connectedCallbackForMobile(shadow);
     } else {
       this.connectedCallbackForDesktop(shadow, win);

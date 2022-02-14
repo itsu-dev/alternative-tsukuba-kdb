@@ -34,9 +34,10 @@ let dom: {
   bodyMobile: HTMLDivElement;
 };
 
-export let isUnder1100px: boolean;
 let lineLimit: number;
 let timeout: any;
+
+export const isMobile = () => window.matchMedia('screen and (max-width: 700px)').matches;
 
 const deleteOptions = (select: HTMLSelectElement) => {
   select.innerHTML = '';
@@ -58,7 +59,7 @@ const updateTable = (options: SearchOptions, index: number, displayedIndex: numb
       continue;
     }
 
-    if (isUnder1100px) {
+    if (isMobile()) {
       const div = renderSubjectForMobile(subject, index == 0);
       dom.bodyMobile.appendChild(div);
 
@@ -96,7 +97,7 @@ const search = (e: Event | null) => {
 
   let season: string | null = null;
   let module: string | null = null;
-  if (isUnder1100px) {
+  if (isMobile()) {
     let seasonModule = dom.selectModule?.options[dom.selectModule.selectedIndex].value as string;
     if (seasonModule != 'null') {
       season = seasonModule.slice(0, 1);
@@ -168,7 +169,6 @@ window.onload = function () {
     bodyMobile: document.getElementById('body-mobile') as HTMLDivElement,
   };
   timetable.initialize();
-  bookmark.initialize();
 
   // associate the display on mobile and desktop
   const keywordOptionsMobile = Array.from(document.querySelectorAll('#keyword-options-sp li'));
@@ -265,8 +265,7 @@ window.onload = function () {
       timetable.display
     );
 
-    isUnder1100px = window.matchMedia('screen and (max-width: 1100px)').matches;
-    if (isUnder1100px) {
+    if (isMobile()) {
       dom.selectModule = document.getElementById('select-module') as HTMLSelectElement;
       dom.selectDay = document.getElementById('select-day') as HTMLSelectElement;
       dom.selectPeriod = document.getElementById('select-period') as HTMLSelectElement;
@@ -279,13 +278,14 @@ window.onload = function () {
       timetable.dom.display = document.getElementById('display-timetable') as HTMLAnchorElement;
     }
 
-    timetable.dom.display.innerHTML = isUnder1100px ? '曜日・時限を選択' : '選択';
+    timetable.dom.display.innerHTML = isMobile() ? '曜日・時限を選択' : '選択';
     dom.submit.addEventListener('click', search);
     dom.clear.addEventListener('click', clear);
     timetable.dom.display.addEventListener('click', timetable.display);
   };
   resized();
   window.addEventListener('resize', resized, { passive: true });
+  bookmark.initialize();
 
   // search
   dom.keyword.addEventListener('keydown', (evt) => {
@@ -391,7 +391,7 @@ window.onload = function () {
     bookmark.update();
 
     let firstBookmark = document.querySelector('input.bookmark');
-    if (!isUnder1100px && localStorage.getItem('kdb_bookmarks') == null) {
+    if (!isMobile() && localStorage.getItem('kdb_bookmarks') == null) {
       dom.bookmarkInfo.style.opacity = '1.0';
       let bounding = firstBookmark?.getBoundingClientRect() as DOMRect;
       dom.bookmarkInfo.style.left = bounding.left + 28 + 'px';
@@ -409,7 +409,7 @@ window.onload = function () {
 
   const displayMS = 200;
   document.addEventListener('click', (e: MouseEvent) => {
-    let query = '#timetable, ' + (isUnder1100px ? '#display-timetable-sp' : '#display-timetable');
+    let query = '#timetable, ' + (isMobile() ? '#display-timetable-sp' : '#display-timetable');
     if (!(e.target as HTMLElement).closest(query)) {
       timetable.dom.timetable.style.opacity = '0';
       setTimeout(() => {

@@ -136,23 +136,6 @@ form {
   top: 0;
 }
 
-/* media query */
-@include mobile {
-  header#top {
-    #keyword-options {
-      display: none;
-    }
-
-    #period {
-      display: none;
-    }
-  }
-
-  #bookmark-timetable {
-    display: none;
-  }
-}
-
 /* Bookmark checkbox */
 input[type='checkbox'].bookmark {
   -webkit-appearance: none;

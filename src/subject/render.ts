@@ -121,6 +121,7 @@ export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
   const removeBookmark = document.createElement('a');
 
   addBookmark.className = 'link add-bookmark';
+  addBookmark.id = `add-bookmark-${subject.code}`;
   addBookmark.append('お気に入りに追加');
   addBookmark.addEventListener('click', () => {
     onBookmarkChanged(true, subject.code);
@@ -128,6 +129,7 @@ export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
     removeBookmark.style.display = 'block';
   });
 
+  removeBookmark.id = `remove-bookmark-${subject.code}`;
   removeBookmark.className = 'link bookmark';
   removeBookmark.append('★お気に入り');
   removeBookmark.addEventListener('click', () => {

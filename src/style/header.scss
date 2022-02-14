@@ -267,3 +267,15 @@ header#top {
     justify-content: flex-end;
   }
 }
+
+@include mobile {
+  header#top {
+    #keyword-options {
+      display: none;
+    }
+
+    #period {
+      display: none;
+    }
+  }
+}
