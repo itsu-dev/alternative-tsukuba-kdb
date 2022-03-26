@@ -59,7 +59,7 @@ function createColumn(...content: (string | Node)[]) {
 
 const createAnchorOfficial = (code: string) => {
   const anchor = document.createElement('a');
-  anchor.href = `https://kdb.tsukuba.ac.jp/syllabi/2021/${code}/jpn`;
+  anchor.href = `https://kdb.tsukuba.ac.jp/syllabi/2022/${code}/jpn`;
   anchor.className = 'link';
   anchor.target = '_blank';
   anchor.append('シラバス');
