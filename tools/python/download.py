@@ -35,7 +35,7 @@ class KdbDownloader():
     """Download a CSV file of KdB data.
     """
 
-    def __init__(self, year: int = 2021) -> None:
+    def __init__(self, year: int = 2022) -> None:
         """Initializer.
 
         Args:
