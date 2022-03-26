@@ -1,5 +1,6 @@
 import { getBookmarks } from '../bookmark';
-import type { Subject } from '.';
+import type { Modules, NormalSeasons, Subject } from '.';
+import { getTermCode } from '.';
 import { Periods } from './period';
 
 export interface SearchOptions {
@@ -9,8 +10,8 @@ export interface SearchOptions {
   reqC: string;
   online: string;
   year: string;
-  season: string | null;
-  module: string | null;
+  season: NormalSeasons | null;
+  module: Modules | null;
   periods: Periods;
   disablePeriods: Periods | null;
   containsName: boolean;
@@ -48,16 +49,10 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
   let matchesPeriods =
     !(
       options.disablePeriods != null &&
-      subject.periodsArray.reduce<boolean>(
-        (accumulator, periods) => accumulator || periods.matches(options.disablePeriods!),
-        false
-      )
+      subject.periodsArray.some((periods) => periods.matches(options.disablePeriods!), false)
     ) &&
     (options.periods.length == 0 ||
-      subject.periodsArray.reduce<boolean>(
-        (accumulator, periods) => accumulator || periods.matches(options.periods),
-        false
-      ) ||
+      subject.periodsArray.some((periods) => periods.matches(options.periods), false) ||
       (options.concentration && subject.concentration) ||
       (options.negotiable && subject.negotiable) ||
       (options.asneeded && subject.asneeded));
@@ -79,9 +74,17 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
   let matchesReqB = options.reqB == 'null' || options.reqB == subject.reqB;
   let matchesReqC = options.reqC == 'null' || options.reqC == subject.reqC;
 
-  // other options
+  // term
   let matchesSeason = options.season == null || subject.termStr.indexOf(options.season) > -1;
   let matchesModule = options.module == null || subject.termStr.indexOf(options.module) > -1;
+  let matchesTerm = matchesSeason && matchesModule;
+  if (options.season && options.module) {
+    matchesTerm = subject.termCodes.some((codes) =>
+      codes.includes(getTermCode(options.season!, options.module!))
+    );
+  }
+
+  // other options
   let matchesOnline = options.online == 'null' || subject.note.indexOf(options.online) > -1;
   let matchesBookmark = !options.containsBookmark || getBookmarks().includes(subject.code);
 
@@ -92,8 +95,7 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
     matchesReqA &&
     matchesReqB &&
     matchesReqC &&
-    matchesSeason &&
-    matchesModule &&
+    matchesTerm &&
     matchesOnline &&
     matchesBookmark
   );
