@@ -3,8 +3,6 @@ import {
   initializeSubject,
   subjectCodeList,
   subjectMap,
-  modules,
-  normalSeasons,
   NormalSeasons,
   Modules,
 } from './subject';
