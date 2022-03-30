@@ -10,8 +10,8 @@ export interface SearchOptions {
   reqC: string;
   online: string;
   year: string;
-  season: NormalSeasons | null;
-  module: Modules | null;
+  season: NormalSeasons | undefined;
+  module: Modules | undefined;
   periods: Periods;
   disablePeriods: Periods | null;
   containsName: boolean;

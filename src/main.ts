@@ -102,8 +102,8 @@ const search = (e: Event | null) => {
   dom.tbody.innerHTML = '';
   dom.bodyMobile.innerHTML = '';
 
-  let season: NormalSeasons | null = null;
-  let module: Modules | null = null;
+  let season: NormalSeasons | undefined;
+  let module: Modules | undefined;
   if (isMobile()) {
     let seasonModule = dom.selectModule?.options[dom.selectModule.selectedIndex].value as string;
     if (seasonModule != 'null') {
