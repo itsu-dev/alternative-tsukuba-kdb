@@ -77,12 +77,12 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
   // term
   let matchesSeason = options.season == null || subject.termStr.indexOf(options.season) > -1;
   let matchesModule = options.module == null || subject.termStr.indexOf(options.module) > -1;
-  let matchesTerm = matchesSeason && matchesModule;
-  if (options.season && options.module) {
-    matchesTerm = subject.termCodes.some((codes) =>
-      codes.includes(getTermCode(options.season!, options.module!))
-    );
-  }
+  let matchesTerm =
+    options.season && options.module
+      ? subject.termCodes.some((codes) =>
+          codes.includes(getTermCode(options.season!, options.module!))
+        )
+      : matchesSeason && matchesModule;
 
   // other options
   let matchesOnline = options.online == 'null' || subject.note.indexOf(options.online) > -1;
