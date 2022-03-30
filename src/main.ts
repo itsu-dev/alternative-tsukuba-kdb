@@ -3,6 +3,8 @@ import {
   initializeSubject,
   subjectCodeList,
   subjectMap,
+  modules,
+  normalSeasons,
   NormalSeasons,
   Modules,
 } from './subject';
@@ -107,15 +109,21 @@ const search = (e: Event | null) => {
   if (isMobile()) {
     let seasonModule = dom.selectModule?.options[dom.selectModule.selectedIndex].value as string;
     if (seasonModule != 'null') {
-      season = seasonModule.slice(0, 1) as NormalSeasons;
-      module = seasonModule.slice(1) as Modules;
+      const firstChar = seasonModule.slice(0, 1);
+      const secondChar = seasonModule.slice(1);
+      if (firstChar === '春' || firstChar === '秋') {
+        season = firstChar;
+      }
+      if (secondChar === 'A' || secondChar === 'B' || secondChar === 'C') {
+        module = secondChar;
+      }
     }
   } else {
     if (dom.form.season.value != 'null') {
-      season = dom.form.season.value as NormalSeasons;
+      season = dom.form.season.value;
     }
     if (dom.form.module.value != 'null') {
-      module = dom.form.module.value as Modules;
+      module = dom.form.module.value;
     }
   }
 
