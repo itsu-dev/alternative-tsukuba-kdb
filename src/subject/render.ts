@@ -11,7 +11,7 @@ export function renderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
   const tr = document.createElement('tr');
   const lineBreak = () => document.createElement('br');
 
-  const anchorOfficial = createAnchorOfficial(subject.code);
+  const anchorOfficial = createAnchorOfficial(subject);
   const anchorMirror = createAnchorMirror(subject.code, subject.name);
 
   const bookmarkCheckbox = document.createElement('input');
@@ -57,9 +57,9 @@ function createColumn(...content: (string | Node)[]) {
   return td;
 }
 
-const createAnchorOfficial = (code: string) => {
+const createAnchorOfficial = (subject: Subject) => {
   const anchor = document.createElement('a');
-  anchor.href = `https://kdb.tsukuba.ac.jp/syllabi/2022/${code}/jpn`;
+  anchor.href = subject.syllabusHref;
   anchor.className = 'link';
   anchor.target = '_blank';
   anchor.append('シラバス');
@@ -138,7 +138,7 @@ export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
     removeBookmark.style.display = 'none';
   });
 
-  const anchorOfficial = createAnchorOfficial(subject.code);
+  const anchorOfficial = createAnchorOfficial(subject);
   const anchorMirror = createAnchorMirror(subject.code, subject.name);
 
   anchors.appendChild(addBookmark);

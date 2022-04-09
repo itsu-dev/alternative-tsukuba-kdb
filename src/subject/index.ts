@@ -94,6 +94,10 @@ export class Subject {
   get periodsArray() {
     return this._periodsArray;
   }
+
+  get syllabusHref() {
+    return `https://kdb.tsukuba.ac.jp/syllabi/2022/${this.code}/jpn`;
+  }
 }
 
 export const subjectMap: {
