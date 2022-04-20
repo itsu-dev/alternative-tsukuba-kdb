@@ -218,13 +218,17 @@ export const update = () => {
                   timetable.disablePeriods.set(day, time, true);
                 }
 
+                let syllabusLink = document.createElement('a');
+                syllabusLink.href = subject.syllabusHref;
+
                 let div = document.createElement('div');
                 let h = 200 + no * 20;
                 div.className = 'class';
                 div.innerHTML = subject.name;
                 div.style.margin = 0.1 * (no + 1) + 'rem';
                 div.style.background = `hsl(${h}, 100%, 90%, 0.8)`;
-                item.appendChild(div);
+                item.appendChild(syllabusLink);
+                syllabusLink.appendChild(div);
                 no++;
 
                 // remove button
