@@ -37,6 +37,8 @@ let dom: {
 let lineLimit: number;
 let timeout: any;
 
+let bookmarks: string[] = [];
+
 export const isMobile = () => window.matchMedia('screen and (max-width: 700px)').matches;
 
 const deleteOptions = (select: HTMLSelectElement) => {
@@ -44,7 +46,6 @@ const deleteOptions = (select: HTMLSelectElement) => {
 };
 
 const updateTable = (options: SearchOptions, index: number, displayedIndex: number) => {
-  let bookmarks = bookmark.getBookmarks();
   if (displayedIndex >= lineLimit) {
     return;
   }
@@ -135,6 +136,7 @@ const search = (e: Event | null) => {
   };
 
   clearTimeout(timeout);
+  bookmarks = bookmark.getBookmarks();
   updateTable(options, 0, 0);
 };
 

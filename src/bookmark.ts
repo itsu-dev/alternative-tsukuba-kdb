@@ -4,7 +4,11 @@ import { subjectMap } from './subject';
 
 export const getBookmarks = () => {
   const value = localStorage.getItem('kdb_bookmarks');
-  return value != null ? decodeURIComponent(value).split(',') : [];
+  return value != null
+    ? decodeURIComponent(value)
+        .split(',')
+        .filter((code) => code !== '')
+    : [];
 };
 
 const saveBookmark = (bookmarks: string[]) => {
