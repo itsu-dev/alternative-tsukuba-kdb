@@ -27,7 +27,7 @@ export interface SearchOptions {
 
 export function matchesSearchOptions(subject: Subject, options: SearchOptions): boolean {
   // keyword
-  const regex = new RegExp(options.keyword);
+  const regex = new RegExp(options.keyword, 'i');
   const matchesCode = options.containsCode && subject.code.indexOf(options.keyword) > -1;
   const matchesName = options.containsName && subject.name.match(regex) != null;
   const matchesRoom = options.containsRoom && subject.room.match(regex) != null;

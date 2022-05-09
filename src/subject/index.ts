@@ -40,9 +40,9 @@ export class Subject {
     this.person = line[8];
     this.abstract = line[9];
     this.note = line[10];
-    this.reqA = line[11];
-    this.reqB = line[12];
-    this.reqC = line[13];
+    this.reqA = line[13];
+    this.reqB = line[14];
+    this.reqC = line[15];
 
     // term (season - module)
     // term code
@@ -104,6 +104,10 @@ export class Subject {
 
   get periodsArray() {
     return this._periodsArray;
+  }
+
+  get syllabusHref() {
+    return `https://kdb.tsukuba.ac.jp/syllabi/2022/${this.code}/jpn`;
   }
 }
 
