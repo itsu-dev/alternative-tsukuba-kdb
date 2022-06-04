@@ -192,8 +192,8 @@
   footer {
     line-height: 1em;
     font-size: 0.8rem;
-    margin: 0.3rem 0 -1rem 0;
-    padding: 0.5rem 0.8rem 1.7rem 0.8em;
+    margin: 6px 0 -16px 0;
+    padding: 4px 12px 22px 12px;
     position: relative;
     z-index: 1;
 
@@ -204,17 +204,24 @@
     p {
       color: #000;
       margin: 0;
+      display: flex;
+      justify-content: space-around;
     }
 
     a {
       color: #63c;
+      text-align: center;
+      padding: 4px 0;
+      display: block;
+      flex-grow: 1;
+    }
+
+    a + a {
+      border-left: solid 1px #ddd;
     }
 
     a#clear-bookmarks {
-      width: 100%;
-      text-align: center;
       color: #c00;
-      display: block;
     }
   }
 }

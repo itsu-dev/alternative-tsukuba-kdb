@@ -4,7 +4,11 @@ import { subjectMap } from './subject';
 
 export const getBookmarks = () => {
   const value = localStorage.getItem('kdb_bookmarks');
-  return value != null ? decodeURIComponent(value).split(',') : [];
+  return value != null
+    ? decodeURIComponent(value)
+        .split(',')
+        .filter((code) => code !== '')
+    : [];
 };
 
 const saveBookmark = (bookmarks: string[]) => {
@@ -90,6 +94,7 @@ let dom: {
   previous: HTMLAnchorElement;
   next: HTMLAnchorElement;
   close: HTMLAnchorElement;
+  exportTwinte: HTMLAnchorElement;
   clear: HTMLAnchorElement;
 };
 
@@ -125,6 +130,12 @@ const shiftTimetable = (isForward: boolean) => {
   }
 };
 
+const exportToTwinte = () => {
+  // https://github.com/twin-te/twinte-front/pull/529
+  const baseUrl = 'https://app.twinte.net/import?codes=';
+  window.open(baseUrl + getBookmarks().join(','));
+};
+
 export const initialize = () => {
   dom = {
     main: document.querySelector('#bookmark-timetable .main') as HTMLDivElement,
@@ -135,12 +146,14 @@ export const initialize = () => {
     previous: document.querySelector('#current-status .previous') as HTMLAnchorElement,
     next: document.querySelector('#current-status .next') as HTMLAnchorElement,
     close: document.querySelector('#close-bookmark-table') as HTMLAnchorElement,
+    exportTwinte: document.querySelector('#export-twinte') as HTMLAnchorElement,
     clear: document.querySelector('#clear-bookmarks') as HTMLAnchorElement,
   };
 
   dom.clear.addEventListener('click', () => clearBookmarks());
   dom.previous.addEventListener('click', () => shiftTimetable(false));
   dom.next.addEventListener('click', () => shiftTimetable(true));
+  dom.exportTwinte.addEventListener('click', () => exportToTwinte());
   dom.close.addEventListener('click', () => switchDisplayTimetable(true));
 
   dom.tableList.style.width = (dom.main.clientWidth - 20) * 6 + 'px';
