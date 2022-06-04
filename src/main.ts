@@ -1,4 +1,11 @@
-import { Subject, initializeSubject, subjectCodeList, subjectMap } from './subject';
+import {
+  Subject,
+  initializeSubject,
+  subjectCodeList,
+  subjectMap,
+  NormalSeasons,
+  Modules,
+} from './subject';
 import * as timetable from './timetable';
 import * as bookmark from './bookmark';
 import codeTypes from './code-types.json';
@@ -95,13 +102,19 @@ const search = (e: Event | null) => {
   dom.tbody.innerHTML = '';
   dom.bodyMobile.innerHTML = '';
 
-  let season: string | null = null;
-  let module: string | null = null;
+  let season: NormalSeasons | undefined;
+  let module: Modules | undefined;
   if (isMobile()) {
     let seasonModule = dom.selectModule?.options[dom.selectModule.selectedIndex].value as string;
     if (seasonModule != 'null') {
-      season = seasonModule.slice(0, 1);
-      module = seasonModule.slice(1);
+      const firstChar = seasonModule.slice(0, 1);
+      const secondChar = seasonModule.slice(1);
+      if (firstChar === '春' || firstChar === '秋') {
+        season = firstChar;
+      }
+      if (secondChar === 'A' || secondChar === 'B' || secondChar === 'C') {
+        module = secondChar;
+      }
     }
   } else {
     if (dom.form.season.value != 'null') {

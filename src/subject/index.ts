@@ -1,6 +1,14 @@
 import type { KdbData } from '../types';
 import { Periods } from './period';
 
+const normalSeasons = ['春', '秋'] as const;
+const modules = ['A', 'B', 'C'] as const;
+export type NormalSeasons = typeof normalSeasons[number];
+export type Modules = typeof modules[number];
+
+export const getTermCode = (season: NormalSeasons, char: Modules) =>
+  (season == '春' ? 0 : 3) + (char == 'A' ? 0 : char == 'B' ? 1 : 2);
+
 export class Subject {
   private _code: string;
   private _name: string;
@@ -53,8 +61,11 @@ export class Subject {
           season = char;
         }
         if (season) {
-          if (['A', 'B', 'C'].includes(char)) {
-            let no = (season == '春' ? 0 : 3) + (char == 'A' ? 0 : char == 'B' ? 1 : 2);
+          if (
+            (modules as readonly string[]).includes(char) &&
+            (normalSeasons as readonly string[]).includes(season)
+          ) {
+            let no = getTermCode(season as NormalSeasons, char as Modules);
             group.push(no);
           }
           if (char == '休') {
