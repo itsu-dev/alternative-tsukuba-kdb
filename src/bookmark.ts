@@ -234,12 +234,26 @@ export const update = () => {
                 let syllabusLink = document.createElement('a');
                 syllabusLink.href = subject.syllabusHref;
 
+                const isInperson = subject.classMethods.includes('対面');
+                const isOndemand = subject.classMethods.includes('オンデマンド');
+                const isInteractive = subject.classMethods.includes('同時双方向');
+                const isOnlyInPerson = isInperson && !isOndemand && !isInteractive;
+                const isOnlyOnline = !isInperson && (isOndemand || isInteractive);
+                const isCombinedInPersonOnline =
+                  subject.classMethods.length > 0 && !isOnlyInPerson && !isOnlyOnline;
+                // red with a class in person
+                // blue with a online class
+                // gray with others
+                const baseH = isOnlyInPerson ? 320 : isCombinedInPersonOnline ? 260 : 200;
+                const h = baseH + no * 5;
+                const s =
+                  isOnlyInPerson || isOnlyOnline || isCombinedInPersonOnline ? '100%' : '20%';
+
                 let div = document.createElement('div');
-                let h = 200 + no * 20;
                 div.className = 'class';
                 div.innerHTML = subject.name;
                 div.style.margin = 0.1 * (no + 1) + 'rem';
-                div.style.background = `hsl(${h}, 100%, 90%, 0.8)`;
+                div.style.background = `hsl(${h}, ${s}, 90%, 0.8)`;
                 item.appendChild(syllabusLink);
                 syllabusLink.appendChild(div);
                 no++;
