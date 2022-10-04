@@ -189,6 +189,27 @@ export const initialize = () => {
   if (isMobile()) {
     switchDisplayTimetable(false);
   }
+
+  const nowDate = new Date();
+  const month = nowDate.getMonth() + 1;
+  const date = nowDate.getDate();
+  // academic calendar as of 2022
+  // https://www.tsukuba.ac.jp/campuslife/calendar-school/pdf/2022-undergrad-grad-tsukuba.pdf
+  const from = {
+    springA: { month: 4, date: 1, index: 0 },
+    springB: { month: 5, date: 25, index: 1 },
+    springC: { month: 7, date: 6, index: 2 },
+    autumnA: { month: 10, date: 1, index: 3 },
+    authmnB: { month: 11, date: 11, index: 4 },
+    authmnC: { month: 1, date: 6, index: 5 },
+  };
+  const sortedFromValues = Object.values(from).sort((a, b) => a.month - b.month);
+  for (const term of sortedFromValues) {
+    if (month > term.month || (month == term.month && date >= term.date)) {
+      switchTimetable(term.index);
+    }
+  }
+  setTimeout(() => (dom.tableList.style.transition = 'margin-left 0.5s ease'), 1);
 };
 
 export const update = () => {
@@ -234,12 +255,26 @@ export const update = () => {
                 let syllabusLink = document.createElement('a');
                 syllabusLink.href = subject.syllabusHref;
 
+                const isInperson = subject.classMethods.includes('対面');
+                const isOndemand = subject.classMethods.includes('オンデマンド');
+                const isInteractive = subject.classMethods.includes('同時双方向');
+                const isOnlyInPerson = isInperson && !isOndemand && !isInteractive;
+                const isOnlyOnline = !isInperson && (isOndemand || isInteractive);
+                const isCombinedInPersonOnline =
+                  subject.classMethods.length > 0 && !isOnlyInPerson && !isOnlyOnline;
+                // red with a class in person
+                // blue with a online class
+                // gray with others
+                const baseH = isOnlyInPerson ? 320 : isCombinedInPersonOnline ? 260 : 200;
+                const h = baseH + no * 5;
+                const s =
+                  isOnlyInPerson || isOnlyOnline || isCombinedInPersonOnline ? '100%' : '20%';
+
                 let div = document.createElement('div');
-                let h = 200 + no * 20;
                 div.className = 'class';
                 div.innerHTML = subject.name;
                 div.style.margin = 0.1 * (no + 1) + 'rem';
-                div.style.background = `hsl(${h}, 100%, 90%, 0.8)`;
+                div.style.background = `hsl(${h}, ${s}, 90%, 0.8)`;
                 item.appendChild(syllabusLink);
                 syllabusLink.appendChild(div);
                 no++;

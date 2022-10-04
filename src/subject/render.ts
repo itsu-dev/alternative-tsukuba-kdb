@@ -7,7 +7,6 @@ import { onBookmarkChanged } from '../bookmark';
  * @returns {HTMLTableRowElement} 表示するべきtr要素
  */
 export function renderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
-  const methods = createClassMethod(subject.note);
   const tr = document.createElement('tr');
   const lineBreak = () => document.createElement('br');
 
@@ -37,9 +36,9 @@ export function renderSubjectAsTableRow(subject: Subject): HTMLTableRowElement {
     createColumn(subject.termStr, lineBreak(), subject.periodStr),
     createColumn(...subject.room.split(/,/g).flatMap((it) => [it, lineBreak()])),
     createColumn(...subject.person.split(/,/g).flatMap((it) => [it, lineBreak()])),
-    methods.length < 1
+    subject.classMethods.length < 1
       ? createColumn('不詳')
-      : createColumn(...methods.flatMap((it) => [it, lineBreak()])),
+      : createColumn(...subject.classMethods.flatMap((it) => [it, lineBreak()])),
     createColumn(subject.abstract),
     createColumn(subject.note)
   );
@@ -66,9 +65,6 @@ const createAnchorOfficial = (subject: Subject) => {
   return anchor;
 };
 
-const createClassMethod = (note: string) =>
-  ['対面', 'オンデマンド', '同時双方向'].filter((it) => note.indexOf(it) > -1);
-
 const createAnchorMirror = (code: string, name: string) => {
   const anchor = document.createElement('a');
   anchor.href = `https://make-it-tsukuba.github.io/alternative-tsukuba-syllabus/syllabus/${code}.html`;
@@ -92,8 +88,7 @@ export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
   abstract.className = 'abstract';
 
   const left = document.createElement('div');
-  const classMethodList = createClassMethod(subject.note);
-  let classMethod = classMethodList.length > 0 ? classMethodList.join('・') : '不詳';
+  let classMethod = subject.classMethods.length > 0 ? subject.classMethods.join('・') : '不詳';
   left.className = 'left';
   left.innerHTML = `<div class="first">${
     subject.code

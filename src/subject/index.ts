@@ -3,8 +3,10 @@ import { Periods } from './period';
 
 const normalSeasons = ['春', '秋'] as const;
 const modules = ['A', 'B', 'C'] as const;
+const classMethods = ['対面', 'オンデマンド', '同時双方向'] as const;
 export type NormalSeasons = typeof normalSeasons[number];
 export type Modules = typeof modules[number];
+export type ClassMethods = typeof classMethods[number];
 
 export const getTermCode = (season: NormalSeasons, char: Modules) =>
   (season == '春' ? 0 : 3) + (char == 'A' ? 0 : char == 'B' ? 1 : 2);
@@ -25,6 +27,7 @@ export class Subject {
   reqA: string;
   reqB: string;
   reqC: string;
+  classMethods: ClassMethods[];
   concentration = false;
   negotiable = false;
   asneeded = false;
@@ -84,6 +87,8 @@ export class Subject {
       this.negotiable = str.indexOf('応談') > -1 || this.concentration;
       this.asneeded = str.indexOf('随時') > -1 || this.concentration;
     }
+
+    this.classMethods = classMethods.filter((it) => this.note.indexOf(it) > -1);
   }
 
   get code() {
