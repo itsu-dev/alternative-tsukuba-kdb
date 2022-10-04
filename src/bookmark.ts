@@ -189,6 +189,27 @@ export const initialize = () => {
   if (isMobile()) {
     switchDisplayTimetable(false);
   }
+
+  const nowDate = new Date();
+  const month = nowDate.getMonth() + 1;
+  const date = nowDate.getDate();
+  // academic calendar as of 2022
+  // https://www.tsukuba.ac.jp/campuslife/calendar-school/pdf/2022-undergrad-grad-tsukuba.pdf
+  const from = {
+    springA: { month: 4, date: 1, index: 0 },
+    springB: { month: 5, date: 25, index: 1 },
+    springC: { month: 7, date: 6, index: 2 },
+    autumnA: { month: 10, date: 1, index: 3 },
+    authmnB: { month: 11, date: 11, index: 4 },
+    authmnC: { month: 1, date: 6, index: 5 },
+  };
+  const sortedFromValues = Object.values(from).sort((a, b) => a.month - b.month);
+  for (const term of sortedFromValues) {
+    if (month > term.month || (month == term.month && date >= term.date)) {
+      switchTimetable(term.index);
+    }
+  }
+  setTimeout(() => (dom.tableList.style.transition = 'margin-left 0.5s ease'), 1);
 };
 
 export const update = () => {
