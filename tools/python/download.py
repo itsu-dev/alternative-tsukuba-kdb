@@ -35,11 +35,11 @@ class KdbDownloader():
     """Download a CSV file of KdB data.
     """
 
-    def __init__(self, year: int = 2022) -> None:
+    def __init__(self, year: int = 2023) -> None:
         """Initializer.
 
         Args:
-            year (int, optional): A year of syllabus. Defaults to 2021.
+            year (int, optional): A year of syllabus. Defaults to 2023.
         """
         requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += "HIGH:!DH"
         self.year = year

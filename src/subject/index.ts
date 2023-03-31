@@ -11,6 +11,8 @@ export type ClassMethods = typeof classMethods[number];
 export const getTermCode = (season: NormalSeasons, char: Modules) =>
   (season == '春' ? 0 : 3) + (char == 'A' ? 0 : char == 'B' ? 1 : 2);
 
+const date = new Date();
+
 export class Subject {
   private _code: string;
   private _name: string;
@@ -112,7 +114,7 @@ export class Subject {
   }
 
   get syllabusHref() {
-    return `https://kdb.tsukuba.ac.jp/syllabi/2022/${this.code}/jpn`;
+    return `https://kdb.tsukuba.ac.jp/syllabi/${date.getFullYear()}/${this.code}/jpn`;
   }
 }
 
