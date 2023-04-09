@@ -71,6 +71,7 @@ export const clear = () => {
   dom.checkConcentration.checked = false;
   dom.checkNegotiable.checked = false;
   dom.checkAsNeeded.checked = false;
+  dom.checkExcludeBookmark.checked = false;
 };
 
 export const initialize = () => {
