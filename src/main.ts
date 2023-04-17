@@ -194,20 +194,37 @@ window.onload = function () {
     dom.checkbox.room,
     dom.checkbox.person,
     dom.checkbox.abstract,
+    dom.checkbox.note,
   ];
 
   const syncKeywordOptionsDisplay = (index: number) => {
-    if (keywordOptionsDesktop[index].checked) {
-      keywordOptionsMobile[index].classList.add('selected');
+    // bookmark
+    if (index === 6) {
+      if (dom.form.bookmark.value === 'bookmark') {
+        keywordOptionsMobile[index].classList.add('selected');
+      } else {
+        keywordOptionsMobile[index].classList.remove('selected');
+      }
     } else {
-      keywordOptionsMobile[index].classList.remove('selected');
+      if (keywordOptionsDesktop[index].checked) {
+        keywordOptionsMobile[index].classList.add('selected');
+      } else {
+        keywordOptionsMobile[index].classList.remove('selected');
+      }
     }
   };
 
   keywordOptionsMobile.forEach((li, index) => {
     li.addEventListener('click', () => {
-      keywordOptionsDesktop[index].checked = !keywordOptionsDesktop[index].checked;
-      syncKeywordOptionsDisplay(index);
+      // bookmark
+      if (index === 6) {
+        console.log('!!');
+        dom.form.bookmark.value = li.classList.contains('selected') ? 'all' : 'bookmark';
+        syncKeywordOptionsDisplay(index);
+      } else {
+        keywordOptionsDesktop[index].checked = !keywordOptionsDesktop[index].checked;
+        syncKeywordOptionsDisplay(index);
+      }
     });
   });
 
