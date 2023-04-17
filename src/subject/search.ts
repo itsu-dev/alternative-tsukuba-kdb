@@ -20,7 +20,7 @@ export interface SearchOptions {
   containsPerson: boolean;
   containsAbstract: boolean;
   containsNote: boolean;
-  containsBookmark: boolean;
+  filter: 'all' | 'bookmark' | 'except-bookmark';
   concentration: boolean;
   negotiable: boolean;
   asneeded: boolean;
@@ -88,8 +88,12 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
       : matchesSeason && matchesModule;
 
   // other options
-  let matchesOnline = options.online == 'null' || subject.note.indexOf(options.online) > -1;
-  let matchesBookmark = !options.containsBookmark || getBookmarks().includes(subject.code);
+  const bookmarked = getBookmarks().includes(subject.code);
+  const matchesOnline = options.online == 'null' || subject.note.indexOf(options.online) > -1;
+  const matchesBookmark =
+    options.filter == 'all' ||
+    (options.filter == 'bookmark' && bookmarked) ||
+    (options.filter == 'except-bookmark' && !bookmarked);
 
   return (
     matchesKeyword &&

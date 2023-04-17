@@ -61,8 +61,13 @@
               ><select id="req-c" class="requirement"></select>
             </div>
             <a href="#" id="clear" class="button right sub no-mobile">検索条件をクリア</a>
-            <span id="bookmark-options">
-              <label><input type="checkbox" id="check-bookmark" />お気に入り</label>
+            <span id="filter-options">
+              表示
+              <label><input type="radio" name="bookmark" value="all" checked />全科目</label>
+              <label><input type="radio" name="bookmark" value="bookmark" />お気に入り</label>
+              <label>
+                <input type="radio" name="bookmark" value="except-bookmark" />お気に入り以外
+              </label>
             </span>
           </div>
           <div id="period">

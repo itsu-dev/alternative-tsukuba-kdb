@@ -30,7 +30,6 @@ let dom: {
     room: HTMLInputElement;
     abstract: HTMLInputElement;
     note: HTMLInputElement;
-    bookmark: HTMLInputElement;
   };
   footer: {
     download: HTMLAnchorElement;
@@ -140,7 +139,7 @@ const search = (e: Event | null) => {
     containsPerson: dom.checkbox.person.checked,
     containsAbstract: dom.checkbox.abstract.checked,
     containsNote: dom.checkbox.note.checked,
-    containsBookmark: dom.checkbox.bookmark.checked,
+    filter: dom.form.bookmark.value,
     periods: timetable.selectedPeriods,
     disablePeriods: timetable.dom.checkExcludeBookmark.checked ? timetable.disablePeriods : null,
     concentration: timetable.dom.checkConcentration.checked,
@@ -175,7 +174,6 @@ window.onload = function () {
       room: document.getElementById('check-room') as HTMLInputElement,
       abstract: document.getElementById('check-abstract') as HTMLInputElement,
       note: document.getElementById('check-note') as HTMLInputElement,
-      bookmark: document.getElementById('check-bookmark') as HTMLInputElement,
     },
     footer: {
       download: document.getElementById('download') as HTMLAnchorElement,
@@ -196,7 +194,6 @@ window.onload = function () {
     dom.checkbox.room,
     dom.checkbox.person,
     dom.checkbox.abstract,
-    dom.checkbox.bookmark,
   ];
 
   const syncKeywordOptionsDisplay = (index: number) => {
@@ -254,6 +251,7 @@ window.onload = function () {
     dom.reqA.selectedIndex = 0;
     deleteOptions(dom.reqB);
     deleteOptions(dom.reqC);
+    dom.form.bookmark.value = 'all';
     dom.form.season.value = 'null';
     dom.form.module.value = 'null';
     dom.form.online.value = 'null';
@@ -265,7 +263,7 @@ window.onload = function () {
     dom.checkbox.room.checked = false;
     dom.checkbox.abstract.checked = false;
     dom.checkbox.note.checked = false;
-    dom.checkbox.bookmark.checked = false;
+    dom.form.checked = false;
 
     timetable.clear();
 
