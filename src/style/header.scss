@@ -197,7 +197,8 @@ header#top {
     width: 8rem;
   }
 
-  #submit {
+  #submit,
+  #clear {
     margin-right: 1rem;
   }
 
@@ -271,6 +272,10 @@ header#top {
 @include mobile {
   header#top {
     #keyword-options {
+      display: none;
+    }
+
+    #filter-options {
       display: none;
     }
 

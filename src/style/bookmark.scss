@@ -1,8 +1,11 @@
 @import 'variables.css';
 @import 'mixin.scss';
 
+$wrapperWidth: 500px;
+$noWidth: 32px;
+
 #bookmark-timetable {
-  width: 500px;
+  width: $wrapperWidth;
   position: fixed;
   bottom: 0;
   right: 1rem;
@@ -19,7 +22,7 @@
     line-height: 1.4rem;
     color: #333;
     font-size: 1.4rem;
-    margin-bottom: -0.4rem;
+    margin-bottom: 0.6rem;
     text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 4px #fff, 0 0 4px #fff, 0 0 6px #fff, 0 0 6px #fff;
     display: flex;
     justify-content: flex-end;
@@ -71,7 +74,6 @@
 
   .content {
     width: 100%;
-    margin-bottom: -1rem;
     display: flex;
   }
 
@@ -83,34 +85,36 @@
   }
 
   .no {
-    width: 8px;
+    width: calc(#{$noWidth} - 6px * 2);
     font-size: 0.8rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    margin-top: 1rem;
     padding: 1.5rem 6px 0.4rem 6px;
     position: relative;
     z-index: 1;
 
     li {
       width: 100%;
-      height: 3.1rem;
-      line-height: 3.1rem;
+      height: calc(3.1rem - 0.3rem);
       text-align: center;
-      padding-right: 0.4rem;
+      padding: 0.3rem 0.4rem 0 0;
       list-style: none;
+
+      .time {
+        line-height: 1.2em;
+        color: #999;
+        font-size: 9px;
+      }
     }
   }
 
   div.table-wrapper {
-    width: 100%;
+    width: calc(#{$wrapperWidth} - #{$noWidth} + 1em);
     height: calc(100% - 0.8rem);
-
-    div.display-area {
-      width: calc(100% - 20px);
-      padding: 1rem 1rem 1rem 0;
-      overflow: hidden;
-    }
+    margin: -1em 0;
+    padding: 1em 0;
+    flex-shrink: 0;
+    overflow: hidden;
   }
 
   ul.table-list {
@@ -119,12 +123,12 @@
   }
 
   li.table {
-    width: calc(100% - 20px);
+    width: calc(#{$wrapperWidth} - #{$noWidth} - 0.4rem);
     padding: 0.4rem 0.4rem 0.4rem 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     display: flex;
-    float: left;
+    flex-shrink: 0;
     justify-content: space-around;
   }
 

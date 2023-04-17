@@ -29,7 +29,7 @@ let dom: {
     person: HTMLInputElement;
     room: HTMLInputElement;
     abstract: HTMLInputElement;
-    bookmark: HTMLInputElement;
+    note: HTMLInputElement;
   };
   footer: {
     download: HTMLAnchorElement;
@@ -138,7 +138,8 @@ const search = (e: Event | null) => {
     containsRoom: dom.checkbox.room.checked,
     containsPerson: dom.checkbox.person.checked,
     containsAbstract: dom.checkbox.abstract.checked,
-    containsBookmark: dom.checkbox.bookmark.checked,
+    containsNote: dom.checkbox.note.checked,
+    filter: dom.form.bookmark.value,
     periods: timetable.selectedPeriods,
     disablePeriods: timetable.dom.checkExcludeBookmark.checked ? timetable.disablePeriods : null,
     concentration: timetable.dom.checkConcentration.checked,
@@ -172,7 +173,7 @@ window.onload = function () {
       person: document.getElementById('check-person') as HTMLInputElement,
       room: document.getElementById('check-room') as HTMLInputElement,
       abstract: document.getElementById('check-abstract') as HTMLInputElement,
-      bookmark: document.getElementById('check-bookmark') as HTMLInputElement,
+      note: document.getElementById('check-note') as HTMLInputElement,
     },
     footer: {
       download: document.getElementById('download') as HTMLAnchorElement,
@@ -193,21 +194,37 @@ window.onload = function () {
     dom.checkbox.room,
     dom.checkbox.person,
     dom.checkbox.abstract,
-    dom.checkbox.bookmark,
+    dom.checkbox.note,
   ];
 
   const syncKeywordOptionsDisplay = (index: number) => {
-    if (keywordOptionsDesktop[index].checked) {
-      keywordOptionsMobile[index].classList.add('selected');
+    // bookmark
+    if (index === 6) {
+      if (dom.form.bookmark.value === 'bookmark') {
+        keywordOptionsMobile[index].classList.add('selected');
+      } else {
+        keywordOptionsMobile[index].classList.remove('selected');
+      }
     } else {
-      keywordOptionsMobile[index].classList.remove('selected');
+      if (keywordOptionsDesktop[index].checked) {
+        keywordOptionsMobile[index].classList.add('selected');
+      } else {
+        keywordOptionsMobile[index].classList.remove('selected');
+      }
     }
   };
 
   keywordOptionsMobile.forEach((li, index) => {
     li.addEventListener('click', () => {
-      keywordOptionsDesktop[index].checked = !keywordOptionsDesktop[index].checked;
-      syncKeywordOptionsDisplay(index);
+      // bookmark
+      if (index === 6) {
+        console.log('!!');
+        dom.form.bookmark.value = li.classList.contains('selected') ? 'all' : 'bookmark';
+        syncKeywordOptionsDisplay(index);
+      } else {
+        keywordOptionsDesktop[index].checked = !keywordOptionsDesktop[index].checked;
+        syncKeywordOptionsDisplay(index);
+      }
     });
   });
 
@@ -251,6 +268,7 @@ window.onload = function () {
     dom.reqA.selectedIndex = 0;
     deleteOptions(dom.reqB);
     deleteOptions(dom.reqC);
+    dom.form.bookmark.value = 'all';
     dom.form.season.value = 'null';
     dom.form.module.value = 'null';
     dom.form.online.value = 'null';
@@ -261,7 +279,8 @@ window.onload = function () {
     dom.checkbox.person.checked = false;
     dom.checkbox.room.checked = false;
     dom.checkbox.abstract.checked = false;
-    dom.checkbox.bookmark.checked = false;
+    dom.checkbox.note.checked = false;
+    dom.form.checked = false;
 
     timetable.clear();
 

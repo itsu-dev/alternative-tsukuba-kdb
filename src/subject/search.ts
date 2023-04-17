@@ -19,7 +19,8 @@ export interface SearchOptions {
   containsRoom: boolean;
   containsPerson: boolean;
   containsAbstract: boolean;
-  containsBookmark: boolean;
+  containsNote: boolean;
+  filter: 'all' | 'bookmark' | 'except-bookmark';
   concentration: boolean;
   negotiable: boolean;
   asneeded: boolean;
@@ -33,6 +34,7 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
   const matchesRoom = options.containsRoom && subject.room.match(regex) != null;
   const matchesPerson = options.containsPerson && subject.person.match(regex) != null;
   const matchesAbstract = options.containsAbstract && subject.abstract.match(regex) != null;
+  const matchesNote = options.containsNote && subject.note.match(regex) != null;
   const matchesKeyword =
     (!options.containsCode &&
       !options.containsName &&
@@ -43,7 +45,8 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
     matchesName ||
     matchesRoom ||
     matchesPerson ||
-    matchesAbstract;
+    matchesAbstract ||
+    matchesNote;
 
   // period
   let matchesPeriods =
@@ -85,8 +88,12 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
       : matchesSeason && matchesModule;
 
   // other options
-  let matchesOnline = options.online == 'null' || subject.note.indexOf(options.online) > -1;
-  let matchesBookmark = !options.containsBookmark || getBookmarks().includes(subject.code);
+  const bookmarked = getBookmarks().includes(subject.code);
+  const matchesOnline = options.online == 'null' || subject.note.indexOf(options.online) > -1;
+  const matchesBookmark =
+    options.filter == 'all' ||
+    (options.filter == 'bookmark' && bookmarked) ||
+    (options.filter == 'except-bookmark' && !bookmarked);
 
   return (
     matchesKeyword &&
