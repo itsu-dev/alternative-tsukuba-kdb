@@ -19,6 +19,7 @@ export interface SearchOptions {
   containsRoom: boolean;
   containsPerson: boolean;
   containsAbstract: boolean;
+  containsNote: boolean;
   containsBookmark: boolean;
   concentration: boolean;
   negotiable: boolean;
@@ -33,6 +34,7 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
   const matchesRoom = options.containsRoom && subject.room.match(regex) != null;
   const matchesPerson = options.containsPerson && subject.person.match(regex) != null;
   const matchesAbstract = options.containsAbstract && subject.abstract.match(regex) != null;
+  const matchesNote = options.containsNote && subject.note.match(regex) != null;
   const matchesKeyword =
     (!options.containsCode &&
       !options.containsName &&
@@ -43,7 +45,8 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
     matchesName ||
     matchesRoom ||
     matchesPerson ||
-    matchesAbstract;
+    matchesAbstract ||
+    matchesNote;
 
   // period
   let matchesPeriods =

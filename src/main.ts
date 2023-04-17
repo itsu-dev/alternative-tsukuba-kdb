@@ -29,6 +29,7 @@ let dom: {
     person: HTMLInputElement;
     room: HTMLInputElement;
     abstract: HTMLInputElement;
+    note: HTMLInputElement;
     bookmark: HTMLInputElement;
   };
   footer: {
@@ -138,6 +139,7 @@ const search = (e: Event | null) => {
     containsRoom: dom.checkbox.room.checked,
     containsPerson: dom.checkbox.person.checked,
     containsAbstract: dom.checkbox.abstract.checked,
+    containsNote: dom.checkbox.note.checked,
     containsBookmark: dom.checkbox.bookmark.checked,
     periods: timetable.selectedPeriods,
     disablePeriods: timetable.dom.checkExcludeBookmark.checked ? timetable.disablePeriods : null,
@@ -172,6 +174,7 @@ window.onload = function () {
       person: document.getElementById('check-person') as HTMLInputElement,
       room: document.getElementById('check-room') as HTMLInputElement,
       abstract: document.getElementById('check-abstract') as HTMLInputElement,
+      note: document.getElementById('check-note') as HTMLInputElement,
       bookmark: document.getElementById('check-bookmark') as HTMLInputElement,
     },
     footer: {
@@ -261,6 +264,7 @@ window.onload = function () {
     dom.checkbox.person.checked = false;
     dom.checkbox.room.checked = false;
     dom.checkbox.abstract.checked = false;
+    dom.checkbox.note.checked = false;
     dom.checkbox.bookmark.checked = false;
 
     timetable.clear();
