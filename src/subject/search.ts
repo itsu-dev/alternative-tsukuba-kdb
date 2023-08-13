@@ -54,7 +54,10 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
       options.disablePeriods != null &&
       subject.periodsArray.some((periods) => periods.matches(options.disablePeriods!), false)
     ) &&
-    (options.periods.length == 0 ||
+    ((options.periods.length == 0 &&
+      !options.concentration &&
+      !options.negotiable &&
+      !options.asneeded) ||
       subject.periodsArray.some((periods) => periods.matches(options.periods), false) ||
       (options.concentration && subject.concentration) ||
       (options.negotiable && subject.negotiable) ||
