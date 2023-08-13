@@ -32,7 +32,11 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
   const matchesCode = options.containsCode && subject.code.indexOf(options.keyword) > -1;
   const matchesName = options.containsName && subject.name.match(regex) != null;
   const matchesRoom = options.containsRoom && subject.room.match(regex) != null;
-  const matchesPerson = options.containsPerson && subject.person.match(regex) != null;
+  // When searching for "情報太郎" or "情報　太郎", it will match "情報 太郎".
+  const matchesPerson =
+    options.containsPerson &&
+    subject.person.replace(' ', '').match(new RegExp(options.keyword.replace(/[ 　]/, ''), 'i')) !=
+      null;
   const matchesAbstract = options.containsAbstract && subject.abstract.match(regex) != null;
   const matchesNote = options.containsNote && subject.note.match(regex) != null;
   const matchesKeyword =
