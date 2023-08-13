@@ -49,38 +49,42 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
     matchesNote;
 
   // period
-  let matchesPeriods =
+  const matchesPeriods =
     !(
       options.disablePeriods != null &&
       subject.periodsArray.some((periods) => periods.matches(options.disablePeriods!), false)
     ) &&
-    (options.periods.length == 0 ||
+    ((options.periods.length == 0 &&
+      !options.concentration &&
+      !options.negotiable &&
+      !options.asneeded) ||
       subject.periodsArray.some((periods) => periods.matches(options.periods), false) ||
       (options.concentration && subject.concentration) ||
       (options.negotiable && subject.negotiable) ||
       (options.asneeded && subject.asneeded));
 
   // standard year of course
-  let matchesYear;
-  if (options.year == 'null') {
-    matchesYear = true;
-  } else if (subject.year.indexOf('-') == -1) {
-    matchesYear = subject.year.indexOf(options.year) > -1;
-  } else {
-    let minYear = subject.year.replace(/\s-\s[1-6]/g, '');
-    let maxYear = subject.year.replace(/[1-6]\s-\s/g, '');
-    matchesYear = minYear <= options.year && options.year <= maxYear;
-  }
+  const matchesYear = (() => {
+    if (options.year == 'null') {
+      return true;
+    } else if (subject.year.indexOf('-') == -1) {
+      return subject.year.indexOf(options.year) > -1;
+    } else {
+      const minYear = subject.year.replace(/\s-\s[1-6]/g, '');
+      const maxYear = subject.year.replace(/[1-6]\s-\s/g, '');
+      return minYear <= options.year && options.year <= maxYear;
+    }
+  })();
 
   // requirements
-  let matchesReqA = options.reqA == 'null' || options.reqA == subject.reqA;
-  let matchesReqB = options.reqB == 'null' || options.reqB == subject.reqB;
-  let matchesReqC = options.reqC == 'null' || options.reqC == subject.reqC;
+  const matchesReqA = options.reqA == 'null' || options.reqA == subject.reqA;
+  const matchesReqB = options.reqB == 'null' || options.reqB == subject.reqB;
+  const matchesReqC = options.reqC == 'null' || options.reqC == subject.reqC;
 
   // term
-  let matchesSeason = options.season == null || subject.termStr.indexOf(options.season) > -1;
-  let matchesModule = options.module == null || subject.termStr.indexOf(options.module) > -1;
-  let matchesTerm =
+  const matchesSeason = options.season == null || subject.termStr.indexOf(options.season) > -1;
+  const matchesModule = options.module == null || subject.termStr.indexOf(options.module) > -1;
+  const matchesTerm =
     options.season && options.module
       ? subject.termCodes.some((codes) =>
           codes.includes(getTermCode(options.season!, options.module!))
