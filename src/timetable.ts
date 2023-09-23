@@ -19,14 +19,14 @@ export let dom: {
 
 export const create = <T>(filled: T): T[][] => {
   const table = new Array(daysofweek.length);
-  for (let i in daysofweek) {
+  for (const i in daysofweek) {
     table[i] = new Array(maxTime).fill(filled);
   }
   return table;
 };
 
 export const display = () => {
-  let linkBounding = dom.display.getBoundingClientRect();
+  const linkBounding = dom.display.getBoundingClientRect();
   dom.timetable.style.top = window.pageYOffset + linkBounding.bottom + 10 + 'px';
   dom.timetable.style.left = window.pageXOffset + linkBounding.left + 'px';
   dom.timetable.style.display = 'block';
@@ -99,12 +99,12 @@ export const initialize = () => {
   let selectedMousePeriods: boolean[][] | null = null;
 
   for (let y = 0; y <= maxTime; y++) {
-    let line = document.createElement('div');
+    const line = document.createElement('div');
     line.classList.add('line');
     dom.content.appendChild(line);
 
     for (let x = -1; x < 7; x++) {
-      let item = document.createElement('div');
+      const item = document.createElement('div');
       item.classList.add('item');
       line.appendChild(item);
 

@@ -105,8 +105,9 @@ const search = (e: Event | null) => {
 
   let season: NormalSeasons | undefined;
   let module: Modules | undefined;
+
   if (isMobile()) {
-    let seasonModule = dom.selectModule?.options[dom.selectModule.selectedIndex].value as string;
+    const seasonModule = dom.selectModule?.options[dom.selectModule.selectedIndex].value as string;
     if (seasonModule != 'null') {
       const firstChar = seasonModule.slice(0, 1);
       const secondChar = seasonModule.slice(1);
@@ -126,7 +127,7 @@ const search = (e: Event | null) => {
     }
   }
 
-  let options: SearchOptions = {
+  const options: SearchOptions = {
     keyword: dom.keyword.value,
     reqA: dom.reqA.options[dom.reqA.selectedIndex].value,
     reqB: dom.reqB.selectedIndex > -1 ? dom.reqB.options[dom.reqB.selectedIndex].value : 'null',
@@ -293,7 +294,7 @@ window.onload = function () {
 
   const resized = () => {
     dom.clear.removeEventListener('click', clear);
-    let supportsTouch = 'ontouchend' in document;
+    const supportsTouch = 'ontouchend' in document;
     timetable.dom.display.removeEventListener(
       supportsTouch ? 'touchstart' : 'click',
       timetable.display
@@ -362,13 +363,13 @@ window.onload = function () {
 
   // get YYYYMMDDhhmmdd
   const getDateString = () => {
-    let date = new Date();
-    let Y = date.getFullYear();
-    let M = ('00' + (date.getMonth() + 1)).slice(-2);
-    let D = ('00' + date.getDate()).slice(-2);
-    let h = ('0' + date.getHours()).slice(-2);
-    let m = ('0' + date.getMinutes()).slice(-2);
-    let d = ('0' + date.getSeconds()).slice(-2);
+    const date = new Date();
+    const Y = date.getFullYear();
+    const M = ('00' + (date.getMonth() + 1)).slice(-2);
+    const D = ('00' + date.getDate()).slice(-2);
+    const h = ('0' + date.getHours()).slice(-2);
+    const m = ('0' + date.getMinutes()).slice(-2);
+    const d = ('0' + date.getSeconds()).slice(-2);
     return Y + M + D + h + m + d;
   };
 
@@ -379,13 +380,13 @@ window.onload = function () {
 
   const constructOptions = (select: HTMLSelectElement, types: { [key: string]: any }) => {
     deleteOptions(select);
-    let option = document.createElement('option');
+    const option = document.createElement('option');
     option.value = 'null';
     option.innerHTML = '指定なし';
     select.appendChild(option);
 
-    for (let key in types) {
-      let option = document.createElement('option');
+    for (const key in types) {
+      const option = document.createElement('option');
       option.innerHTML = key;
       select.appendChild(option);
     }
@@ -403,7 +404,7 @@ window.onload = function () {
     if (selectedValue == 'null') {
       deleteOptions(subSelect);
     } else {
-      let types = isA
+      const types = isA
         ? (codeTypes as any)[reqA_value]
         : (codeTypes as any)[reqA_value].childs[reqB_value];
       constructOptions(subSelect, types.childs);
@@ -424,10 +425,10 @@ window.onload = function () {
     // bookmark
     bookmark.update();
 
-    let firstBookmark = document.querySelector('input.bookmark');
+    const firstBookmark = document.querySelector('input.bookmark');
     if (!isMobile() && localStorage.getItem('kdb_bookmarks') == null) {
       dom.bookmarkInfo.style.opacity = '1.0';
-      let bounding = firstBookmark?.getBoundingClientRect() as DOMRect;
+      const bounding = firstBookmark?.getBoundingClientRect() as DOMRect;
       dom.bookmarkInfo.style.left = bounding.left + 28 + 'px';
       dom.bookmarkInfo.style.top = bounding.top + 4 + 'px';
     } else {
@@ -443,7 +444,7 @@ window.onload = function () {
 
   const displayMS = 200;
   document.addEventListener('click', (e: MouseEvent) => {
-    let query = '#timetable, ' + (isMobile() ? '#display-timetable-sp' : '#display-timetable');
+    const query = '#timetable, ' + (isMobile() ? '#display-timetable-sp' : '#display-timetable');
     if (!(e.target as HTMLElement).closest(query)) {
       timetable.dom.timetable.style.opacity = '0';
       setTimeout(() => {
