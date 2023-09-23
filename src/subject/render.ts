@@ -73,7 +73,7 @@ const createAnchorMirror = (code: string, name: string) => {
   anchor.append('シラバス（ミラー）');
   anchor.addEventListener('click', (evt) => {
     evt.preventDefault();
-    let win = document.createElement('draggable-window');
+    const win = document.createElement('draggable-window');
     win.innerHTML = `<div slot='title'>${name} - シラバス</div><iframe slot='body' src='${anchor.href}' />`;
     document.body.append(win);
   });
@@ -87,8 +87,8 @@ export function renderSubjectForMobile(subject: Subject, isFirst: boolean) {
   const abstract = document.createElement('div');
   abstract.className = 'abstract';
 
+  const classMethod = subject.classMethods.length > 0 ? subject.classMethods.join('・') : '不詳';
   const left = document.createElement('div');
-  let classMethod = subject.classMethods.length > 0 ? subject.classMethods.join('・') : '不詳';
   left.className = 'left';
   left.innerHTML = `<div class="first">${
     subject.code

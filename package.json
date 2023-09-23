@@ -4,9 +4,9 @@
   "description": "[![CSV scheduled update](https://github.com/Make-IT-TSUKUBA/alternative-tsukuba-kdb/actions/workflows/main.yml/badge.svg)](https://github.com/Make-IT-TSUKUBA/alternative-tsukuba-kdb/actions/workflows/main.yml)",
   "main": ".prettierrc.js",
   "scripts": {
-    "build": "webpack",
+    "build": "NODE_OPTIONS='--openssl-legacy-provider' webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint src",
+    "lint": "eslint \"src/**/*.ts\"",
     "dev": "NODE_OPTIONS='--openssl-legacy-provider' webpack serve"
   },
   "repository": {
@@ -20,16 +20,16 @@
   },
   "homepage": "https://github.com/Make-IT-TSUKUBA/alternative-tsukuba-kdb#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.31.2",
-    "@typescript-eslint/parser": "^4.31.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
     "css-loader": "^6.3.0",
     "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^5.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",
     "json-loader": "^0.5.7",
@@ -38,7 +38,7 @@
     "sass-loader": "^12.1.0",
     "style-loader": "^3.3.0",
     "ts-loader": "^9.2.6",
-    "typescript": "^4.4.3",
+    "typescript": "^5.2.2",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.3.0"

@@ -9,23 +9,23 @@ export class Periods {
     let dayArray: number[] = [];
 
     if (value != null && typeof value == 'string') {
-      let periodStrArray = (value as string).split(',');
-      for (let periodStr of periodStrArray) {
-        let dayStr = periodStr.replace(/[0-9\\-]/g, '');
-        let days = dayStr
+      const periodStrArray = (value as string).split(',');
+      for (const periodStr of periodStrArray) {
+        const dayStr = periodStr.replace(/[0-9\\-]/g, '');
+        const days = dayStr
           .split('・')
           .filter((day) => timetable.daysofweek.includes(day))
           .map((day) => timetable.daysofweek.indexOf(day));
         if (days.length > 0) {
           dayArray = days;
         }
-        let timeArray = [];
-        let timeStr = periodStr.replace(/[^0-9\\-]/g, '');
+        const timeArray: number[] = [];
+        const timeStr = periodStr.replace(/[^0-9\\-]/g, '');
 
         if (timeStr.indexOf('-') > -1) {
-          let timeStrArray = timeStr.split('-');
-          let startTime = Number(timeStrArray[0]);
-          let endTime = Number(timeStrArray[1]);
+          const timeStrArray = timeStr.split('-');
+          const startTime = Number(timeStrArray[0]);
+          const endTime = Number(timeStrArray[1]);
           for (let k = startTime; k <= endTime; k++) {
             timeArray.push(k);
           }
@@ -34,8 +34,8 @@ export class Periods {
         }
 
         if (timeStr.length > 0) {
-          for (let day of dayArray) {
-            for (let time of timeArray) {
+          for (const day of dayArray) {
+            for (const time of timeArray) {
               this._periods[day][time - 1] = true;
             }
           }
@@ -82,8 +82,8 @@ export class Periods {
   }
 
   matches(periods: Periods) {
-    for (let day in this._periods) {
-      for (let time in this._periods[day]) {
+    for (const day in this._periods) {
+      for (const time in this._periods[day]) {
         if (this._periods[day][time] && periods._periods[day][time]) {
           return true;
         }

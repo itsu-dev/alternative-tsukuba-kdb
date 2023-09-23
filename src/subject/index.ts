@@ -1,12 +1,23 @@
 import type { KdbData } from '../types';
 import { Periods } from './period';
 
+const allSeasons = ['春', '夏', '秋', '冬'] as const;
 const normalSeasons = ['春', '秋'] as const;
 const modules = ['A', 'B', 'C'] as const;
 const classMethods = ['対面', 'オンデマンド', '同時双方向'] as const;
+
+export type AllSeasons = typeof allSeasons[number];
 export type NormalSeasons = typeof normalSeasons[number];
 export type Modules = typeof modules[number];
 export type ClassMethods = typeof classMethods[number];
+
+const isAllSeason = (char: string): char is AllSeasons =>
+  (allSeasons as readonly string[]).includes(char);
+
+const isNormalSeason = (char: string): char is NormalSeasons =>
+  (normalSeasons as readonly string[]).includes(char);
+
+const isModule = (char: string): char is Modules => (modules as readonly string[]).includes(char);
 
 export const getTermCode = (season: NormalSeasons, char: Modules) =>
   (season == '春' ? 0 : 3) + (char == 'A' ? 0 : char == 'B' ? 1 : 2);
@@ -54,26 +65,23 @@ export class Subject {
     // : spring A-C: 0-2
     // : autumn A-C: 3-5
     // : spring, summer, autumn and winter holiday: 6-9
-    let termGroups = this.termStr.split(' ');
-    let allSeasons = ['春', '夏', '秋', '冬'];
-    let season: string | null = null;
+    const termGroups = this.termStr.split(' ');
+    let season: AllSeasons | null = null;
 
-    for (let groupStr of termGroups) {
-      let group: number[] = [];
-      let charArray = Array.from(groupStr);
-      for (let char of charArray) {
-        if (allSeasons.includes(char)) {
+    for (const groupStr of termGroups) {
+      const group: number[] = [];
+      const charArray = Array.from(groupStr);
+
+      for (const char of charArray) {
+        if (isAllSeason(char)) {
           season = char;
         }
         if (season) {
-          if (
-            (modules as readonly string[]).includes(char) &&
-            (normalSeasons as readonly string[]).includes(season)
-          ) {
-            let no = getTermCode(season as NormalSeasons, char as Modules);
+          if (isModule(char) && isNormalSeason(season)) {
+            const no = getTermCode(season, char);
             group.push(no);
           }
-          if (char == '休') {
+          if (char === '休') {
             group.push(allSeasons.indexOf(season) + 6);
           }
         }
@@ -82,8 +90,8 @@ export class Subject {
     }
 
     // period (day, time)
-    let termStrArray = this.periodStr.split(' ');
-    for (let str of termStrArray) {
+    const termStrArray = this.periodStr.split(' ');
+    for (const str of termStrArray) {
       this._periodsArray.push(new Periods(str));
       this.concentration = str.indexOf('集中') > -1 || this.concentration;
       this.negotiable = str.indexOf('応談') > -1 || this.concentration;
@@ -118,19 +126,18 @@ export class Subject {
   }
 }
 
-export const subjectMap: {
-  [key: string]: Subject;
-} = {};
+export const subjectMap: { [key: string]: Subject } = {};
 export const subjectCodeList: string[] = [];
 
 export const initializeSubject = async () => {
   const kdb = (await import('../kdb.json')) as unknown as KdbData;
+
   // read a json
   const subjects = kdb.subject;
   const updatedDate = kdb.updated;
 
   // convert into a map
-  for (let line of subjects) {
+  for (const line of subjects) {
     const subject = new Subject(line);
     subjectMap[subject.code] = subject;
     subjectCodeList.push(subject.code);

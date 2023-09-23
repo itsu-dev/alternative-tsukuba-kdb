@@ -12,12 +12,7 @@ export const getBookmarks = () => {
 };
 
 const saveBookmark = (bookmarks: string[]) => {
-  let value = '';
-  for (let i = 0; i < bookmarks.length; i++) {
-    value += ',' + bookmarks[i];
-  }
-  value = encodeURIComponent(value.substr(1, value.length - 1));
-  localStorage.setItem('kdb_bookmarks', value);
+  localStorage.setItem('kdb_bookmarks', encodeURIComponent(bookmarks.join(',')));
 };
 
 const removeBookmark = (subjectCode: string) => {
@@ -33,7 +28,7 @@ const removeBookmark = (subjectCode: string) => {
 
 export const onBookmarkChanged = (checked: boolean, code: string) => {
   if (checked) {
-    let bookmarks = getBookmarks();
+    const bookmarks = getBookmarks();
     if (bookmarks.includes(code)) {
       return;
     } else {
@@ -51,14 +46,14 @@ export const onBookmarkChanged = (checked: boolean, code: string) => {
 
 const changeBookmarkButton = (code: string) => {
   // desktop
-  let bookmark = document.getElementById('bookmark-' + code);
+  const bookmark = document.getElementById('bookmark-' + code);
   if (bookmark != null) {
     (bookmark as HTMLInputElement).checked = false;
   }
 
   // mobile
-  let addBookmarkAnchor = document.getElementById('add-bookmark-' + code);
-  let removeBookmarkAnchor = document.getElementById('remove-bookmark-' + code);
+  const addBookmarkAnchor = document.getElementById('add-bookmark-' + code);
+  const removeBookmarkAnchor = document.getElementById('remove-bookmark-' + code);
   if (addBookmarkAnchor != null) {
     (addBookmarkAnchor as HTMLAnchorElement).style.display = 'block';
     (removeBookmarkAnchor as HTMLAnchorElement).style.display = 'none';
@@ -72,7 +67,7 @@ const clearBookmarks = () => {
   }
 
   const bookmarks = getBookmarks();
-  for (let subjectId of bookmarks) {
+  for (const subjectId of bookmarks) {
     removeBookmark(subjectId);
     changeBookmarkButton(subjectId);
   }
@@ -161,17 +156,17 @@ export const initialize = () => {
   // create HTML elements for a table
   let firstTable = null;
   for (let moduleNo = 0; moduleNo < maxModule; moduleNo++) {
-    let table = document.createElement('li');
+    const table = document.createElement('li');
     firstTable = firstTable ?? table;
     table.className = 'table tile';
     dom.periods[moduleNo] = timetable.create<HTMLLIElement>(null as any);
 
     for (let x = 0; x < timetable.daysofweek.length; x++) {
-      let row = document.createElement('ul');
+      const row = document.createElement('ul');
       row.className = 'row';
 
       for (let y = -1; y < timetable.maxTime; y++) {
-        let item = document.createElement('li');
+        const item = document.createElement('li');
         if (y == -1) {
           item.innerHTML = timetable.daysofweek[x];
         }
@@ -214,45 +209,45 @@ export const initialize = () => {
 
 export const update = () => {
   let credit = 0.0;
-  let bookmarks = getBookmarks();
+  const bookmarks = getBookmarks();
   timetable.disablePeriods.clear();
 
   // timetable
   for (let moduleNo = 0; moduleNo < maxModule; moduleNo++) {
     for (let time = 0; time < timetable.maxTime; time++) {
       for (let day = 0; day < timetable.daysofweek.length; day++) {
-        let item = dom.periods[moduleNo][day][time];
+        const item = dom.periods[moduleNo][day][time];
         item.innerHTML = '';
         let no = 0;
 
-        for (let code of bookmarks) {
+        for (const code of bookmarks) {
           if (!(code in subjectMap)) {
             continue;
           }
-          let subject = subjectMap[code];
+
+          const subject = subjectMap[code];
 
           // term
-          for (let subjectModuleNo in subject.termCodes) {
+          for (const subjectModuleNo in subject.termCodes) {
             if (!subject.termCodes[subjectModuleNo].includes(moduleNo)) {
               continue;
             }
 
             // period
-            let startNo, endNo;
-            [startNo, endNo] =
+            const [startNo, endNo] =
               subject.termCodes.length == subject.periodsArray.length
                 ? [Number(subjectModuleNo), Number(subjectModuleNo)]
                 : [0, subject.periodsArray.length - 1];
 
             for (let i = startNo; i <= endNo; i++) {
-              let periods = subject.periodsArray[i];
+              const periods = subject.periodsArray[i];
               if (periods.get(day, time)) {
                 // exclude from the timetable for search
                 if (moduleNo == displayingModule) {
                   timetable.disablePeriods.set(day, time, true);
                 }
 
-                let syllabusLink = document.createElement('a');
+                const syllabusLink = document.createElement('a');
                 syllabusLink.href = subject.syllabusHref;
 
                 const isInperson = subject.classMethods.includes('対面');
@@ -270,7 +265,7 @@ export const update = () => {
                 const s =
                   isOnlyInPerson || isOnlyOnline || isCombinedInPersonOnline ? '100%' : '20%';
 
-                let div = document.createElement('div');
+                const div = document.createElement('div');
                 div.className = 'class';
                 div.innerHTML = subject.name;
                 div.style.margin = 0.1 * (no + 1) + 'rem';
@@ -280,7 +275,7 @@ export const update = () => {
                 no++;
 
                 // remove button
-                let remove = document.createElement('a');
+                const remove = document.createElement('a');
                 remove.classList.add('remove');
                 remove.innerHTML = '×';
                 div.appendChild(remove);
@@ -306,15 +301,15 @@ export const update = () => {
   }
 
   // credit
-  for (let code of bookmarks) {
+  for (const code of bookmarks) {
     if (code in subjectMap && !isNaN(subjectMap[code].credit)) {
       credit += Number(subjectMap[code].credit);
     }
   }
 
   // status
-  let season = displayingModule < 3 ? '春' : '秋';
-  let module_ = displayingModule % 3 == 0 ? 'A' : displayingModule % 3 == 1 ? 'B' : 'C';
+  const season = displayingModule < 3 ? '春' : '秋';
+  const module_ = displayingModule % 3 == 0 ? 'A' : displayingModule % 3 == 1 ? 'B' : 'C';
   dom.module.innerHTML = season + module_;
   dom.credit.innerHTML = credit.toFixed(1) + '単位';
 };
