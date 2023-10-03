@@ -1,7 +1,6 @@
 on: 
-  push:
-    - pull_request
-    - workflow_dispatch
+  - pull_request
+  - workflow_dispatch
 env:
   cache-date: "2023-10-04"
 jobs:
