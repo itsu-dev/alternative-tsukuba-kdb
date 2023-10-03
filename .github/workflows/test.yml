@@ -1,8 +1,10 @@
 on: 
-  - pull_request
-  - workflow_dispatch
+  pull_request:
+  workflow_dispatch:
+
 env:
   cache-date: "2023-10-04"
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,10 +16,10 @@ jobs:
         id: cache_dependencies
         with:
           path: node_modules
-          key: ${{ env.cache-date }}-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles("package-lock.json") }}
+          key: ${{ env.cache-date }}-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: ${{ env.cache-date }}-${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Install Dependencies
-        if: steps.cache_dependencies.outputs.cache-hit != "true"
+        if: steps.cache_dependencies.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build
         run: npm run build
