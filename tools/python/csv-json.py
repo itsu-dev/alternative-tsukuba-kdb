@@ -209,10 +209,10 @@ def main() -> None:
 
     # output
     with open(f"{args.output_dir}/kdb.json", "w", encoding="utf-8") as fp:
-        json.dump(k.get_output(), fp, indent="\t", ensure_ascii=False)
+        json.dump(k.get_output(), fp, indent="  ", ensure_ascii=False)
 
     with open(f"{args.output_dir}/code-types.json", "w", encoding="utf-8") as fp:
-        json.dump(k.get_types(), fp, indent="\t", ensure_ascii=False)
+        json.dump(k.get_types(), fp, indent="  ", ensure_ascii=False)
 
     k.print_empty_typed_subjects()
 
