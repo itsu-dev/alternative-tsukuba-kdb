@@ -5,7 +5,7 @@ on:
 env:
   cache-date: "2023-10-04"
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,5 +20,7 @@ jobs:
       - name: Install Dependencies
         if: steps.cache_dependencies.outputs.cache-hit != "true"
         run: npm ci
+      - name: Build
+        run: npm run build
       - name: Lint
         run: npm run lint
