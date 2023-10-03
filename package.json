@@ -6,7 +6,8 @@
   "scripts": {
     "build": "NODE_OPTIONS='--openssl-legacy-provider' webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" && prettier --check src/",
+    "format": "prettier --write src/",
     "dev": "NODE_OPTIONS='--openssl-legacy-provider' webpack serve"
   },
   "repository": {
