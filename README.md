@@ -13,10 +13,12 @@ It is approved by The College of Media arts, Science and Technology (MAST) in Un
 ```bash
 # Install dependencies
 npm install
-
 # Launch local dev server at localhost:8000
 npm run dev
-
 # Build
 npm run build
+# Lint
+npm run lint
+# Format
+num run format
 ```

@@ -275,21 +275,21 @@ export const update = () => {
                 no++;
 
                 // remove button
-                const remove = document.createElement('a');
-                remove.classList.add('remove');
-                remove.innerHTML = '×';
-                div.appendChild(remove);
+                const removeAnchor = document.createElement('a');
+                removeAnchor.classList.add('remove');
+                removeAnchor.innerHTML = '×';
+                div.appendChild(removeAnchor);
 
                 div.addEventListener('mouseover', () => {
-                  remove.classList.add('displayed');
+                  removeAnchor.classList.add('displayed');
                 });
                 div.addEventListener('mouseout', () => {
-                  remove.classList.remove('displayed');
+                  removeAnchor.classList.remove('displayed');
                 });
-                remove.addEventListener('click', () => {
+                removeAnchor.addEventListener('click', (e) => {
+                  e.preventDefault();
                   removeBookmark(code);
                   changeBookmarkButton(code);
-
                   update();
                 });
               }
