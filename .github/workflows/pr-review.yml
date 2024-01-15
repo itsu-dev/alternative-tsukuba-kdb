@@ -3,7 +3,7 @@ name: Review PR to update syllabus
 on:
   pull_request:
     branches:
-      - 'update_*'
+      - update_*
     types:
       - opened
       - labeled
