@@ -5,6 +5,7 @@ on:
     branches:
       - 'update_*'
     types:
+      - opened
       - labeled
 
 jobs:
