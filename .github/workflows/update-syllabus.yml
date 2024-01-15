@@ -9,6 +9,7 @@ jobs:
   update:
     environment: actions
     runs-on: ubuntu-latest
+    permissions: write-all
     strategy:
       fail-fast: false
       matrix:
@@ -17,11 +18,9 @@ jobs:
       TZ: Asia/Tokyo
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GH_ADMIN_TOKEN }}
+        uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -36,14 +35,12 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GH_ADMIN_TOKEN }}
           title: Sceduled update of syllabus data (${{ steps.date.outputs.date }})
           branch: update_${{ steps.date.outputs.date }}
           author: GitHub Action <action@github.com>
           committer: GitHub Action <action@github.com>
           commit-message: |
             update csv: ${{ steps.date.outputs.date }}
-          labels: automated pr
-          # delete-branch: true
+          labels: automated-pr
