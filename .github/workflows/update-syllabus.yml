@@ -45,6 +45,7 @@ jobs:
           commit-message: |
             update csv: ${{ steps.date.outputs.date }}
           labels: automated-pr
+          token: ${{ secrets.GH_ADMIN_TOKEN }}
       - name: Enable auto-merge
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
