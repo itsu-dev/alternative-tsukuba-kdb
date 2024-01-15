@@ -2,11 +2,8 @@ name: Review PR to update syllabus
 
 on:
   pull_request:
-    branches:
-      - update_*
     types:
       - opened
-      - labeled
 
 jobs:
   review:
