@@ -44,10 +44,12 @@ jobs:
           committer: GitHub Action <action@github.com>
           commit-message: |
             update csv: ${{ steps.date.outputs.date }}
-          labels: automated-pr
-          token: ${{ secrets.GH_ADMIN_TOKEN }}
       - name: Enable auto-merge
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           token: ${{ secrets.GH_ADMIN_TOKEN }}
+      - name: Add label
+        run: gh pr edit ${{ steps.cpr.outputs.pull-request-number }} --add-label automated-pr
+        env:
+          GH_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
