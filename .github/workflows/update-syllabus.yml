@@ -49,4 +49,4 @@ jobs:
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          github-token: ${{ secrets.GH_ADMIN_TOKEN }}
+          token: ${{ secrets.GH_ADMIN_TOKEN }}
