@@ -2,7 +2,7 @@ name: CSV scheduled update
 
 on:
   schedule:
-    - cron: '0 15 * * 6'
+    - cron: '0 15 * * *'
   workflow_dispatch:
 
 jobs:
