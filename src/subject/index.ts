@@ -124,7 +124,7 @@ export class Subject {
     // That is because it may refer to a unpublished syllabus,
     // in case that we the fiscal year is retrieved from the current date,
     // Official syllabi are updated manually in early April.
-    const year = 2023;
+    const year = 2024;
     return `https://kdb.tsukuba.ac.jp/syllabi/${year}/${this.code}/jpn`;
   }
 }
