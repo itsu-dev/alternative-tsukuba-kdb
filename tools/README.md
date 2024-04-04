@@ -17,7 +17,6 @@ python tools/python/download.py tools/csv
 # - src/kdb.json
 # - src/kdb-grad.json
 # - src/code-types.json
-# - src/code-types-grad.json
 python tools/python/csv-json.py tools/csv/kdb-YYYYMMDD.csv tools/python/list.txt src
 ```
 
