@@ -1,3 +1,4 @@
+import { allCodeTypes } from './code-types';
 import {
   Subject,
   initializeSubject,
@@ -8,7 +9,6 @@ import {
 } from './subject';
 import * as timetable from './timetable';
 import * as bookmark from './bookmark';
-import codeTypes from './code-types.json';
 import { matchesSearchOptions, SearchOptions } from './subject/search';
 import { renderSubjectAsTableRow, renderSubjectForMobile } from './subject/render';
 
@@ -404,9 +404,7 @@ window.onload = function () {
     if (selectedValue == 'null') {
       deleteOptions(subSelect);
     } else {
-      const types = isA
-        ? (codeTypes as any)[reqA_value]
-        : (codeTypes as any)[reqA_value].childs[reqB_value];
+      const types = isA ? allCodeTypes[reqA_value] : allCodeTypes[reqA_value].childs[reqB_value];
       constructOptions(subSelect, types.childs);
     }
   };
@@ -414,7 +412,7 @@ window.onload = function () {
   // initialize
   (async () => {
     // construct options of requirements
-    constructOptions(dom.reqA, codeTypes);
+    constructOptions(dom.reqA, allCodeTypes);
     dom.reqA.addEventListener('change', () => selectOnChange(true));
     dom.reqB.addEventListener('change', () => selectOnChange(false));
 

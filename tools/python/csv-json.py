@@ -25,12 +25,14 @@ class KdbCSVtoJSON():
         self.contains_graduate = contains_graduate
         self.types = self.__get_types()
 
-        self.empty_typed_subjects: List[List[str]] = []
-
         now = datetime.datetime.now()
         self.output = {
             "updated": now.strftime("%Y/%m/%d"),
-            "subject": self.__get_subjects()
+            "subject": self.__get_subjects(False)
+        }
+        self.grad_output = {
+            "updated": now.strftime("%Y/%m/%d"),
+            "subject": self.__get_subjects(True)
         }
 
     def get_types(self) -> Dict[str, Any]:
@@ -48,12 +50,14 @@ class KdbCSVtoJSON():
             Dict[str, Any]: An output to convert data CSV to JSON.
         """
         return self.output
+    
+    def get_grad_output(self) -> Dict[str, Any]:
+        """Get an output to convert data CSV for graduated school to JSON.
 
-    def print_empty_typed_subjects(self) -> None:
-        """Print empty-typed subjects.
+        Returns:
+            Dict[str, Any]: An output to convert data CSV for graduated school to JSON.
         """
-        for s in self.empty_typed_subjects:
-            print(s)
+        return self.grad_output
 
     def __get_subjectcode(self, s: str) -> Tuple[List[str], List[str]]:
         """Get subject code.
@@ -141,7 +145,7 @@ class KdbCSVtoJSON():
 
         return types
 
-    def __get_subjects(self) -> List[List[str]]:
+    def __get_subjects(self, grad: bool) -> List[List[str]]:
         """Get subjects.
 
         Args:
@@ -154,7 +158,7 @@ class KdbCSVtoJSON():
         lines = [line for line in csv.reader(open(self.csvpath))]
 
         for line in lines:
-            for i in range(6):
+            for i in range(8):
                 line.pop(11)
 
             code = line[0]
@@ -164,20 +168,9 @@ class KdbCSVtoJSON():
             #   subjects for graduate school
             is_grad = (len(code) > 0 and code[0] == '0'
                        and not self.contains_graduate)
-            if code in ["科目番号", ""] or is_grad:
+            if code in ["科目番号", ""] or (not grad and is_grad):
                 continue
 
-            # types
-            searched_types = self.__search_type(code, self.types, [])
-
-            if len(searched_types) == 0:
-                self.empty_typed_subjects.append(line)
-
-            first = searched_types[0] if len(searched_types) >= 1 else ""
-            second = searched_types[1] if len(searched_types) >= 2 else ""
-            third = searched_types[2] if len(searched_types) >= 3 else ""
-
-            line += [first, second, third]
             subjects.append(line)
 
         return subjects
@@ -210,11 +203,12 @@ def main() -> None:
     # output
     with open(f"{args.output_dir}/kdb.json", "w", encoding="utf-8") as fp:
         json.dump(k.get_output(), fp, indent="  ", ensure_ascii=False)
+    
+    with open(f"{args.output_dir}/kdb-grad.json", "w", encoding="utf-8") as fp:
+        json.dump(k.get_grad_output(), fp, indent="  ", ensure_ascii=False)
 
     with open(f"{args.output_dir}/code-types.json", "w", encoding="utf-8") as fp:
         json.dump(k.get_types(), fp, indent="  ", ensure_ascii=False)
-
-    k.print_empty_typed_subjects()
 
 
 if __name__ == '__main__':
