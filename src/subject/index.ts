@@ -35,9 +35,6 @@ export class Subject {
   person: string;
   abstract: string;
   note: string;
-  reqA: string;
-  reqB: string;
-  reqC: string;
   classMethods: ClassMethods[];
   concentration = false;
   negotiable = false;
@@ -54,9 +51,6 @@ export class Subject {
     this.person = line[8];
     this.abstract = line[9];
     this.note = line[10];
-    this.reqA = line[13];
-    this.reqB = line[14];
-    this.reqC = line[15];
 
     // term (season - module)
     // term code
@@ -134,16 +128,13 @@ export const subjectCodeList: string[] = [];
 
 export const initializeSubject = async () => {
   const kdb = (await import('../kdb.json')) as unknown as KdbData;
-
-  // read a json
-  const subjects = kdb.subject;
-  const updatedDate = kdb.updated;
+  const kdbGrad = (await import('../kdb-grad.json')) as unknown as KdbData;
 
   // convert into a map
-  for (const line of subjects) {
+  for (const line of [...kdb.subject, ...kdbGrad.subject]) {
     const subject = new Subject(line);
     subjectMap[subject.code] = subject;
     subjectCodeList.push(subject.code);
   }
-  return updatedDate;
+  return kdb.updated;
 };

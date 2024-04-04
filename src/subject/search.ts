@@ -1,6 +1,7 @@
 import { getBookmarks } from '../bookmark';
 import type { Modules, NormalSeasons, Subject } from '.';
 import { getTermCode } from '.';
+import { matchesCodeRequirement } from '../code-types';
 import { Periods } from './period';
 
 export interface SearchOptions {
@@ -82,10 +83,11 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
     }
   })();
 
-  // requirements
-  const matchesReqA = options.reqA == 'null' || options.reqA == subject.reqA;
-  const matchesReqB = options.reqB == 'null' || options.reqB == subject.reqB;
-  const matchesReqC = options.reqC == 'null' || options.reqC == subject.reqC;
+  // requirement
+  const reqA = options.reqA !== 'null' ? options.reqA : null;
+  const reqB = options.reqB !== 'null' ? options.reqB : null;
+  const reqC = options.reqC !== 'null' ? options.reqC : null;
+  const matchesRequirement = matchesCodeRequirement(subject.code, reqA, reqB, reqC);
 
   // term
   const matchesSeason = options.season == null || subject.termStr.indexOf(options.season) > -1;
@@ -109,9 +111,7 @@ export function matchesSearchOptions(subject: Subject, options: SearchOptions): 
     matchesKeyword &&
     matchesPeriods &&
     matchesYear &&
-    matchesReqA &&
-    matchesReqB &&
-    matchesReqC &&
+    matchesRequirement &&
     matchesTerm &&
     matchesOnline &&
     matchesBookmark
