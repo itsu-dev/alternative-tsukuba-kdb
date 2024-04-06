@@ -1,5 +1,5 @@
-"""Download a CSV file of KdB data.
-"""
+"""Download a CSV file of KdB data."""
+
 from typing import Optional, TypedDict
 
 import argparse
@@ -7,8 +7,8 @@ import requests
 
 
 class PostDict(TypedDict):
-    """Dict for requesting with POST to KdB.
-    """
+    """Dict for requesting with POST to KdB."""
+
     index: str
     locale: str
     nendo: int
@@ -31,9 +31,8 @@ class PostDict(TypedDict):
     outputFormat: Optional[int]
 
 
-class KdbDownloader():
-    """Download a CSV file of KdB data.
-    """
+class KdbDownloader:
+    """Download a CSV file of KdB data."""
 
     def __init__(self, year: int = 2024) -> None:
         """Initializer.
@@ -63,7 +62,7 @@ class KdbDownloader():
             "_risyuFlg": 1,
             "_excludeFukaikoFlg": 1,
             "_eventId": None,
-            "outputFormat": None
+            "outputFormat": None,
         }
 
     def get_post(self) -> PostDict:
@@ -84,47 +83,42 @@ class KdbDownloader():
         open(filename, "w", encoding="utf-8").write(self.response_text)
 
     def __download(self) -> None:
-        """Helper for downloading.
-        """
+        """Helper for downloading."""
         self.__start_session()
         self.__search_kdb()
         self.__download_csv()
 
     def __start_session(self) -> None:
-        """Helper for starting session to KdB.
-        """
+        """Helper for starting session to KdB."""
         kdb_url = "https://kdb.tsukuba.ac.jp/"
         self.session = requests.session()
         self.response = self.session.get(kdb_url)
         if self.response.status_code != 200:
-            raise ValueError('System failure on KdB.')
+            raise ValueError("System failure on KdB.")
 
     def __search_kdb(self) -> None:
-        """Helper for searching.
-        """
+        """Helper for searching."""
         search_post = self.get_post()
         search_post["_eventId"] = "searchOpeningCourse"
         self.response = self.session.post(self.response.url, data=search_post)
         self.do_url = self.response.url
 
     def __download_csv(self) -> None:
-        """Helper for downloading CSV.
-        """
+        """Helper for downloading CSV."""
         csv_post = self.get_post()
         csv_post["_eventId"] = "output"
         csv_post["outputFormat"] = 0
         res = self.session.post(self.do_url, data=csv_post).text
         if len(res) == 0:
-            raise ValueError('Response text is empty.')
-        elif 'sys-err-head' in res:
-            raise ValueError('System failure on KdB.')
+            raise ValueError("Response text is empty.")
+        elif "sys-err-head" in res:
+            raise ValueError("System failure on KdB.")
         else:
             self.response_text = res
 
 
 def main() -> None:
-    """Main.
-    """
+    """Main."""
     import datetime
     import os
 
@@ -133,12 +127,16 @@ def main() -> None:
     args = parser.parse_args()
 
     date = datetime.datetime.now()
-    filename = "%s/kdb-%04d%02d%02d.csv" % (args.output_dir,
-                                            date.year, date.month, date.day)
+    filename = "%s/kdb-%04d%02d%02d.csv" % (
+        args.output_dir,
+        date.year,
+        date.month,
+        date.day,
+    )
 
     os.makedirs(args.output_dir, exist_ok=True)
     KdbDownloader().download(filename)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

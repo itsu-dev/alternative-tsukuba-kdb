@@ -1,14 +1,18 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
-import chromedriver_binary
+import chromedriver_binary  # noqa
 import glob
 import os
 import time
 
+
 def click_button_with_value(driver, value: str):
-    button = driver.find_element_by_xpath(f"//input[@type='button' and @value='{value}']")
+    button = driver.find_element_by_xpath(
+        f"//input[@type='button' and @value='{value}']"
+    )
     button.click()
+
 
 KDB_URL = "https://kdb.tsukuba.ac.jp/"
 TMP_DIR = os.path.abspath("tmp")
@@ -18,9 +22,12 @@ os.makedirs(TMP_DIR, exist_ok=True)
 os.makedirs(DST_DIR, exist_ok=True)
 
 options = Options()
-options.add_experimental_option("prefs", {
-    "download.default_directory": TMP_DIR,
-})
+options.add_experimental_option(
+    "prefs",
+    {
+        "download.default_directory": TMP_DIR,
+    },
+)
 
 driver = webdriver.Chrome(options=options)
 driver.get(KDB_URL)
@@ -62,7 +69,7 @@ for i in range(1, len(hierarchy2.options)):
             if timeout_second < 0:
                 succeeds = False
                 break
-        
+
         if succeeds:
             time.sleep(2)
             tmp_csv = glob.glob(os.path.join(TMP_DIR, "*.csv"))[0]
@@ -70,9 +77,9 @@ for i in range(1, len(hierarchy2.options)):
             dst_csv = os.path.join(DST_DIR, filename)
 
             # Shift-JIS から UTF-8 に変換
-            with open(tmp_csv, encoding='cp932') as fp:
+            with open(tmp_csv, encoding="cp932") as fp:
                 text = fp.read()
-            with open(dst_csv, "w", encoding='utf-8') as fp:
+            with open(dst_csv, "w", encoding="utf-8") as fp:
                 fp.write(text)
 
             os.remove(tmp_csv)

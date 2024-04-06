@@ -13,7 +13,7 @@ dic = {}
 
 for csv_name in csv_list:
     codes = []
-    with open(csv_name, encoding='utf-8') as fp:
+    with open(csv_name, encoding="utf-8") as fp:
         reader = csv.reader(fp)
         for row in reader:
             if len(row) == 1:
@@ -36,7 +36,7 @@ for csv_name, codes in dic.items():
         four_code = code[0:4]
         if four_code in four_codes:
             continue
-        
+
         # four_code から始まる科目番号が他の区分に存在するか確認
         not_other_exists = True
         for key, value in dic.items():
@@ -44,16 +44,16 @@ for csv_name, codes in dic.items():
                 for o_code in value:
                     if o_code.startswith(four_code):
                         not_other_exists = False
-        
+
         if not_other_exists:
             four_codes.append(four_code)
             continue
-        
+
         # 科目番号の最初の 5 桁を取得
         five_code = code[0:5]
         if five_code in five_codes:
             continue
-        
+
         # five_code から始まる科目番号が他の区分に存在するか確認
         not_other_exists = True
         for key, value in dic.items():
@@ -65,7 +65,7 @@ for csv_name, codes in dic.items():
             five_codes.append(five_code)
         else:
             other_codes.append(code)
-    
+
     all_codes = four_codes + five_codes + other_codes
     name = csv_name.replace("dst/", "").replace(".csv", "")
     large, mid = name.split("_")
@@ -74,5 +74,5 @@ for csv_name, codes in dic.items():
         display_dic[large] = {}
     display_dic[large][mid] = all_codes
 
-with open(args.json, "w", encoding='utf-8') as fp:
+with open(args.json, "w", encoding="utf-8") as fp:
     json.dump(display_dic, fp, ensure_ascii=False, indent=2)
