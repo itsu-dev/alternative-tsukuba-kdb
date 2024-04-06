@@ -1,5 +1,5 @@
-"""Convert a CSV file of KdB data to a JSON file with configure file defines types.
-"""
+"""Convert a CSV file of KdB data to a JSON file with configure file defines types."""
+
 import argparse
 import csv
 import datetime
@@ -7,32 +7,28 @@ import json
 from typing import Any, Dict, List, Tuple
 
 
-class KdbCSVtoJSON():
-    """Convert a CSV file of KdB data to a JSON file with configure file defines types.
-    """
+class KdbCSVtoJSON:
+    """Convert a CSV file of KdB data to a JSON file with configure file defines types."""
 
-    def __init__(self, csvpath: str, typespath: str,
-                 contains_graduate: bool = True) -> None:
+    def __init__(self, csvpath: str, typespath: str) -> None:
         """Initializer.
 
         Args:
             csvpath (str): A KdB data CSV path.
             typespath (str): A text file path defines type.
-            contains_graduate (bool, optional): A flag if it contains graduated subjects. Defaults to True.
         """
         self.csvpath = csvpath
         self.typespath = typespath
-        self.contains_graduate = contains_graduate
         self.types = self.__get_types()
 
         now = datetime.datetime.now()
         self.output = {
             "updated": now.strftime("%Y/%m/%d"),
-            "subject": self.__get_subjects(False)
+            "subject": self.__get_subjects(False),
         }
         self.grad_output = {
             "updated": now.strftime("%Y/%m/%d"),
-            "subject": self.__get_subjects(True)
+            "subject": self.__get_subjects(True),
         }
 
     def get_types(self) -> Dict[str, Any]:
@@ -50,7 +46,7 @@ class KdbCSVtoJSON():
             Dict[str, Any]: An output to convert data CSV to JSON.
         """
         return self.output
-    
+
     def get_grad_output(self) -> Dict[str, Any]:
         """Get an output to convert data CSV for graduated school to JSON.
 
@@ -77,8 +73,9 @@ class KdbCSVtoJSON():
         codes = code[0].split("/")
         return (codes, except_codes)
 
-    def __search_type(self, code: str, target_types: Dict[str, Any],
-                      types: List[str] = []) -> List[str]:
+    def __search_type(
+        self, code: str, target_types: Dict[str, Any], types: List[str] = []
+    ) -> List[str]:
         """Search the type.
 
         Args:
@@ -94,8 +91,9 @@ class KdbCSVtoJSON():
             target_excepts = target_types[key]["except-codes"]
 
             for target_code in target_codes:
-                is_grad = any([code.find(target_except) == 0
-                               for target_except in target_excepts])
+                is_grad = any(
+                    [code.find(target_except) == 0 for target_except in target_excepts]
+                )
                 if code.find(target_code) == 0 and not is_grad:
                     types.append(key)
                     if len(types) <= 2:
@@ -119,29 +117,39 @@ class KdbCSVtoJSON():
         first, second = "", ""
         type_lines = open(self.typespath, encoding="utf-8").readlines()
         rows = [
-            row for row in [
+            row
+            for row in [
                 line.replace(" ,", ",").replace(", ", ",").split(",")
                 for line in type_lines
-            ] if len(row) >= 2]
+            ]
+            if len(row) >= 2
+        ]
 
         for row in rows:
             codes_str = row[0]
-            codes, except_codes = self.__get_subjectcode(
-                codes_str.replace("\t", ""))
+            codes, except_codes = self.__get_subjectcode(codes_str.replace("\t", ""))
             name = row[1].replace("\n", "").replace("\t", "")
             tab = codes_str.count("\t")
 
             if tab == 0:
                 first = name
-                types[first] = {"codes": codes,
-                                "except-codes": except_codes, "childs": {}}
+                types[first] = {
+                    "codes": codes,
+                    "except-codes": except_codes,
+                    "childs": {},
+                }
             elif tab == 1:
                 second = name
                 types[first]["childs"][second] = {
-                    "codes": codes, "except-codes": except_codes, "childs": {}}
+                    "codes": codes,
+                    "except-codes": except_codes,
+                    "childs": {},
+                }
             elif tab == 2:
                 types[first]["childs"][second]["childs"][name] = {
-                    "codes": codes, "except-codes": except_codes}
+                    "codes": codes,
+                    "except-codes": except_codes,
+                }
 
         return types
 
@@ -158,17 +166,18 @@ class KdbCSVtoJSON():
         lines = [line for line in csv.reader(open(self.csvpath))]
 
         for line in lines:
-            for i in range(8):
+            for _ in range(8):
                 line.pop(11)
 
             code = line[0]
 
-            # skip:
-            #   the header and empty lines
-            #   subjects for graduate school
-            is_grad = (len(code) > 0 and code[0] == '0'
-                       and not self.contains_graduate)
-            if code in ["科目番号", ""] or (not grad and is_grad):
+            # skip the header and empty lines
+            is_grad = len(code) > 0 and code[0] == "0"
+            if (
+                code in ["科目番号", ""]
+                or (not grad and is_grad)
+                or (grad and not is_grad)
+            ):
                 continue
 
             subjects.append(line)
@@ -185,25 +194,26 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("csv", help="an input csv file")
     parser.add_argument(
-        "types", help="a text file of the relation between requirement classification and subject codes")
-    parser.add_argument("output_dir", help="the output directory of kdb.json and code-types.json")
-    parser.add_argument("-c", "--contains_graduate", action="store_true",
-                        help="contains subjects for graduate school")
+        "types",
+        help="a text file of the relation between requirement classification and subject codes",
+    )
+    parser.add_argument(
+        "output_dir", help="the output directory of kdb.json and code-types.json"
+    )
 
     return parser.parse_args()
 
 
 def main() -> None:
-    """Main.
-    """
+    """Main."""
     args = parse_args()
-    csvpath, typespath, contains_graduate = args.csv, args.types, args.contains_graduate
-    k = KdbCSVtoJSON(csvpath, typespath, contains_graduate)
+    csvpath, typespath = args.csv, args.types
+    k = KdbCSVtoJSON(csvpath, typespath)
 
     # output
     with open(f"{args.output_dir}/kdb.json", "w", encoding="utf-8") as fp:
         json.dump(k.get_output(), fp, indent="  ", ensure_ascii=False)
-    
+
     with open(f"{args.output_dir}/kdb-grad.json", "w", encoding="utf-8") as fp:
         json.dump(k.get_grad_output(), fp, indent="  ", ensure_ascii=False)
 
@@ -211,5 +221,5 @@ def main() -> None:
         json.dump(k.get_types(), fp, indent="  ", ensure_ascii=False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
