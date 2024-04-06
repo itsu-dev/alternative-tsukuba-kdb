@@ -5,7 +5,7 @@
 
 ## 開発
 
-```
+```bash
 python -m ruff check
 python -m ruff format
 ```
@@ -32,7 +32,7 @@ python tools/python/csv-json.py tools/csv/kdb-YYYYMMDD.csv tools/python/list.txt
 
 ## 大学院開設授業科目の科目番号対応表
 
-大学院開設授業科目における科目番号の対応は複雑であるため、スクリプトを用いて自動で生成します。この工程は人の手で行います。
+大学院開設授業科目における科目番号の対応は複雑であるため、スクリプトを用いて自動で生成します。この工程は手動で行います。
 
 ```bash
 # 区分毎の CSV ファイルを取得し、dst/ に保存

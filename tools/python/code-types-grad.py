@@ -5,10 +5,11 @@ import json
 import os
 
 argparse = argparse.ArgumentParser()
+argparse.add_argument("--dst", "-d", default="dst")
 argparse.add_argument("--json", "-j", default="src/code-types-grad.json")
 args = argparse.parse_args()
 
-csv_list = glob.glob(os.path.join("dst", "*.csv"))
+csv_list = glob.glob(os.path.join(args.dst, "*.csv"))
 dic = {}
 
 for csv_name in csv_list:
@@ -67,7 +68,7 @@ for csv_name, codes in dic.items():
             other_codes.append(code)
 
     all_codes = four_codes + five_codes + other_codes
-    name = csv_name.replace("dst/", "").replace(".csv", "")
+    name = os.path.splitext(os.path.basename(csv_name))[0]
     large, mid = name.split("_")
 
     if large not in display_dic:

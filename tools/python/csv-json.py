@@ -10,19 +10,15 @@ from typing import Any, Dict, List, Tuple
 class KdbCSVtoJSON:
     """Convert a CSV file of KdB data to a JSON file with configure file defines types."""
 
-    def __init__(
-        self, csvpath: str, typespath: str, contains_graduate: bool = True
-    ) -> None:
+    def __init__(self, csvpath: str, typespath: str) -> None:
         """Initializer.
 
         Args:
             csvpath (str): A KdB data CSV path.
             typespath (str): A text file path defines type.
-            contains_graduate (bool, optional): A flag if it contains graduated subjects. Defaults to True.
         """
         self.csvpath = csvpath
         self.typespath = typespath
-        self.contains_graduate = contains_graduate
         self.types = self.__get_types()
 
         now = datetime.datetime.now()
@@ -175,11 +171,13 @@ class KdbCSVtoJSON:
 
             code = line[0]
 
-            # skip:
-            #   the header and empty lines
-            #   subjects for graduate school
-            is_grad = len(code) > 0 and code[0] == "0" and not self.contains_graduate
-            if code in ["科目番号", ""] or (not grad and is_grad):
+            # skip the header and empty lines
+            is_grad = len(code) > 0 and code[0] == "0"
+            if (
+                code in ["科目番号", ""]
+                or (not grad and is_grad)
+                or (grad and not is_grad)
+            ):
                 continue
 
             subjects.append(line)
@@ -202,12 +200,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "output_dir", help="the output directory of kdb.json and code-types.json"
     )
-    parser.add_argument(
-        "-c",
-        "--contains_graduate",
-        action="store_true",
-        help="contains subjects for graduate school",
-    )
 
     return parser.parse_args()
 
@@ -215,8 +207,8 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     """Main."""
     args = parse_args()
-    csvpath, typespath, contains_graduate = args.csv, args.types, args.contains_graduate
-    k = KdbCSVtoJSON(csvpath, typespath, contains_graduate)
+    csvpath, typespath = args.csv, args.types
+    k = KdbCSVtoJSON(csvpath, typespath)
 
     # output
     with open(f"{args.output_dir}/kdb.json", "w", encoding="utf-8") as fp:
