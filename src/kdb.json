@@ -1,5 +1,5 @@
 {
-  "updated": "2024/09/20",
+  "updated": "2024/09/21",
   "subject": [
     [
       "1101102",
@@ -1414,7 +1414,7 @@
       "秋AB",
       "月1",
       "5C407",
-      "田渕 経司,井上 貴昭",
+      "田渕 経司,井上 貴昭,白鳥 裕貴,菅野 直美,奈良坂 俊明,西田 恵子,矢藤 繁,鎌田 浩史,吉本 尚",
       "健康で有意義な学生生活を送るうえで役立つ、科学的根拠に基づいた正しい健康教育を行う。学生時代に遭遇する危険性が高いcommon diseaseの正しい知識とその予防、救急処置に役立つ知識や社会的関心の高い疾患 を専門家が概説し、自ら積極的に生涯健康増進に取り組む姿勢や習慣を身に着けさせる。",
       "【事前登録対象】【定員180名】(医学開設) 対面"
     ],
@@ -3054,7 +3054,7 @@
       "CA305",
       "森尾 貴広,SINGH Rajeev Kumar,KUMAR Pankaj",
       "It is crucial to solve global issues for constructing sustainable society. We tackle the issues of water, waste management, urbanization, eco-system and climate change shown in the Sustainable Development Goals (SDGs), and we explain the causes, mechanism, spatial and temporal variabilities, and solution from the viewpoints of multiple stakeholders.",
-      "「Global Issues and Society（1C90131）」の取得済みの者は履修できない。 英語で授業。 1/11,12 対面"
+      "「Global Issues and Society（1C90131）」の取得済みの者は履修できない。 英語で授業。 1/11-1/12 対面"
     ],
     [
       "1290041",
@@ -3298,7 +3298,7 @@
       "3・4",
       "秋AB",
       "金4",
-      "1H201",
+      "1H101",
       "毛利 亜樹",
       "巨大な隣国である中国は、1976年の文化大革命の終結以降、経済の改革開放政策の成果により、大きな変貌をとげた。21世紀初頭の今、ますます存在感を増した中華人民共和国の現在の諸相を、学生にとって身近な目線で講じる。現在中国との関わりの深い筑波大学OBを講師とし、現代中国の文化、社会、経済、環境、日中翻訳など、様々な観点から、現場に立つ講師ならではの姿を描き出す。",
       "【事前登録対象】【定員200名】(国際総合学類開設) オンライン(対面併用型)"
@@ -42220,7 +42220,7 @@
       "2 - 4",
       "秋AB",
       "水3,4",
-      "",
+      "3A306",
       "喜田川 たまき",
       "本講義では、北アフリカ地域における社会構造の基盤であるイスラームとインディジナスな文化であるアマジグとの併存について考察する。画一的に語られることの多いイスラーム社会の多様性の理解を目指すとともに、近代化による文化変容やナショナリズム、伝統文化を利用した原理主義化の抑制政策とその反動など、現代社会が直面する文化的諸問題を論じる。",
       "対面"
@@ -43526,6 +43526,19 @@
       "The number of students is limited to 25. 英語で授業。 対面"
     ],
     [
+      "BE21381",
+      "Introduction to Political Science",
+      "1",
+      " 2.0",
+      "1・2",
+      "秋AB",
+      "水5,6",
+      "1C306",
+      "ジャイ イーダ",
+      "このコースでは、政治学における重要な概念と理論を学びます。政治、国家、政府、政治体制、ナショナリズム、グローバリゼーション、人権とは何かなど、この分野の幅広いテーマを取り上げています。",
+      "英語で授業。 対面"
+    ],
+    [
       "BE21391",
       "Introduction to Sociology",
       "1",
@@ -43550,6 +43563,19 @@
       "ヴァシラケ シモナ",
       "This course wishes to engage students in active discussions on various contemporary topics, ranging from politics, economics, science to culture, entertainment etc. The students are encouraged to express and defend their opinions openly and actively, as well as propose issues to be discussed.",
       "英語で授業。 G科目. 対面. interdepartmental course The number of students is limited to 30."
+    ],
+    [
+      "BE21831",
+      "Quantitative Methods for Social Sciences",
+      "1",
+      " 2.0",
+      "1・2",
+      "秋AB",
+      "水3,4",
+      "1C206",
+      "ジャイ イーダ",
+      "このコースでは、統計学の基礎知識と量的研究分析の主な方法を紹介します。 コンピュータ上での統計解析ソフトウェアの実践を通じて、基本的な量的分析能力を身に付けます。",
+      "英語で授業。 対面 The number of students is limited to 20. Priorities are given to students from the College of Social Sciences and the College of International Studies."
     ],
     [
       "BE21861",
@@ -43927,6 +43953,32 @@
       "ウラノ エジソン ヨシアキ",
       "This course aims to analyze international migration focusing on key themes for understanding this social phenomenon. To this end, topics such as gender and migration, transnational communities, migration policies will be addressed through a sociological and multidisciplinary perspective.",
       "Limited to 30 students. 西暦偶数年度開講。 英語で授業。 G科目. 対面 Biennial Course (offered in even years)"
+    ],
+    [
+      "BE22591",
+      "Introduction to International Law",
+      "1",
+      " 2.0",
+      "1・2",
+      "秋AB",
+      "水3,4",
+      "1C403",
+      "マダニ ツィアディン セイェッド ",
+      "This course provides a comprehensive introduction to the foundational principles and structures of international law. It explores the sources of international law, including treaties, customary law, and general principles, and examines how states, international organizations, and individuals interact within the international legal framework. Through case studies and discussions, students will gain insights into the legal mechanisms that govern global issues and resolve disputes between states. The course serves as a stepping stone for further study in specialized areas of international law.",
+      "英語で授業。 対面"
+    ],
+    [
+      "BE22761",
+      "International Humanitarian Law",
+      "1",
+      " 2.0",
+      "1・2",
+      "秋AB",
+      "水5,6",
+      "1B208",
+      "マダニ ツィアディン セイェッド ",
+      "This course offers an in-depth exploration of International Humanitarian Law (IHL), focusing on the legal frameworks designed to protect individuals during armed conflicts. Students will study the core principles of IHL, including the Geneva Conventions, the distinction between combatants and civilians, and the treatment of war crimes. The course will also tackle contemporary issues such as the role of non-state actors, and humanitarian interventions. Through case analyses and discussions, students will develop a critical understanding of the legal dimensions of warfare and conflict resolution. Depending on the number of students, they may require to make oral presentations (individually or within teams).",
+      "英語で授業。 対面"
     ],
     [
       "BE22821",
@@ -55205,12 +55257,12 @@
       "3",
       " 2.0",
       "2・3",
-      "秋C",
+      "春季休業中",
       "集中",
       "",
       "鎌田 祥仁",
       "タイ国チュラロンコン大学理学部地質教室の学生とともに、タイ国において野外実習を実施する。タイ国の代表的な地質を観察しながら衝突型造山運動について学ぶ。実習は英語による。",
-      "西暦偶数年度開講。 対面"
+      "西暦偶数年度開講。 2/18-2/24 対面"
     ],
     [
       "EE31653",
@@ -82468,7 +82520,7 @@
       "1 - 6",
       "秋AB",
       "月4",
-      "",
+      "9L202",
       "石原 奈保",
       "補講日本語3レベルの人が4レベルでスムーズに勉強できるように読み書きを練習するクラス。",
       "外国人留学生が受講できる。ただし、特別聴講学生（学群）は受講不可。受講人数制限あり。 対面 詳細は授業内で、またはmanabaで周知する。"
@@ -82481,7 +82533,7 @@
       "1 - 6",
       "秋AB",
       "月5",
-      "",
+      "9L202",
       "石原 奈保",
       "補講日本語3レベルの人が4レベルでスムーズに勉強できるように読み書きを練習するクラス。",
       "外国人留学生が受講できる。ただし、特別聴講学生（学群）は受講不可。受講人数制限あり。 対面 詳細は授業内で、またはmanabaで周知する。"
@@ -82533,7 +82585,7 @@
       "1 - 6",
       "秋AB",
       "水3",
-      "",
+      "9L101",
       "金 青華",
       "大学での生活・勉学のための日本語を身につける。話すについて初級で学んだ日本語の運用力を高める。また、中級日本語の文法や語彙などを学んで運用できるようになる。",
       "外国人留学生が受講できる。ただし、特別聴講学生（学群）は受講不可。受講人数制限あり。 対面 詳細は授業内で、またはmanabaで周知する。"
