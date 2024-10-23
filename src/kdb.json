@@ -1,5 +1,5 @@
 {
-  "updated": "2024/10/23",
+  "updated": "2024/10/24",
   "subject": [
     [
       "1101102",
@@ -33459,7 +33459,7 @@
       "秋AB",
       "金2",
       "2B507",
-      "徳丸 亜木",
+      "徳丸 亜木,渡部 圭一",
       "民俗学の研究動向について文献を講読する事を通じて考える。",
       "AB84442, AC62092の単位取得者は履修できない。 西暦偶数年度開講。 対面"
     ],
@@ -33485,7 +33485,7 @@
       "秋C",
       "金1,2",
       "2B208,2B209",
-      "徳丸 亜木",
+      "徳丸 亜木,渡部 圭一",
       "民俗事象および民俗学の方法論から参加者各々がテーマを選び演習形式で授業を行う。",
       "西暦偶数年度開講。 対面"
     ],
@@ -33654,7 +33654,7 @@
       "秋ABC 秋C",
       "木6 応談",
       "2D307",
-      "徳丸 亜木,佐本 英規,木村 周平,塩谷 哲史",
+      "徳丸 亜木,佐本 英規,木村 周平,塩谷 哲史,渡部 圭一",
       "特定地域でフィールドワークを実践し、成果をレポートとしてまとめる事により、民俗学的なフィールドワークの手法を習得する。",
       "西暦偶数年度開講。 対面"
     ],
@@ -65451,10 +65451,10 @@
       "3・4",
       "秋C",
       "集中",
-      "",
+      "3A405",
       "手塚 太郎",
       "機械学習の基本概念を確率論や情報理論を基礎として学ぶ。線形回帰を発展させた構造としてのニューラルネットワークを捉える。深層学習の基礎となる勾配降下法と誤差逆伝播法について理解する。",
-      "FG35391と同一。 1/9, 1/23, 1/30, 2/6, 2/13 3~4限 対面"
+      "FG35391と同一。 1/7, 1/14, 1/21, 1/28, 2/4 5~6限 対面"
     ],
     [
       "FG25401",
@@ -65464,10 +65464,10 @@
       "3・4",
       "秋C",
       "集中",
-      "",
+      "3A415",
       "手塚 太郎",
       "機械学習において現在もっとも広く使われている手法のひとつである深層学習の特性を学ぶ。畳み込みニューラルネットワークやリカレントネットワークなどの代表的なネットワーク構造について、それらがどのような強みと限界を持っているのかを知る。さらに変分オートエンコーダや深層強化学習など、特定のタスクに対する深層学習の利用についても理解を深める。",
-      "FG35401と同一。 1/10, 1/16, 1/24, 1/31, 2/7 3~4限 対面"
+      "FG35401と同一。 1/8, 1/15, 1/29, 2/5, 2/12 5~6限 対面"
     ],
     [
       "FG25901",
@@ -65906,10 +65906,10 @@
       "3・4",
       "秋C",
       "集中",
-      "",
+      "3A405",
       "手塚 太郎",
       "機械学習の基本概念を確率論や情報理論を基礎として学ぶ。線形回帰を発展させた構造としてのニューラルネットワークを捉える。深層学習の基礎となる勾配降下法と誤差逆伝播法について理解する。",
-      "FG25391と同一。 1/9, 1/23, 1/30, 2/6, 2/13 3~4限 対面"
+      "FG25391と同一。 1/7, 1/14, 1/21, 1/28, 2/4 5~6限 対面"
     ],
     [
       "FG35401",
@@ -65919,10 +65919,10 @@
       "3・4",
       "秋C",
       "集中",
-      "",
+      "3A415",
       "手塚 太郎",
       "機械学習において現在もっとも広く使われている手法のひとつである深層学習の特性を学ぶ。畳み込みニューラルネットワークやリカレントネットワークなどの代表的なネットワーク構造について、それらがどのような強みと限界を持っているのかを知る。さらに変分オートエンコーダや深層強化学習など、特定のタスクに対する深層学習の利用についても理解を深める。",
-      "FG25401と同一。 1/10, 1/16, 1/24, 1/31, 2/7 3~4限 対面"
+      "FG25401と同一。 1/8, 1/15, 1/29, 2/5, 2/12 5~6限 対面"
     ],
     [
       "FG35904",
@@ -77802,7 +77802,7 @@
       "秋AB 秋ABC 秋C",
       "金2,3 水4,5 水1,2",
       "大学会館B棟402",
-      "秋山 肇,サンドバール フェリーぺ,森尾 貴広,守谷 優希,秋山 知宏",
+      "秋山 肇,サンドバール フェリーぺ,森尾 貴広,守谷 優希,秋山 知宏,Ho Kiong",
       "These seminars will approach a wide range of academic knowledge, evaluation methods, and coping and preventive strategies related to the issues of social diversity-inclusion as well as human health-wellbeing. For the former part, the course will provide a variety of global issues concerning the disciplines of humanities and social sciences. Students will learn what are problems and discuss how we can resolve them. As for the latter part, the course will approach the health matters of aged people, as contemporary society requires information literacy and care of the elderly. Students will learn basic concepts and techniques of a survey to grasp problems in a real situation, processing methods, and interpretative strategies for gathered information (documents, data). In the end, students will come up with an action plan and/or original research project aiming at finding and solving problems in a real situation.",
       "This course is for BPGI students, or students who have earned credits of VB10001 and VB10011. 英語で授業。 主専攻必修科目. 対面"
     ],
