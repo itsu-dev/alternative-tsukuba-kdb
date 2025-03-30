@@ -26,46 +26,46 @@ const globalStyle = css`
     font-family: "Noto Sans JP";
     font-weight: 400;
     font-display: swap;
-    src: url("/NotoSansJP-Regular.ttf");
+    src: url("./NotoSansJP-Regular.ttf");
   }
 
   @font-face {
     font-family: "Noto Sans JP";
     font-weight: 700;
     font-display: swap;
-    src: url("/NotoSansJP-Bold.ttf");
+    src: url("./NotoSansJP-Bold.ttf");
   }
 `;
 
 const App = () => {
-	const [searchOptions, setSearchOptions] = useState<SearchOptions>(
-		createSearchOptions(),
-	);
-	const [timetableTermCode, setTimetableTermCode] = useState(0);
+  const [searchOptions, setSearchOptions] = useState<SearchOptions>(
+    createSearchOptions()
+  );
+  const [timetableTermCode, setTimetableTermCode] = useState(0);
 
-	const usedBookmark = useBookmark(timetableTermCode, setTimetableTermCode);
+  const usedBookmark = useBookmark(timetableTermCode, setTimetableTermCode);
 
-	return (
-		<>
-			<Global styles={globalStyle} />
-			<Header
-				searchOptions={searchOptions}
-				bookmarkTimeslotTable={usedBookmark.bookmarkTimeslotTable}
-				setSearchOptions={setSearchOptions}
-			/>
-			<Main
-				searchOptions={searchOptions}
-				usedBookmark={usedBookmark}
-				setSearchOptions={setSearchOptions}
-			/>
-			<Footer />
-			<Timetable
-				termCode={timetableTermCode}
-				usedBookmark={usedBookmark}
-				setTermCode={setTimetableTermCode}
-			/>
-		</>
-	);
+  return (
+    <>
+      <Global styles={globalStyle} />
+      <Header
+        searchOptions={searchOptions}
+        bookmarkTimeslotTable={usedBookmark.bookmarkTimeslotTable}
+        setSearchOptions={setSearchOptions}
+      />
+      <Main
+        searchOptions={searchOptions}
+        usedBookmark={usedBookmark}
+        setSearchOptions={setSearchOptions}
+      />
+      <Footer />
+      <Timetable
+        termCode={timetableTermCode}
+        usedBookmark={usedBookmark}
+        setTermCode={setTimetableTermCode}
+      />
+    </>
+  );
 };
 
 export default App;

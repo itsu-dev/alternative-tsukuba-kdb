@@ -71,57 +71,57 @@ const LoadingTd = styled.td`
 `;
 
 interface MainTableDesktopProps {
-  subjects: Subject[];
-  filteredSubjects: Subject[];
-  bookmarks: Set<string>;
-  hasMore: boolean;
-  loadingRef: React.RefObject<HTMLTableRowElement | null>;
-  setSearchOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
-  switchBookmark: (subjectCode: string) => void;
+	subjects: Subject[];
+	filteredSubjects: Subject[];
+	bookmarks: Set<string>;
+	hasMore: boolean;
+	loadingRef: React.RefObject<HTMLTableRowElement | null>;
+	setSearchOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
+	switchBookmark: (subjectCode: string) => void;
 }
 
 const MainTableDesktop = ({
-  subjects,
-  filteredSubjects,
-  bookmarks,
-  hasMore,
-  loadingRef,
-  setSearchOptions,
-  switchBookmark,
+	subjects,
+	filteredSubjects,
+	bookmarks,
+	hasMore,
+	loadingRef,
+	setSearchOptions,
+	switchBookmark,
 }: MainTableDesktopProps) => {
-  return (
-    <Table>
-      <thead>
-        <tr>
-          <Th>科目番号／科目名</Th>
-          <Th>単位／年次</Th>
-          <Th>学期／時限</Th>
-          <Th>担当</Th>
-          <Th>実施形態</Th>
-          <Th>概要</Th>
-          <Th>備考</Th>
-        </tr>
-      </thead>
-      <tbody>
-        {subjects.map((subject) => (
-          <SubjectTr
-            subject={subject}
-            bookmarks={bookmarks}
-            switchBookmark={switchBookmark}
-            setSearchOptions={setSearchOptions}
-            key={subject.code}
-          />
-        ))}
-        <tr ref={loadingRef}>
-          <LoadingTd>
-            {hasMore
-              ? "Loading..."
-              : `全 ${kdb?.subjectCodeList.length} 件中 ${filteredSubjects.length} 件を表示しました`}
-          </LoadingTd>
-        </tr>
-      </tbody>
-    </Table>
-  );
+	return (
+		<Table>
+			<thead>
+				<tr>
+					<Th>科目番号／科目名</Th>
+					<Th>単位／年次</Th>
+					<Th>学期／時限</Th>
+					<Th>担当</Th>
+					<Th>実施形態</Th>
+					<Th>概要</Th>
+					<Th>備考</Th>
+				</tr>
+			</thead>
+			<tbody>
+				{subjects.map((subject) => (
+					<SubjectTr
+						subject={subject}
+						bookmarks={bookmarks}
+						switchBookmark={switchBookmark}
+						setSearchOptions={setSearchOptions}
+						key={subject.code}
+					/>
+				))}
+				<tr ref={loadingRef}>
+					<LoadingTd>
+						{hasMore
+							? "Loading..."
+							: `全 ${kdb?.subjectCodeList.length} 件中 ${filteredSubjects.length} 件を表示しました`}
+					</LoadingTd>
+				</tr>
+			</tbody>
+		</Table>
+	);
 };
 
 export default MainTableDesktop;

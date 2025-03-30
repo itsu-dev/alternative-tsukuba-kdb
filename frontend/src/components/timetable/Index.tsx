@@ -1,7 +1,12 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
-import { colorPurpleDark, mobileMedia, shadow } from "@/utils/style";
+import {
+  colorPurpleDark,
+  mobileMedia,
+  mobileWidth,
+  shadow,
+} from "@/utils/style";
 import { type Subject, kdb } from "@/utils/subject";
 import {
   type Timetable,
@@ -12,6 +17,7 @@ import {
 } from "@/utils/timetable";
 import type { useBookmark } from "@/utils/useBookmark";
 import Header from "./Header";
+import { useMedia } from "react-use";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -195,7 +201,9 @@ const TimetableElement = ({
   const { bookmarks, switchBookmark, clearBookmarks, exportToTwinte } =
     usedBookmark;
 
-  const [opened, setOpened] = useState(true);
+  const isMobile = useMedia(`(width < ${mobileWidth})`);
+
+  const [opened, setOpened] = useState(!isMobile);
   const [timetable, setTimetable] = useState<Timetable<Subject[]>>(
     fillTimetable<Subject[]>([])
   );

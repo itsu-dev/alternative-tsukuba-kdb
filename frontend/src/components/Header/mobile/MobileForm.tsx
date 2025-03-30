@@ -127,7 +127,6 @@ const specialOptions = [
   ["応談", "negotiable"],
   ["随時", "asneeded"],
   ["NT", "nt"],
-  ["同名科目を除外", "exceptSameName"],
 ] as const;
 
 interface DesktopHeaderProps {
@@ -243,6 +242,28 @@ const MobileForm = ({
                 {label}
               </CheckButton>
             ))}
+            <CheckButton
+              data-selected={searchOptions.filter === "bookmark"}
+              onClick={() =>
+                setSearchOptions((prev) => ({
+                  ...searchOptions,
+                  filter: prev.filter === "bookmark" ? "all" : "bookmark",
+                }))
+              }
+            >
+              ★
+            </CheckButton>
+            <CheckButton
+              data-selected={searchOptions.exceptSameName}
+              onClick={() =>
+                setSearchOptions((prev) => ({
+                  ...searchOptions,
+                  exceptSameName: !prev.exceptSameName,
+                }))
+              }
+            >
+              同名科目を除外
+            </CheckButton>
           </CheckButtonWrapper>
           <TimeslotsSelection
             options={searchOptions}
@@ -309,7 +330,7 @@ const MobileForm = ({
           <SubButtonAnchor href="#" onClick={clear}>
             <span>条件をクリア</span>
           </SubButtonAnchor>
-          <MainButtonAnchor href="#">
+          <MainButtonAnchor href="#" style={{ marginLeft: "8px" }}>
             <span>検索</span>
           </MainButtonAnchor>
         </Line>

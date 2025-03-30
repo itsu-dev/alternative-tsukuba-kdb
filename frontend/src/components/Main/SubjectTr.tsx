@@ -3,10 +3,10 @@ import React from "react";
 
 import type { SearchOptions } from "@/utils/search";
 import {
-  colorPurple,
-  colorPurpleDark,
-  colorPurpleGradient,
-  shallowShadow,
+	colorPurple,
+	colorPurpleDark,
+	colorPurpleGradient,
+	shallowShadow,
 } from "@/utils/style";
 import type { Subject } from "@/utils/subject";
 
@@ -73,83 +73,83 @@ const Anchor = styled.a`
 `;
 
 interface SubjectTrProps {
-  subject: Subject;
-  bookmarks: Set<string>;
-  switchBookmark: (subjectCode: string) => void;
-  setSearchOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
+	subject: Subject;
+	bookmarks: Set<string>;
+	switchBookmark: (subjectCode: string) => void;
+	setSearchOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
 }
 
 const SubjectTr = React.memo(
-  ({
-    subject,
-    bookmarks,
-    switchBookmark,
-    setSearchOptions,
-  }: SubjectTrProps) => {
-    return (
-      <tr key={subject.code}>
-        <Td>
-          {subject.code}
-          <br />
-          {subject.name}
-          <br />
-          <BottomRow>
-            <Link href={subject.syllabusHref} target="_blank">
-              <span>シラバス</span>
-            </Link>
-            <Link href="">
-              <span>ポップアップ</span>
-            </Link>
-            <Star
-              enabled={bookmarks.has(subject.code)}
-              onClick={() => switchBookmark(subject.code)}
-            >
-              ★
-            </Star>
-          </BottomRow>
-        </Td>
-        <Td>
-          {subject.credit.toFixed(1)} 単位
-          <br />
-          {subject.year} 年次
-        </Td>
-        <Td>
-          {subject.termStr}
-          <br />
-          {subject.timeslotStr}
-        </Td>
-        <Td>
-          {subject.person.split(",").map((person, i, array) => (
-            <React.Fragment key={i}>
-              <Anchor
-                href="#"
-                onClick={() =>
-                  setSearchOptions((prev) => ({
-                    ...prev,
-                    keyword: person,
-                    containsPerson: true,
-                  }))
-                }
-              >
-                {person}
-              </Anchor>
-              {i < array.length && <br />}
-            </React.Fragment>
-          ))}
-        </Td>
-        <Td>
-          {subject.classMethods.map((method, i, array) => (
-            <React.Fragment key={i}>
-              {method}
-              {i < array.length && <br />}
-            </React.Fragment>
-          ))}
-        </Td>
-        <Td>{subject.abstract}</Td>
-        <Td>{subject.note}</Td>
-      </tr>
-    );
-  }
+	({
+		subject,
+		bookmarks,
+		switchBookmark,
+		setSearchOptions,
+	}: SubjectTrProps) => {
+		return (
+			<tr key={subject.code}>
+				<Td>
+					{subject.code}
+					<br />
+					{subject.name}
+					<br />
+					<BottomRow>
+						<Link href={subject.syllabusHref} target="_blank">
+							<span>シラバス</span>
+						</Link>
+						<Link href="">
+							<span>ポップアップ</span>
+						</Link>
+						<Star
+							enabled={bookmarks.has(subject.code)}
+							onClick={() => switchBookmark(subject.code)}
+						>
+							★
+						</Star>
+					</BottomRow>
+				</Td>
+				<Td>
+					{subject.credit.toFixed(1)} 単位
+					<br />
+					{subject.year} 年次
+				</Td>
+				<Td>
+					{subject.termStr}
+					<br />
+					{subject.timeslotStr}
+				</Td>
+				<Td>
+					{subject.person.split(",").map((person, i, array) => (
+						<React.Fragment key={i}>
+							<Anchor
+								href="#"
+								onClick={() =>
+									setSearchOptions((prev) => ({
+										...prev,
+										keyword: person,
+										containsPerson: true,
+									}))
+								}
+							>
+								{person}
+							</Anchor>
+							{i < array.length && <br />}
+						</React.Fragment>
+					))}
+				</Td>
+				<Td>
+					{subject.classMethods.map((method, i, array) => (
+						<React.Fragment key={i}>
+							{method}
+							{i < array.length && <br />}
+						</React.Fragment>
+					))}
+				</Td>
+				<Td>{subject.abstract}</Td>
+				<Td>{subject.note}</Td>
+			</tr>
+		);
+	},
 );
 
 export default SubjectTr;

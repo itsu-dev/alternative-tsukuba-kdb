@@ -148,5 +148,3 @@ cython_debug/
 .DS_Store
 *.save
 *.swp
-
-node_modules
