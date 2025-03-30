@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: yarn run build
       - name: Upload to artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
