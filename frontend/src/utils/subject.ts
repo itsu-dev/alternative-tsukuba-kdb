@@ -1,0 +1,178 @@
+import kdbGradData from "@/kdb/kdb-grad.json";
+import kdbData from "@/kdb/kdb.json";
+import type { KdbData } from "../kdb/kdb";
+import {
+	type TimeslotTable,
+	createTimeslotTable,
+	timeslotTableToBits,
+} from "./timetable";
+
+const allSeasons = ["春", "夏", "秋", "冬"] as const;
+export const normalSeasons = ["春", "秋"] as const;
+export const modules = ["A", "B", "C"] as const;
+export const classMethods = ["対面", "オンデマンド", "同時双方向"] as const;
+
+export type AllSeason = (typeof allSeasons)[number];
+export type NormalSeason = (typeof normalSeasons)[number];
+export type Module = (typeof modules)[number];
+export type ClassMethod = (typeof classMethods)[number];
+
+const isAllSeason = (char: string): char is AllSeason =>
+	(allSeasons as readonly string[]).includes(char);
+
+const isNormalSeason = (char: string): char is NormalSeason =>
+	(normalSeasons as readonly string[]).includes(char);
+
+const isModule = (char: string): char is Module =>
+	(modules as readonly string[]).includes(char);
+
+export const getTermCode = (season: NormalSeason, module: Module) =>
+	(season === "春" ? 0 : 3) + (module === "A" ? 0 : module === "B" ? 1 : 2);
+
+export class Subject {
+	private _code: string;
+	private _name: string;
+	private _credit: number;
+	private _termCodes: number[][] = [];
+	private _timeslotTables: TimeslotTable[] = [];
+	// timeslotTables のビット列の論理積（検索用）
+	private _timeslotTableBits = 0n;
+	year: string;
+	termStr: string;
+	timeslotStr: string;
+	room: string;
+	person: string;
+	abstract: string;
+	note: string;
+	classMethods: ClassMethod[];
+	concentration = false;
+	negotiable = false;
+	asneeded = false;
+	nt = false;
+
+	constructor(line: KdbData["subject"][0]) {
+		this._code = line[0];
+		this._name = line[1];
+		this._credit = Number.parseFloat(line[3]);
+		this.year = line[4];
+		this.termStr = line[5];
+		this.timeslotStr = line[6];
+		this.room = line[7];
+		this.person = line[8];
+		this.abstract = line[9];
+		this.note = line[10];
+
+		this._termCodes = Subject.parseTerm(this.termStr);
+
+		// 時限
+		const termStrArray = this.timeslotStr.split(" ");
+		for (const str of termStrArray) {
+			this._timeslotTables.push(createTimeslotTable(str));
+			this.concentration ||= str.includes("集中");
+			this.negotiable ||= str.includes("応談");
+			this.asneeded ||= str.includes("随時");
+			this.nt ||= str.includes("NT");
+		}
+		for (const table of this._timeslotTables) {
+			this._timeslotTableBits |= timeslotTableToBits(table);
+		}
+
+		this.classMethods = classMethods.filter((it) => this.note.indexOf(it) > -1);
+	}
+
+	get code() {
+		return this._code;
+	}
+
+	get name() {
+		return this._name;
+	}
+
+	get credit() {
+		return this._credit;
+	}
+
+	get termCodes() {
+		return this._termCodes;
+	}
+
+	get timeslotTables() {
+		return this._timeslotTables;
+	}
+
+	get timeslotTableBits() {
+		return this._timeslotTableBits;
+	}
+
+	get syllabusHref() {
+		// 現在の日付から年度を取得する場合、未公開のシラバスを参照してしまう可能性があるため、手動で年度を更新する。
+		// シラバスは、毎年4月上旬に更新される。
+		const year = 2024;
+		return `https://kdb.tsukuba.ac.jp/syllabi/${year}/${this.code}/jpn`;
+	}
+
+	private static parseTerm(termStr: string) {
+		// タームコード
+		// - 春 A-C: 0-2
+		// - 秋 A-C: 3-5
+		// - 春季、夏季、秋季、冬季休業中: 6-9
+		const termCodes: number[][] = [];
+		let season: AllSeason | null = null;
+
+		// 初めにスペースで分割
+		const termGroups = termStr.split(" ");
+		for (const groupStr of termGroups) {
+			// タームコードのグループはコマのグループと一致する
+			const group: number[] = [];
+			const charArray = Array.from(groupStr);
+
+			for (const char of charArray) {
+				// 季節が出現した場合、以降のタームはその季節として扱う
+				if (isAllSeason(char)) {
+					season = char;
+				}
+				if (season) {
+					// ABC ターム
+					if (isModule(char) && isNormalSeason(season)) {
+						const no = getTermCode(season, char);
+						group.push(no);
+					}
+					// 休業中
+					if (char === "休") {
+						group.push(allSeasons.indexOf(season) + 6);
+					}
+				}
+			}
+			termCodes.push(group);
+		}
+		return termCodes;
+	}
+}
+
+export const kdb = (() => {
+	const subjectMap: { [key: string]: Subject } = {};
+	const subjectCodeList: string[] = [];
+
+	const allSubjects = [
+		...(kdbData as KdbData).subject,
+		...(kdbGradData as KdbData).subject,
+	];
+	for (const line of allSubjects) {
+		const subject = new Subject(line);
+		subjectMap[subject.code] = subject;
+		subjectCodeList.push(subject.code);
+	}
+	return {
+		subjectMap,
+		subjectCodeList,
+		updated: kdbData.updated,
+	};
+})();
+
+// 一度に表示する件数
+export const ONCE_COUNT = 50;
+
+// 高速化のため、初回表示時のみフィルタされてない科目を表示
+export const initialSubjects = kdb.subjectCodeList
+	.slice(0, ONCE_COUNT)
+	.map((code) => kdb.subjectMap[code]);
