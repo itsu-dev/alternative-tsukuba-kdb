@@ -13,7 +13,18 @@ It is approved by The College of Media arts, Science and Technology (MAST) in Un
 
 ## 開発
 
-詳細は以下の README.md を参照してください。
+`/csv` 配下に過去の科目データの CSV ファイルが含まれるため、clone/pull に時間を要する場合があります。スパースチェックアウト等を活用することをおすすめします。
+
+```bash
+# /csv を除外
+git clone --depth 1 --filter=blob:none --no-checkout git@github.com:Make-IT-TSUKUBA/alternative-tsukuba-kdb.git
+cd alternative-tsukuba-kdb
+git sparse-checkout init --cone
+git sparse-checkout set ":!csv"
+git checkout
+```
+
+詳細な開発手順については、以下の README.md を参照してください。
 
 - `/frontend`：フロントエンド
 - `/tools`：科目データの取得、管理用スクリプト
