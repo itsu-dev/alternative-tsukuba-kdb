@@ -34,13 +34,13 @@ class PostDict(TypedDict):
 class KdbDownloader:
     """Download a CSV file of KdB data."""
 
-    def __init__(self, year: int = 2024) -> None:
+    def __init__(self, year: int = 2025) -> None:
         """Initializer.
 
         Args:
-            year (int, optional): A year of syllabus. Defaults to 2023.
+            year (int, optional): A year of syllabus. Defaults to 2025.
         """
-        requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += "HIGH:!DH"
+        #requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += "HIGH:!DH"
         self.year = year
         self.post: PostDict = {
             "index": "",
