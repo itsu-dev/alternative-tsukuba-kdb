@@ -1,33 +1,33 @@
 {
-	"name": "alternative-tsukuba-kdb2",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc -b && vite build",
-		"preview": "vite preview",
-		"check": "biome check --write .",
-		"check:ci": "biome ci ."
-	},
-	"dependencies": {
-		"@emotion/react": "^11.14.0",
-		"@emotion/styled": "^11.14.0",
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0",
-		"react-use": "^17.6.0"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
-		"@eslint/js": "^9.21.0",
-		"@types/node": "^22.13.14",
-		"@types/react": "^19.0.10",
-		"@types/react-dom": "^19.0.4",
-		"@vitejs/plugin-react-swc": "^3.8.0",
-		"globals": "^15.15.0",
-		"typescript": "~5.7.2",
-		"typescript-eslint": "^8.24.1",
-		"vite": "^6.2.0",
-		"vite-plugin-pwa": "^0.21.2"
-	}
+  "name": "alternative-tsukuba-kdb2",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "check": "biome check --write .",
+    "check:ci": "biome ci ."
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-use": "^17.6.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@eslint/js": "^9.21.0",
+    "@types/node": "^22.13.14",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "globals": "^15.15.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0",
+    "vite-plugin-pwa": "^0.21.2"
+  }
 }

@@ -2,11 +2,11 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 import {
-	colorPurple,
-	colorPurpleDark,
-	colorPurpleGradient,
-	mobileMedia,
-	shallowShadow,
+  colorPurple,
+  colorPurpleDark,
+  colorPurpleGradient,
+  mobileMedia,
+  shallowShadow,
 } from "../../utils/style";
 
 export const Form = styled.div`
@@ -82,9 +82,9 @@ export const SubButtonAnchor = styled(ButtonAnchor)`
 `;
 
 export const keywordContainOptions = [
-	["科目名", "containsName"],
-	["科目番号", "containsCode"],
-	["教員名", "containsPerson"],
-	["概要", "containsAbstract"],
-	["備考", "containsNote"],
+  ["科目名", "containsName"],
+  ["科目番号", "containsCode"],
+  ["教員名", "containsPerson"],
+  ["概要", "containsAbstract"],
+  ["備考", "containsNote"],
 ] as const;

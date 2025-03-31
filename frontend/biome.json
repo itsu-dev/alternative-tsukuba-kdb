@@ -1,43 +1,43 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
-	"files": {
-		"include": ["package.json", "biome.json", "src/"],
-		"ignoreUnknown": false,
-		"ignore": [
-			"tsconfig.*.json",
-			"src/kdb/code-types-grad.json",
-			"src/kdb/code-types.json",
-			"src/kdb/kdb-grad.json",
-			"src/kdb/kdb.json"
-		]
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab"
-	},
-	"organizeImports": {
-		"enabled": true
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"a11y": {
-				"useValidAnchor": "off"
-			},
-			"suspicious": {
-				"noArrayIndexKey": "off"
-			}
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "double"
-		}
-	}
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "include": ["package.json", "biome.json", "src/"],
+    "ignoreUnknown": false,
+    "ignore": [
+      "tsconfig.*.json",
+      "src/kdb/code-types-grad.json",
+      "src/kdb/code-types.json",
+      "src/kdb/kdb-grad.json",
+      "src/kdb/kdb.json"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "useValidAnchor": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  }
 }

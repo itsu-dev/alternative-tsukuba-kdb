@@ -63,66 +63,66 @@ const Close = styled.a<{ opened: boolean }>`
 `;
 
 interface HeaderProps {
-	opened: boolean;
-	termCode: number;
-	totalCredit: number;
-	totalTimeslot: number;
-	setOpened: React.Dispatch<React.SetStateAction<boolean>>;
-	setTermCode: React.Dispatch<React.SetStateAction<number>>;
+  opened: boolean;
+  termCode: number;
+  totalCredit: number;
+  totalTimeslot: number;
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  setTermCode: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Header = ({
-	opened,
-	termCode,
-	totalCredit,
-	totalTimeslot,
-	setOpened,
-	setTermCode,
+  opened,
+  termCode,
+  totalCredit,
+  totalTimeslot,
+  setOpened,
+  setTermCode,
 }: HeaderProps) => {
-	const moveBefore = (e: React.MouseEvent) => {
-		e.stopPropagation();
-		setTermCode((prev) => {
-			if (prev - 1 >= 0) {
-				return prev - 1;
-			}
-			return prev;
-		});
-	};
+  const moveBefore = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setTermCode((prev) => {
+      if (prev - 1 >= 0) {
+        return prev - 1;
+      }
+      return prev;
+    });
+  };
 
-	const moveAfter = (e: React.MouseEvent) => {
-		e.stopPropagation();
-		setTermCode((prev) => {
-			if (prev + 1 < normalSeasons.length * modules.length) {
-				return prev + 1;
-			}
-			return prev;
-		});
-	};
+  const moveAfter = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setTermCode((prev) => {
+      if (prev + 1 < normalSeasons.length * modules.length) {
+        return prev + 1;
+      }
+      return prev;
+    });
+  };
 
-	return (
-		<Wrapper onClick={() => setOpened((prev) => !prev)}>
-			<Left>
-				<Move onClick={moveBefore} data-disabled={termCode - 1 < 0}>
-					〈
-				</Move>
-				<TermName>
-					{normalSeasons[Math.floor(termCode / modules.length)]}{" "}
-					{modules[termCode % 3]}
-				</TermName>
-				<Move
-					data-next="true"
-					data-disabled={termCode + 1 >= normalSeasons.length * modules.length}
-					onClick={moveAfter}
-				>
-					〉
-				</Move>
-				<Details>
-					{totalCredit.toFixed(1)} 単位、{totalTimeslot} コマ
-				</Details>
-			</Left>
-			<Close opened={opened}>{opened ? "﹀" : "︿"}</Close>
-		</Wrapper>
-	);
+  return (
+    <Wrapper onClick={() => setOpened((prev) => !prev)}>
+      <Left>
+        <Move onClick={moveBefore} data-disabled={termCode - 1 < 0}>
+          〈
+        </Move>
+        <TermName>
+          {normalSeasons[Math.floor(termCode / modules.length)]}{" "}
+          {modules[termCode % 3]}
+        </TermName>
+        <Move
+          data-next="true"
+          data-disabled={termCode + 1 >= normalSeasons.length * modules.length}
+          onClick={moveAfter}
+        >
+          〉
+        </Move>
+        <Details>
+          {totalCredit.toFixed(1)} 単位、{totalTimeslot} コマ
+        </Details>
+      </Left>
+      <Close opened={opened}>{opened ? "﹀" : "︿"}</Close>
+    </Wrapper>
+  );
 };
 
 export default Header;

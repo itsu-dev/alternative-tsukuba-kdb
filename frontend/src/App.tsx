@@ -4,7 +4,7 @@ import { useState } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
-import Timetable from "./components/timetable/Index";
+import Timetable from "./components/Timetable/Index";
 import { type SearchOptions, createSearchOptions } from "./utils/search";
 import { useBookmark } from "./utils/useBookmark";
 
@@ -39,7 +39,7 @@ const globalStyle = css`
 
 const App = () => {
   const [searchOptions, setSearchOptions] = useState<SearchOptions>(
-    createSearchOptions()
+    createSearchOptions(),
   );
   const [timetableTermCode, setTimetableTermCode] = useState(0);
 

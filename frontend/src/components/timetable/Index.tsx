@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
+import { useMedia } from "react-use";
 
 import {
   colorPurpleDark,
@@ -17,7 +18,6 @@ import {
 } from "@/utils/timetable";
 import type { useBookmark } from "@/utils/useBookmark";
 import Header from "./Header";
-import { useMedia } from "react-use";
 
 const Wrapper = styled.div`
   width: 400px;
@@ -205,7 +205,7 @@ const TimetableElement = ({
 
   const [opened, setOpened] = useState(!isMobile);
   const [timetable, setTimetable] = useState<Timetable<Subject[]>>(
-    fillTimetable<Subject[]>([])
+    fillTimetable<Subject[]>([]),
   );
   const [totalCredit, setTotalCredit] = useState(0);
   const [totalTimeslot, setTotalTimeslot] = useState(0);
@@ -237,7 +237,7 @@ const TimetableElement = ({
 
       // タームコードを含むグループを探索
       const termIndex = subject.termCodes.findIndex((codes) =>
-        codes.includes(termCode)
+        codes.includes(termCode),
       );
       if (termIndex === -1) {
         continue;
@@ -318,9 +318,9 @@ const TimetableElement = ({
         <Link onClick={exportToTwinte}>
           <span>Twin:te にエクスポート</span>
         </Link>
-        <Link>
+        {/*<Link>
           <span>画像に保存</span>
-        </Link>
+        </Link>*/}
         <Link caution={true} onClick={clearBookmarks}>
           <span>すべて削除</span>
         </Link>

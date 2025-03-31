@@ -2,11 +2,11 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 
 import {
-	colorPurple,
-	colorPurpleDark,
-	colorPurpleGradient,
-	mobileMedia,
-	shallowShadow,
+  colorPurple,
+  colorPurpleDark,
+  colorPurpleGradient,
+  mobileMedia,
+  shallowShadow,
 } from "@/utils/style";
 import { type Subject, kdb } from "@/utils/subject";
 
@@ -112,84 +112,84 @@ const Loading = styled.div`
 `;
 
 interface MobileProps {
-	subjects: Subject[];
-	filteredSubjects: Subject[];
-	bookmarks: Set<string>;
-	hasMore: boolean;
-	loadingRef: React.RefObject<HTMLDivElement | null>;
-	switchBookmark: (subjectCode: string) => void;
+  subjects: Subject[];
+  filteredSubjects: Subject[];
+  bookmarks: Set<string>;
+  hasMore: boolean;
+  loadingRef: React.RefObject<HTMLDivElement | null>;
+  switchBookmark: (subjectCode: string) => void;
 }
 
 const Mobile = ({
-	subjects,
-	filteredSubjects,
-	bookmarks,
-	hasMore,
-	loadingRef,
-	switchBookmark,
+  subjects,
+  filteredSubjects,
+  bookmarks,
+  hasMore,
+  loadingRef,
+  switchBookmark,
 }: MobileProps) => {
-	const [displayed, setDisplayed] = useState(new Set<string>());
+  const [displayed, setDisplayed] = useState(new Set<string>());
 
-	return (
-		<Wrapper>
-			{subjects.map((subject) => (
-				<SubjectWrapper
-					key={subject.code}
-					onClick={() =>
-						setDisplayed((prev) => new Set([...prev, subject.code]))
-					}
-				>
-					<Abstract>
-						<Left>
-							<div className="first">
-								{subject.code}
-								<span className="class-method">
-									{subject.classMethods.join("、")}
-								</span>
-							</div>
-							<Title>{subject.name}</Title>
-							{subject.person.split(",").join("、")}
-						</Left>
-						<Right>
-							{subject.termStr} {subject.timeslotStr} <br />
-							{subject.credit.toFixed(1)}
-							<span className="sub">単位</span>
-							<br />
-							{subject.year}
-							<span className="sub">年次</span>
-						</Right>
-					</Abstract>
-					<Details displays={displayed.has(subject.code)}>
-						<p>{subject.abstract}</p>
-						<AnchorWrapper>
-							<Anchor
-								data-bookmark={bookmarks.has(subject.code)}
-								onClick={() => switchBookmark(subject.code)}
-							>
-								<span>
-									{bookmarks.has(subject.code)
-										? "★ お気に入り"
-										: "★ お気に入りに追加"}
-								</span>
-							</Anchor>
-							<Anchor
-								href={subject.syllabusHref}
-								target="_blank"
-								rel="noreferrer"
-							>
-								<span>シラバス</span>
-							</Anchor>
-						</AnchorWrapper>
-					</Details>
-				</SubjectWrapper>
-			))}
-			<Loading ref={loadingRef}>
-				{hasMore
-					? "Loading..."
-					: `全 ${kdb?.subjectCodeList.length} 件中 ${filteredSubjects.length} 件を表示しました`}
-			</Loading>
-		</Wrapper>
-	);
+  return (
+    <Wrapper>
+      {subjects.map((subject) => (
+        <SubjectWrapper
+          key={subject.code}
+          onClick={() =>
+            setDisplayed((prev) => new Set([...prev, subject.code]))
+          }
+        >
+          <Abstract>
+            <Left>
+              <div className="first">
+                {subject.code}
+                <span className="class-method">
+                  {subject.classMethods.join("、")}
+                </span>
+              </div>
+              <Title>{subject.name}</Title>
+              {subject.person.split(",").join("、")}
+            </Left>
+            <Right>
+              {subject.termStr} {subject.timeslotStr} <br />
+              {subject.credit.toFixed(1)}
+              <span className="sub">単位</span>
+              <br />
+              {subject.year}
+              <span className="sub">年次</span>
+            </Right>
+          </Abstract>
+          <Details displays={displayed.has(subject.code)}>
+            <p>{subject.abstract}</p>
+            <AnchorWrapper>
+              <Anchor
+                data-bookmark={bookmarks.has(subject.code)}
+                onClick={() => switchBookmark(subject.code)}
+              >
+                <span>
+                  {bookmarks.has(subject.code)
+                    ? "★ お気に入り"
+                    : "★ お気に入りに追加"}
+                </span>
+              </Anchor>
+              <Anchor
+                href={subject.syllabusHref}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>シラバス</span>
+              </Anchor>
+            </AnchorWrapper>
+          </Details>
+        </SubjectWrapper>
+      ))}
+      <Loading ref={loadingRef}>
+        {hasMore
+          ? "Loading..."
+          : `全 ${kdb?.subjectCodeList.length} 件中 ${filteredSubjects.length} 件を表示しました`}
+      </Loading>
+    </Wrapper>
+  );
 };
 
 export default Mobile;

@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 
 import type { SearchOptions } from "@/utils/search";
 import {
-	colorPurpleDark,
-	mobileMedia,
-	shadow,
-	shallowShadow,
+  colorPurpleDark,
+  mobileMedia,
+  shadow,
+  shallowShadow,
 } from "@/utils/style";
 import { type TimeslotTable, daysofweek, maxPeriod } from "@/utils/timetable";
 
@@ -75,11 +75,11 @@ const Button = styled.button<{ state: "disabled" | "selected" | "none" }>`
   margin: 0;
   padding: 0;
   background: ${({ state }) =>
-		state === "disabled"
-			? "#ccc"
-			: state === "selected"
-				? colorPurpleDark
-				: "#fff"};
+    state === "disabled"
+      ? "#ccc"
+      : state === "selected"
+        ? colorPurpleDark
+        : "#fff"};
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -95,143 +95,142 @@ const Label = styled.label`
 `;
 
 interface TimeslotsSelectionProps {
-	options: SearchOptions;
-	displays: boolean;
-	bookmarkTimeslotTable: TimeslotTable;
-	setOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
-	setDisplays: React.Dispatch<React.SetStateAction<boolean>>;
+  options: SearchOptions;
+  displays: boolean;
+  bookmarkTimeslotTable: TimeslotTable;
+  setOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
+  setDisplays: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TimeslotsSelection = ({
-	options,
-	displays,
-	bookmarkTimeslotTable,
-	setOptions,
-	setDisplays,
+  options,
+  displays,
+  bookmarkTimeslotTable,
+  setOptions,
+  setDisplays,
 }: TimeslotsSelectionProps) => {
-	const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
 
-	const [startTimeslot, setStartTimeslot] = React.useState<{
-		day: number;
-		time: number;
-	} | null>(null);
-	const [startTimeslotTable, setStartTimeslotTable] =
-		React.useState<TimeslotTable | null>(null);
-	const [tempTimeslotTable, setTempTimeslotTable] =
-		React.useState<TimeslotTable | null>(null);
+  const [startTimeslot, setStartTimeslot] = React.useState<{
+    day: number;
+    time: number;
+  } | null>(null);
+  const [startTimeslotTable, setStartTimeslotTable] =
+    React.useState<TimeslotTable | null>(null);
+  const [tempTimeslotTable, setTempTimeslotTable] =
+    React.useState<TimeslotTable | null>(null);
 
-	const update = (day: number, time: number, updates: boolean) => {
-		if (!startTimeslot || !startTimeslotTable) {
-			return;
-		}
-		const newTimeslotTable = structuredClone(startTimeslotTable);
+  const update = (day: number, time: number, updates: boolean) => {
+    if (!startTimeslot || !startTimeslotTable) {
+      return;
+    }
+    const newTimeslotTable = structuredClone(startTimeslotTable);
 
-		// 選択範囲を反転
-		for (
-			let dayi = Math.min(startTimeslot.day, day);
-			dayi <= Math.max(startTimeslot.day, day);
-			dayi++
-		) {
-			for (
-				let timei = Math.min(startTimeslot.time, time);
-				timei <= Math.max(startTimeslot.time, time);
-				timei++
-			) {
-				newTimeslotTable[dayi][timei] = !startTimeslotTable[dayi][timei];
-			}
-		}
+    // 選択範囲を反転
+    for (
+      let dayi = Math.min(startTimeslot.day, day);
+      dayi <= Math.max(startTimeslot.day, day);
+      dayi++
+    ) {
+      for (
+        let timei = Math.min(startTimeslot.time, time);
+        timei <= Math.max(startTimeslot.time, time);
+        timei++
+      ) {
+        newTimeslotTable[dayi][timei] = !startTimeslotTable[dayi][timei];
+      }
+    }
 
-		// updates が true の場合のみ、実際の検索条件を更新
-		if (updates) {
-			setOptions({ ...options, timeslotTable: newTimeslotTable });
-		} else {
-			setTempTimeslotTable(newTimeslotTable);
-		}
-	};
+    // updates が true の場合のみ、実際の検索条件を更新
+    if (updates) {
+      setOptions({ ...options, timeslotTable: newTimeslotTable });
+    } else {
+      setTempTimeslotTable(newTimeslotTable);
+    }
+  };
 
-	const onMouseDown = (day: number, time: number) => {
-		setStartTimeslot({ day, time });
-		setStartTimeslotTable(options.timeslotTable);
-	};
+  const onMouseDown = (day: number, time: number) => {
+    setStartTimeslot({ day, time });
+    setStartTimeslotTable(options.timeslotTable);
+  };
 
-	const onMouseMove = (day: number, time: number) => {
-		update(day, time, false);
-		// TODO: 科目区分を科目番号の隣に表示（情報学群 のように）
-	};
+  const onMouseMove = (day: number, time: number) => {
+    update(day, time, false);
+  };
 
-	const onMouseUp = (day: number, time: number) => {
-		update(day, time, true);
-		setStartTimeslot(null);
-		setStartTimeslotTable(null);
-		setTempTimeslotTable(null);
-	};
+  const onMouseUp = (day: number, time: number) => {
+    update(day, time, true);
+    setStartTimeslot(null);
+    setStartTimeslotTable(null);
+    setTempTimeslotTable(null);
+  };
 
-	useEffect(() => {
-		const documentClickHandler = (e: MouseEvent) => {
-			if (
-				!wrapperRef.current ||
-				wrapperRef.current.contains(e.target as HTMLElement)
-			) {
-				return;
-			}
-			setDisplays(false);
-			e.stopPropagation();
-		};
+  useEffect(() => {
+    const documentClickHandler = (e: MouseEvent) => {
+      if (
+        !wrapperRef.current ||
+        wrapperRef.current.contains(e.target as HTMLElement)
+      ) {
+        return;
+      }
+      setDisplays(false);
+      e.stopPropagation();
+    };
 
-		if (displays) {
-			setTimeout(() => {
-				document.body.addEventListener("click", documentClickHandler);
-			}, 500);
-		}
-		return () =>
-			document.body.removeEventListener("click", documentClickHandler);
-	}, [displays, setDisplays]);
+    if (displays) {
+      setTimeout(() => {
+        document.body.addEventListener("click", documentClickHandler);
+      }, 500);
+    }
+    return () =>
+      document.body.removeEventListener("click", documentClickHandler);
+  }, [displays, setDisplays]);
 
-	return (
-		<Wrapper data-displays={displays} ref={wrapperRef}>
-			<Row>
-				<Time />
-				{daysofweek.map((day) => (
-					<Day key={day}>{day}</Day>
-				))}
-			</Row>
-			<ButtonWrapper>
-				{[...Array(maxPeriod)].map((_, time) => (
-					<React.Fragment key={time}>
-						<Row>
-							<Time>{time + 1}</Time>
-							{daysofweek.map((day, i) => (
-								<Button
-									onMouseDown={() => onMouseDown(i, time)}
-									onMouseMove={() => onMouseMove(i, time)}
-									onMouseUp={() => onMouseUp(i, time)}
-									state={
-										options.excludesBookmark && bookmarkTimeslotTable[i][time]
-											? "disabled"
-											: (tempTimeslotTable ?? options.timeslotTable)[i][time]
-												? "selected"
-												: "none"
-									}
-									key={day}
-								/>
-							))}
-						</Row>
-					</React.Fragment>
-				))}
-			</ButtonWrapper>
-			<Description>ドラッグで複数選択</Description>
-			<Label>
-				<input
-					type="checkbox"
-					checked={options.excludesBookmark}
-					onChange={(e) =>
-						setOptions({ ...options, excludesBookmark: e.target.checked })
-					}
-				/>
-				ブックマークを除外
-			</Label>
-		</Wrapper>
-	);
+  return (
+    <Wrapper data-displays={displays} ref={wrapperRef}>
+      <Row>
+        <Time />
+        {daysofweek.map((day) => (
+          <Day key={day}>{day}</Day>
+        ))}
+      </Row>
+      <ButtonWrapper>
+        {[...Array(maxPeriod)].map((_, time) => (
+          <React.Fragment key={time}>
+            <Row>
+              <Time>{time + 1}</Time>
+              {daysofweek.map((day, i) => (
+                <Button
+                  onMouseDown={() => onMouseDown(i, time)}
+                  onMouseMove={() => onMouseMove(i, time)}
+                  onMouseUp={() => onMouseUp(i, time)}
+                  state={
+                    options.excludesBookmark && bookmarkTimeslotTable[i][time]
+                      ? "disabled"
+                      : (tempTimeslotTable ?? options.timeslotTable)[i][time]
+                        ? "selected"
+                        : "none"
+                  }
+                  key={day}
+                />
+              ))}
+            </Row>
+          </React.Fragment>
+        ))}
+      </ButtonWrapper>
+      <Description>ドラッグで複数選択</Description>
+      <Label>
+        <input
+          type="checkbox"
+          checked={options.excludesBookmark}
+          onChange={(e) =>
+            setOptions({ ...options, excludesBookmark: e.target.checked })
+          }
+        />
+        ブックマークを除外
+      </Label>
+    </Wrapper>
+  );
 };
 
 export default TimeslotsSelection;

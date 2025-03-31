@@ -20,50 +20,50 @@ const Select = styled.select`
 `;
 
 interface RequirementsProps {
-	options: SearchOptions;
-	setOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
+  options: SearchOptions;
+  setOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
 }
 
 const Requirements = ({ options, setOptions }: RequirementsProps) => {
-	return (
-		<Wrapper>
-			<Select
-				value={options.reqA}
-				onChange={(e) => setOptions({ ...options, reqA: e.target.value })}
-			>
-				<option value="null">指定なし</option>
-				{Object.keys(allCodeTypes).map((key) => (
-					<option value={key} key={key}>
-						{key}
-					</option>
-				))}
-			</Select>
-			<Select
-				value={options.reqB}
-				onChange={(e) => setOptions({ ...options, reqB: e.target.value })}
-			>
-				<option value="null" />
-				{Object.keys(allCodeTypes[options.reqA]?.childs ?? {}).map((key) => (
-					<option value={key} key={key}>
-						{key}
-					</option>
-				))}
-			</Select>
-			<Select
-				value={options.reqC}
-				onChange={(e) => setOptions({ ...options, reqC: e.target.value })}
-			>
-				<option value="null" />
-				{Object.keys(
-					allCodeTypes[options.reqA]?.childs?.[options.reqB]?.childs ?? {},
-				).map((key) => (
-					<option value={key} key={key}>
-						{key}
-					</option>
-				))}
-			</Select>
-		</Wrapper>
-	);
+  return (
+    <Wrapper>
+      <Select
+        value={options.reqA}
+        onChange={(e) => setOptions({ ...options, reqA: e.target.value })}
+      >
+        <option value="null">指定なし</option>
+        {Object.keys(allCodeTypes).map((key) => (
+          <option value={key} key={key}>
+            {key}
+          </option>
+        ))}
+      </Select>
+      <Select
+        value={options.reqB}
+        onChange={(e) => setOptions({ ...options, reqB: e.target.value })}
+      >
+        <option value="null" />
+        {Object.keys(allCodeTypes[options.reqA]?.childs ?? {}).map((key) => (
+          <option value={key} key={key}>
+            {key}
+          </option>
+        ))}
+      </Select>
+      <Select
+        value={options.reqC}
+        onChange={(e) => setOptions({ ...options, reqC: e.target.value })}
+      >
+        <option value="null" />
+        {Object.keys(
+          allCodeTypes[options.reqA]?.childs?.[options.reqB]?.childs ?? {},
+        ).map((key) => (
+          <option value={key} key={key}>
+            {key}
+          </option>
+        ))}
+      </Select>
+    </Wrapper>
+  );
 };
 
 export default Requirements;

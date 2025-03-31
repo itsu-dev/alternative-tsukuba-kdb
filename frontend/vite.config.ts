@@ -53,8 +53,5 @@ export default defineConfig({
       "@": `${__dirname}/src`,
     },
   },
-  base: "/alternative-tsukuba-kdb2/",
-  server: {
-    allowedHosts: ["0a83-60-127-26-88.ngrok-free.app"],
-  },
+  base: "/alternative-tsukuba-kdb/",
 });
