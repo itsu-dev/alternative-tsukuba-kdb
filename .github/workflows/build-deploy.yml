@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   push:
@@ -9,19 +9,35 @@ jobs:
   build:
     environment: actions
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_ADMIN_TOKEN }}
+          sparse-checkout: frontend
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
       - name: Install
-        run: npm ci
+        run: yarn install --frozen-lockfile
       - name: Build
-        run: NODE_OPTIONS='--openssl-legacy-provider' npm run build
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        run: yarn run build
+      - name: Upload to artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GH_ADMIN_TOKEN }}
-          publish_dir: dist
+          path: frontend/dist
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
