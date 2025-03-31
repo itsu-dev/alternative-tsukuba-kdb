@@ -19,17 +19,17 @@ KdB からシラバスデータを取得し、学群／大学院開設授業科�
 対応付けを変更する場合は `python/list.txt` を編集します。
 
 ```bash
-# tools/csv/ に kdb-YYYYMMDD.csv を保存
-python tools/python/download.py tools/csv
+# /csv/kdb-YYYYMMDD.csv を保存
+python tools/python/download.py csv
 
 # 以下のファイルを保存
-# - src/kdb.json
-# - src/kdb-grad.json
-# - src/code-types.json
-python tools/python/csv-json.py tools/csv/kdb-YYYYMMDD.csv tools/python/list.txt src
+# - /frontend/src/kdb/kdb.json
+# - /frontend/src/kdb/kdb-grad.json
+# - /frontend/src/kdb/code-types.json
+python tools/python/csv-json.py csv/kdb-YYYYMMDD.csv tools/python/list.txt frontend/src/kdb
 ```
 
-保存した CSV ファイルと、生成されたファイル群はコミットに含めてください。
+保存した CSV ファイルおよび生成されたファイル群はコミットに含めてください。
 なお、これらのスクリプトは基本的に CI 上で実行されます。
 
 ## 大学院開設授業科目の科目番号対応表
@@ -39,6 +39,7 @@ python tools/python/csv-json.py tools/csv/kdb-YYYYMMDD.csv tools/python/list.txt
 ```bash
 # 区分毎の CSV ファイルを取得し、dst/ に保存
 python tools/python/download-grad.py
-# 保存された CSV ファイルを基に対応表を作成し、src/code-types-grad.json に保存
+
+# 保存された CSV ファイルを基に対応表を作成し、/frontend/src/code-types-grad.json に保存
 python tools/python/code-types-grad.py
 ```

@@ -6,7 +6,7 @@ import os
 
 argparse = argparse.ArgumentParser()
 argparse.add_argument("--dst", "-d", default="dst")
-argparse.add_argument("--json", "-j", default="src/code-types-grad.json")
+argparse.add_argument("--json", "-j", default="frontend/src/kdb/code-types-grad.json")
 args = argparse.parse_args()
 
 csv_list = glob.glob(os.path.join(args.dst, "*.csv"))
