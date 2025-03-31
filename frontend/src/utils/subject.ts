@@ -107,7 +107,7 @@ export class Subject {
   get syllabusHref() {
     // 現在の日付から年度を取得する場合、未公開のシラバスを参照してしまう可能性があるため、手動で年度を更新する。
     // シラバスは、毎年4月上旬に更新される。
-    const year = 2024;
+    const year = 2025;
     return `https://kdb.tsukuba.ac.jp/syllabi/${year}/${this.code}/jpn`;
   }
 
