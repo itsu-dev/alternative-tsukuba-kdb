@@ -1,14 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { type SearchOptions, searchSubjects } from "@/utils/search";
+import type { SearchOptions } from "@/utils/search";
 import { mobileMedia } from "@/utils/style";
-import {
-  ONCE_COUNT,
-  type Subject,
-  initialSubjects,
-  kdb,
-} from "@/utils/subject";
+import { ONCE_COUNT, type Subject, initialSubjects } from "@/utils/subject";
 import type { useBookmark } from "@/utils/useBookmark";
 import MainTableDesktop from "./MainTableDesktop";
 import Mobile from "./Mobile";
@@ -24,15 +19,18 @@ const Wrapper = styled.main`
 `;
 
 interface MainProps {
-  searchOptions: SearchOptions;
+  filteredSubjects: Subject[];
   usedBookmark: ReturnType<typeof useBookmark>;
   setSearchOptions: React.Dispatch<React.SetStateAction<SearchOptions>>;
 }
 
-const Main = ({ searchOptions, usedBookmark, setSearchOptions }: MainProps) => {
-  const { bookmarks, bookmarkTimeslotTable, switchBookmark } = usedBookmark;
+const Main = ({
+  filteredSubjects,
+  usedBookmark,
+  setSearchOptions,
+}: MainProps) => {
+  const { bookmarks, switchBookmark } = usedBookmark;
 
-  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
   const [displayedCount, setDisplayedCount] = useState(0);
   const [initial, setInitial] = useState(true);
   const loadingDesktopRef = useRef<HTMLTableRowElement>(null);
@@ -54,22 +52,10 @@ const Main = ({ searchOptions, usedBookmark, setSearchOptions }: MainProps) => {
   );
 
   useEffect(() => {
-    // 検索結果を更新
-    if (!kdb) {
-      return;
-    }
-    const subjects = searchSubjects(
-      kdb.subjectMap,
-      kdb.subjectCodeList,
-      searchOptions,
-      bookmarks,
-      bookmarkTimeslotTable,
-    );
-    setFilteredSubjects(subjects);
     // ブックマークの切替時のガタつきを防止するために、以前表示していた件数は必ず表示
     setDisplayedCount((prev) => Math.max(ONCE_COUNT, prev));
     setInitial(false);
-  }, [searchOptions, bookmarks, bookmarkTimeslotTable]);
+  }, []);
 
   useEffect(() => {
     // 無限スクロールで一定件数ずつ表示
