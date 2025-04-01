@@ -22,7 +22,7 @@ const saveBookmarks = (bookmarks: Set<string>) => {
 
 export const useBookmark = (
   timetableTermCode: number,
-  setTimetableTermCode: React.Dispatch<React.SetStateAction<number>>
+  setTimetableTermCode: React.Dispatch<React.SetStateAction<number>>,
 ) => {
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
 
@@ -53,7 +53,7 @@ export const useBookmark = (
         continue;
       }
       const termIndex = subject.termCodes.findIndex((codes) =>
-        codes.includes(timetableTermCode)
+        codes.includes(timetableTermCode),
       );
       if (termIndex === -1) {
         continue;
@@ -73,7 +73,7 @@ export const useBookmark = (
 
   const clearBookmarks = () => {
     const ok = window.confirm(
-      "すべてのお気に入りの科目が削除されます。よろしいですか？"
+      "すべてのお気に入りの科目が削除されます。よろしいですか？",
     );
     if (ok) {
       localStorage.removeItem(BOOKMARK_KEY);

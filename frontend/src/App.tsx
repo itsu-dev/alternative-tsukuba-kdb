@@ -1,11 +1,16 @@
 import { Global, css } from "@emotion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Footer from "./components/Footer";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Timetable from "./components/Timetable/Index";
-import { type SearchOptions, createSearchOptions } from "./utils/search";
+import {
+  type SearchOptions,
+  createSearchOptions,
+  searchSubjects,
+} from "./utils/search";
+import { type Subject, kdb } from "./utils/subject";
 import { useBookmark } from "./utils/useBookmark";
 
 const globalStyle = css`
@@ -41,9 +46,23 @@ const App = () => {
   const [searchOptions, setSearchOptions] = useState<SearchOptions>(
     createSearchOptions(),
   );
+  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
   const [timetableTermCode, setTimetableTermCode] = useState(0);
 
   const usedBookmark = useBookmark(timetableTermCode, setTimetableTermCode);
+  const { bookmarks, bookmarkTimeslotTable } = usedBookmark;
+
+  useEffect(() => {
+    // 検索結果を更新
+    const subjects = searchSubjects(
+      kdb.subjectMap,
+      kdb.subjectCodeList,
+      searchOptions,
+      bookmarks,
+      bookmarkTimeslotTable,
+    );
+    setFilteredSubjects(subjects);
+  }, [searchOptions, bookmarks, bookmarkTimeslotTable]);
 
   return (
     <>
@@ -54,11 +73,11 @@ const App = () => {
         setSearchOptions={setSearchOptions}
       />
       <Main
-        searchOptions={searchOptions}
+        filteredSubjects={filteredSubjects}
         usedBookmark={usedBookmark}
         setSearchOptions={setSearchOptions}
       />
-      <Footer />
+      <Footer filteredSubjects={filteredSubjects} />
       <Timetable
         termCode={timetableTermCode}
         usedBookmark={usedBookmark}

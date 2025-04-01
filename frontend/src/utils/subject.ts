@@ -176,3 +176,75 @@ export const ONCE_COUNT = 50;
 export const initialSubjects = kdb.subjectCodeList
   .slice(0, ONCE_COUNT)
   .map((code) => kdb.subjectMap[code]);
+
+// UTF-8（BOM 付き）の CSV ファイルに出力
+export const outputSubjectsToCSV = (
+  subjects: Subject[],
+  a: HTMLAnchorElement | null
+) => {
+  const escaped = /,|\r?\n|\r|"/;
+  const e = /"/g;
+
+  const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+  const rows = [
+    [
+      "科目番号",
+      "科目名",
+      "単位数",
+      "年次",
+      "ターム",
+      "曜日・時限",
+      "担当",
+      "実施形態",
+      "概要",
+      "備考",
+    ],
+  ];
+  for (const subject of subjects) {
+    rows.push([
+      subject.code,
+      subject.name,
+      subject.credit.toFixed(1),
+      subject.year,
+      subject.termStr,
+      subject.timeslotStr,
+      subject.person,
+      subject.classMethods.join(","),
+      subject.abstract,
+      subject.note,
+    ]);
+  }
+
+  // エスケープ
+  const csvRows: string[] = [];
+  for (const row of rows) {
+    csvRows.push(
+      row
+        .map((field) =>
+          escaped.test(field) ? `"${field.replace(e, '""')}"` : field
+        )
+        .join(",")
+        .replace('\n",', '",')
+    );
+  }
+
+  // kdb_YYYYMMDDhhmmdd.csv
+  const dateString = (() => {
+    const date = new Date();
+    const Y = date.getFullYear();
+    const M = `${date.getMonth() + 1}`.padStart(2, "0");
+    const D = `${date.getDate()}`.padStart(2, "0");
+    const h = `${date.getHours()}`.padStart(2, "0");
+    const m = `${date.getMinutes()}`.padStart(2, "0");
+    const d = `${date.getSeconds()}`.padStart(2, "0");
+    return Y + M + D + h + m + d;
+  })();
+  const filename = `kdb_${dateString}.csv`;
+
+  // Blob のリンクを生成
+  const blob = new Blob([bom, csvRows.join("\n")], { type: "text/csv" });
+  if (a) {
+    a.download = filename;
+    a.href = window.URL.createObjectURL(blob);
+  }
+};

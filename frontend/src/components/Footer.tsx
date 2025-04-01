@@ -1,10 +1,13 @@
-import { mobileMedia } from "@/utils/style";
 import styled from "@emotion/styled";
+import { useRef } from "react";
+
+import { mobileMedia } from "@/utils/style";
+import { type Subject, outputSubjectsToCSV } from "@/utils/subject";
 
 const Wrapper = styled.footer`
-  line-height: 1.8rem;
+  line-height: 1.8;
   text-align: center;
-  margin: 1rem 0 2rem 0;
+  margin: 16px 0 80px 0;
 
   ${mobileMedia} {
     line-height: 1.5;
@@ -15,6 +18,7 @@ const Wrapper = styled.footer`
 
   a {
     color: #666;
+    text-decoration: underline;
   }
 `;
 
@@ -29,7 +33,13 @@ const Slash = styled.span`
   margin: 0 8px;
 `;
 
-const Footer = () => {
+interface FooterProps {
+  filteredSubjects: Subject[];
+}
+
+const Footer = ({ filteredSubjects }: FooterProps) => {
+  const anchorRef = useRef<HTMLAnchorElement>(null);
+
   return (
     <Wrapper>
       <List>
@@ -49,7 +59,14 @@ const Footer = () => {
           <a href="https://github.com/itsu-dev">Itsu</a>,{" "}
           <a href="https://github.com/Mimori256">Mimori256</a> et al.
           <Slash>/</Slash>
-          <a href="javascript:void(0)">CSV ダウンロード</a>
+          <a
+            ref={anchorRef}
+            onClick={() =>
+              outputSubjectsToCSV(filteredSubjects, anchorRef.current)
+            }
+          >
+            CSV ダウンロード
+          </a>
         </li>
       </List>
     </Wrapper>
