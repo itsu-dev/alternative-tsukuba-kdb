@@ -180,7 +180,7 @@ export const initialSubjects = kdb.subjectCodeList
 // UTF-8（BOM 付き）の CSV ファイルに出力
 export const outputSubjectsToCSV = (
   subjects: Subject[],
-  a: HTMLAnchorElement | null,
+  a: HTMLAnchorElement | null
 ) => {
   const escaped = /,|\r?\n|\r|"/;
   const e = /"/g;
@@ -201,7 +201,7 @@ export const outputSubjectsToCSV = (
     ],
   ];
   for (const subject of subjects) {
-    const row = [
+    rows.push([
       subject.code,
       subject.name,
       subject.credit.toFixed(1),
@@ -212,17 +212,20 @@ export const outputSubjectsToCSV = (
       subject.classMethods.join(","),
       subject.abstract,
       subject.note,
-    ];
-    rows.push(row);
+    ]);
   }
 
   // エスケープ
   const csvRows: string[] = [];
   for (const row of rows) {
-    row.map((field) =>
-      escaped.test(field) ? `"${field.replace(e, '""')}"` : field,
+    csvRows.push(
+      row
+        .map((field) =>
+          escaped.test(field) ? `"${field.replace(e, '""')}"` : field
+        )
+        .join(",")
+        .replace('\n",', '",')
     );
-    csvRows.push(row.join(",").replace('\n",', '",'));
   }
 
   // kdb_YYYYMMDDhhmmdd.csv

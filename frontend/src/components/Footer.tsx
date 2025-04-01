@@ -1,7 +1,8 @@
-import { mobileMedia } from "@/utils/style";
-import { type Subject, outputSubjectsToCSV } from "@/utils/subject";
 import styled from "@emotion/styled";
 import { useRef } from "react";
+
+import { mobileMedia } from "@/utils/style";
+import { type Subject, outputSubjectsToCSV } from "@/utils/subject";
 
 const Wrapper = styled.footer`
   line-height: 1.8;
