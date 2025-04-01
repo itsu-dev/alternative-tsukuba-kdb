@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMedia } from "react-use";
 
 import {
@@ -205,10 +205,22 @@ const TimetableElement = ({
 
   const [opened, setOpened] = useState(!isMobile);
   const [timetable, setTimetable] = useState<Timetable<Subject[]>>(
-    fillTimetable<Subject[]>([]),
+    fillTimetable<Subject[]>([])
   );
-  const [totalCredit, setTotalCredit] = useState(0);
-  const [totalTimeslot, setTotalTimeslot] = useState(0);
+  const [currentCredits, setCurrentCredits] = useState(0);
+  const [currentTimeslots, setCurrentTimeslots] = useState(0);
+
+  // 全タームを通した単位数の合計
+  const totalCredits = useMemo(() => {
+    let credits = 0;
+    for (const bookmark of bookmarks) {
+      const subject = kdb.subjectMap[bookmark];
+      if (subject) {
+        credits += subject.credit;
+      }
+    }
+    return credits;
+  }, [bookmarks]);
 
   const getColor = (subject: Subject, no: number) => {
     // 実施形態と重なりで色を決定
@@ -226,8 +238,8 @@ const TimetableElement = ({
 
   useEffect(() => {
     const table = fillTimetable<Subject[]>([]);
-    let tempCredits = 0;
-    let tempSlots = 0;
+    let credits = 0;
+    let timeslots = 0;
 
     for (const bookmark of bookmarks) {
       const subject = kdb.subjectMap[bookmark];
@@ -237,26 +249,26 @@ const TimetableElement = ({
 
       // タームコードを含むグループを探索
       const termIndex = subject.termCodes.findIndex((codes) =>
-        codes.includes(termCode),
+        codes.includes(termCode)
       );
       if (termIndex === -1) {
         continue;
       }
       const subjectTable = subject.timeslotTables[termIndex];
-      for (let day = 0; day < subjectTable.length; day++) {
-        for (let period = 0; period < subjectTable[day].length; period++) {
+      for (let day = 0; day < table.length; day++) {
+        for (let period = 0; period < table[day].length; period++) {
           // 科目がコマを含めば追加
           if (subjectTable[day][period]) {
             table[day][period].push(subject);
           }
         }
       }
-      tempCredits += subject.credit;
-      tempSlots += getTimeslotsLength(subjectTable);
+      credits += subject.credit;
+      timeslots += getTimeslotsLength(subjectTable);
     }
     setTimetable(table);
-    setTotalCredit(tempCredits);
-    setTotalTimeslot(tempSlots);
+    setCurrentCredits(credits);
+    setCurrentTimeslots(timeslots);
   }, [bookmarks, termCode]);
 
   return (
@@ -264,8 +276,9 @@ const TimetableElement = ({
       <Header
         opened={opened}
         termCode={termCode}
-        totalCredit={totalCredit}
-        totalTimeslot={totalTimeslot}
+        currentCredits={currentCredits}
+        currentTimeslots={currentTimeslots}
+        totalCredits={totalCredits}
         setOpened={setOpened}
         setTermCode={setTermCode}
       />

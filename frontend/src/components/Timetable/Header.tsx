@@ -65,8 +65,9 @@ const Close = styled.a<{ opened: boolean }>`
 interface HeaderProps {
   opened: boolean;
   termCode: number;
-  totalCredit: number;
-  totalTimeslot: number;
+  currentCredits: number;
+  currentTimeslots: number;
+  totalCredits: number;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
   setTermCode: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -74,8 +75,9 @@ interface HeaderProps {
 const Header = ({
   opened,
   termCode,
-  totalCredit,
-  totalTimeslot,
+  currentCredits,
+  currentTimeslots,
+  totalCredits,
   setOpened,
   setTermCode,
 }: HeaderProps) => {
@@ -117,7 +119,8 @@ const Header = ({
           〉
         </Move>
         <Details>
-          {totalCredit.toFixed(1)} 単位、{totalTimeslot} コマ
+          {currentCredits.toFixed(1)} 単位、{currentTimeslots} コマ（通年{" "}
+          {totalCredits.toFixed(1)} 単位）
         </Details>
       </Left>
       <Close opened={opened}>{opened ? "﹀" : "︿"}</Close>
