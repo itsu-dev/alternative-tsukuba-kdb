@@ -119,6 +119,11 @@ export abstract class CodeTypeGeneartor {
     return codes;
   }
 
+  /**
+   * CSV データのファイル名から要件を取得する。単に変換するだけでなく、human-readable な区分に変換する
+   * @param src -  CSV データのファイル名
+   * @returns 要件の配列
+   */
   protected abstract getRequirements(src: string): string[];
 
   protected getDictKey(requirements: (string | undefined)[]) {
