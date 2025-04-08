@@ -22,8 +22,6 @@ yarn run check
 ## シラバスデータの保存と変換
 
 KdB からシラバスデータを取得し、学群／大学院開設授業科目に分けて JSON ファイルに変換します。
-また、科目番号と科目区分の対応表を出力します。
-対応付けを変更する場合は `python/list.txt` を編集します。
 
 ```bash
 # /csv/kdb-YYYYMMDD.csv を保存
@@ -32,8 +30,7 @@ python tools/python/download.py csv
 # 以下のファイルを保存
 # - /frontend/src/kdb/kdb.json
 # - /frontend/src/kdb/kdb-grad.json
-# - /frontend/src/kdb/code-types.json
-python tools/python/csv-json.py csv/kdb-YYYYMMDD.csv tools/python/list.txt frontend/src/kdb
+python tools/python/csv-json.py csv/kdb-YYYYMMDD.csv frontend/src/kdb
 ```
 
 保存した CSV ファイルおよび生成されたファイル群はコミットに含めてください。
