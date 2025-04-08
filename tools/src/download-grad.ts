@@ -4,13 +4,13 @@ import path from "node:path";
 import { KdbDownloader } from "./downloader";
 
 const TMP_DIR = path.resolve("tmp");
-const DST_DIR = path.resolve("dst");
+const DST_DIR = path.resolve("dst-grad");
 
 fs.mkdirSync(TMP_DIR, { recursive: true });
 fs.mkdirSync(DST_DIR, { recursive: true });
 
 class KdbGradDownloader extends KdbDownloader {
-  async download() {
+  async download(skipExisting = false) {
     await this.init();
 
     // 大学院共通科目を選択
@@ -32,7 +32,7 @@ class KdbGradDownloader extends KdbDownloader {
         await this.selectThenNavigation("#hierarchy3", hierarchy3Value);
         const hierarchy3Text = await this.getSelectedOptionText("#hierarchy3");
         const filename = `${hierarchy2Text}_${hierarchy3Text}.csv`;
-        await this.csvDownload(filename, false);
+        await this.csvDownload(filename, skipExisting);
       }
     }
 

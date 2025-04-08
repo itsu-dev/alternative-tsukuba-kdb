@@ -4,7 +4,7 @@ import path from "node:path";
 import { KdbDownloader } from "./downloader";
 
 const TMP_DIR = path.resolve("tmp");
-const DST_DIR = path.resolve("dst");
+const DST_DIR = path.resolve("dst-undergrad");
 
 fs.mkdirSync(TMP_DIR, { recursive: true });
 fs.mkdirSync(DST_DIR, { recursive: true });
