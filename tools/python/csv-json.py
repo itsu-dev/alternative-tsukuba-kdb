@@ -10,16 +10,13 @@ from typing import Any, Dict, List, Tuple
 class KdbCSVtoJSON:
     """Convert a CSV file of KdB data to a JSON file with configure file defines types."""
 
-    def __init__(self, csvpath: str, typespath: str) -> None:
+    def __init__(self, csvpath: str) -> None:
         """Initializer.
 
         Args:
             csvpath (str): A KdB data CSV path.
-            typespath (str): A text file path defines type.
         """
         self.csvpath = csvpath
-        self.typespath = typespath
-        self.types = self.__get_types()
 
         now = datetime.datetime.now()
         self.output = {
@@ -30,14 +27,6 @@ class KdbCSVtoJSON:
             "updated": now.strftime("%Y/%m/%d"),
             "subject": self.__get_subjects(True),
         }
-
-    def get_types(self) -> Dict[str, Any]:
-        """Get an output to convert types txt to JSON.
-
-        Returns:
-            Dict[str, Any]: An output to convert types txt to JSON.
-        """
-        return self.types
 
     def get_output(self) -> Dict[str, Any]:
         """Get an output to convert data CSV to JSON.
@@ -104,55 +93,6 @@ class KdbCSVtoJSON:
 
         return types
 
-    def __get_types(self) -> Dict[str, Any]:
-        """Get types.
-
-        Args:
-            args (argparse.Namespace): Parsed result of command line args.
-
-        Returns:
-            Dict: A dictionary of types.
-        """
-        types = {}
-        first, second = "", ""
-        type_lines = open(self.typespath, encoding="utf-8").readlines()
-        rows = [
-            row
-            for row in [
-                line.replace(" ,", ",").replace(", ", ",").split(",")
-                for line in type_lines
-            ]
-            if len(row) >= 2
-        ]
-
-        for row in rows:
-            codes_str = row[0]
-            codes, except_codes = self.__get_subjectcode(codes_str.replace("\t", ""))
-            name = row[1].replace("\n", "").replace("\t", "")
-            tab = codes_str.count("\t")
-
-            if tab == 0:
-                first = name
-                types[first] = {
-                    "codes": codes,
-                    "except-codes": except_codes,
-                    "childs": {},
-                }
-            elif tab == 1:
-                second = name
-                types[first]["childs"][second] = {
-                    "codes": codes,
-                    "except-codes": except_codes,
-                    "childs": {},
-                }
-            elif tab == 2:
-                types[first]["childs"][second]["childs"][name] = {
-                    "codes": codes,
-                    "except-codes": except_codes,
-                }
-
-        return types
-
     def __get_subjects(self, grad: bool) -> List[List[str]]:
         """Get subjects.
 
@@ -194,10 +134,6 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("csv", help="an input csv file")
     parser.add_argument(
-        "types",
-        help="a text file of the relation between requirement classification and subject codes",
-    )
-    parser.add_argument(
         "output_dir", help="the output directory of kdb.json and code-types.json"
     )
 
@@ -207,8 +143,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     """Main."""
     args = parse_args()
-    csvpath, typespath = args.csv, args.types
-    k = KdbCSVtoJSON(csvpath, typespath)
+    k = KdbCSVtoJSON(args.csv)
 
     # output
     with open(f"{args.output_dir}/kdb.json", "w", encoding="utf-8") as fp:
@@ -216,9 +151,6 @@ def main() -> None:
 
     with open(f"{args.output_dir}/kdb-grad.json", "w", encoding="utf-8") as fp:
         json.dump(k.get_grad_output(), fp, indent="  ", ensure_ascii=False)
-
-    with open(f"{args.output_dir}/code-types.json", "w", encoding="utf-8") as fp:
-        json.dump(k.get_types(), fp, indent="  ", ensure_ascii=False)
 
 
 if __name__ == "__main__":
