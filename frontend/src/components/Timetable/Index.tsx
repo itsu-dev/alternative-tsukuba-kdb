@@ -120,6 +120,11 @@ const SubjectTile = styled.div<{ background: string; top: number }>`
   top: ${({ top }) => 3 + top}px;
   left: 3px;
 
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
   &:hover .close {
     display: block;
   }
@@ -310,9 +315,15 @@ const TimetableElement = ({
                       top={subjecti * 2}
                       key={subject.code}
                     >
-                      {subject.code}
-                      <br />
-                      {subject.name}
+                      <a
+                        href={subject.syllabusHref}
+                        target="_blank"
+                        rel="nofollow noopener noreferrer"
+                      >
+                        {subject.code}
+                        <br />
+                        {subject.name}
+                      </a>
                       <Close
                         className="close"
                         onClick={() => switchBookmark(subject.code)}
