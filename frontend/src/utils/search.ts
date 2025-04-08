@@ -221,6 +221,11 @@ const matchesTerm = (subject: Subject, options: SearchOptions) => {
   const season = options.season;
   const module = options.module;
 
+  // 通年の場合はマッチ
+  if (subject.termStr.includes("通年")) {
+    return true;
+  }
+
   // 学期、モジュールが両方指定されている場合は組み合わせで検索
   if (season && module) {
     return subject.termCodes.some((codes) =>

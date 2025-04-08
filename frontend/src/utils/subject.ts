@@ -130,7 +130,15 @@ export class Subject {
       const group: number[] = [];
       const charArray = Array.from(groupStr);
 
-      for (const char of charArray) {
+      for (let i = 0; i < charArray.length; i++) {
+        const char = charArray[i];
+        const nextChar = charArray[i + 1];
+
+        // 通年の場合は春 A-C，秋A-C を入れる
+        if (char === "通" && nextChar === "年") {
+          group.push(0, 1, 2, 3, 4, 5);
+          continue;
+        }
         // 季節が出現した場合、以降のタームはその季節として扱う
         if (isAllSeason(char)) {
           season = char;
