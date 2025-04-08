@@ -23,15 +23,20 @@ export abstract class CodeTypeGeneartor {
   protected array: CodeArray = [];
   protected processed: Set<string> = new Set();
 
+  protected abstract getDefinitionYaml(): string;
+
   generate(dst: string, json: string) {
     // ファイル名をキーにした辞書を作成
     const csvList = globSync(path.join(dst, "*.csv"));
     for (const src of csvList) {
       const key = this.getDictKey(this.getRequirements(src));
-      this.dic[key] = CodeTypeGeneartor.parseCsv(src);
+      const csv = CodeTypeGeneartor.parseCsv(src);
+      if (csv.length > 0) {
+        this.dic[key] = csv;
+      }
     }
 
-    const txt = fs.readFileSync("./src/undergrad.txt", "utf-8");
+    const txt = fs.readFileSync(this.getDefinitionYaml(), "utf-8");
     const yaml = YAML.parse(txt);
     const larges: LargeCodeType[] = yaml.types;
 
@@ -121,7 +126,7 @@ export abstract class CodeTypeGeneartor {
   }
 
   /**
-   * 自身の CSV 以外で、科目コードがユニークかどうかを判定する
+   * 自身の CSV 以外で、科目番号がユニークかどうかを判定する
    */
   protected isUniqueCode(currentCode: string, csvName: string) {
     return Object.entries(this.dic).every(
@@ -177,7 +182,7 @@ export abstract class CodeTypeGeneartor {
     }
     const codeLength = codes[0].length;
 
-    // 科目コード長ごとのコードの Set を作成
+    // 科目番号長ごとの番号の Set を作成
     const lengthToCodes: Set<string>[] = [];
     for (let i = 0; i < codeLength; i++) {
       lengthToCodes[i] = new Set();
@@ -186,7 +191,7 @@ export abstract class CodeTypeGeneartor {
       this.addUniqueCodeToDict(code, lengthToCodes, key);
     }
 
-    // 科目コード長の昇順に出力
+    // 科目番号長の昇順に出力
     const allCodes: string[] = [];
     for (let i = 0; i < codeLength; i++) {
       if (lengthToCodes[i].size > 0) {
@@ -201,7 +206,7 @@ export abstract class CodeTypeGeneartor {
     lengthToCodes: Set<string>[],
     csvName: string
   ) {
-    // 処理中の分類に限定される科目コードの最短桁数を探索
+    // 処理中の分類に限定される科目番号の最短桁数を探索
     for (let i = 0; i < code.length; i++) {
       const sliced = code.slice(0, i + 1);
       if (this.isUniqueCode(sliced, csvName)) {
@@ -210,7 +215,7 @@ export abstract class CodeTypeGeneartor {
       }
     }
 
-    // 複数の分類で共有をしているため、ユニークにならない科目コードが存在する。その場合は追加
+    // 複数の分類で共有をしているため、ユニークにならない科目番号が存在する。その場合は追加
     lengthToCodes[code.length - 1].add(code);
   }
 }

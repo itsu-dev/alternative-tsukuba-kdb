@@ -4,6 +4,10 @@ import { Command } from "commander";
 import { CodeTypeGeneartor } from "./code-types-generator";
 
 class CodeTypeUndergradGeneartor extends CodeTypeGeneartor {
+  protected getDefinitionYaml() {
+    return "./src/undergrad.yaml";
+  }
+
   protected getRequirements(src: string) {
     const name = path.basename(src, path.extname(src));
 
@@ -72,7 +76,7 @@ class CodeTypeUndergradGeneartor extends CodeTypeGeneartor {
 (() => {
   const program = new Command();
   program
-    .option("-d, --dst <dst>", "Destination directory", "dst")
+    .option("-d, --dst <dst>", "Destination directory", "dst-undergrad")
     .option(
       "-j, --json <json>",
       "JSON output file",
