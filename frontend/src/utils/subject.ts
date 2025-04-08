@@ -53,7 +53,11 @@ export class Subject {
   constructor(line: KdbData["subject"][0]) {
     this._code = line[0];
     this._name = line[1];
+
     this._credit = Number.parseFloat(line[3]);
+    if (Number.isNaN(this._credit)) {
+      this._credit = 0;
+    }
     this.year = line[4];
     this.termStr = line[5];
     this.timeslotStr = line[6];
