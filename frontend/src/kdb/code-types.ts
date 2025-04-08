@@ -1,78 +1,90 @@
-import gradCodeTypes from "./code-types-grad.json";
-import codeTypes from "./code-types.json";
+import codeTypesGrad from "./code-types-grad.json";
+import codeTypesUndergrad from "./code-types-undergrad.json";
 
-export interface CodeTypes {
-  [key: string]: {
-    codes: string[];
-    "except-codes": string[];
-    childs: {
-      [key: string]: {
-        codes: string[];
-        "except-codes": string[];
-        childs: {
-          [key: string]: {
-            codes: string[];
-            "except-codes": string[];
-          };
-        };
-      };
-    };
-  };
-}
+type Codes = string[];
+export type SmallCodeArray = { name: string; children: Codes }[];
+export type MidCodeArray = { name: string; children: SmallCodeArray | Codes }[];
+export type CodeArray = {
+  name: string;
+  children: MidCodeArray | Codes;
+}[];
 
+type SmallCodeMap = Record<string, { codes: Codes }>;
+type MidCodeMap = Record<string, { codes: Codes; small: SmallCodeMap }>;
+type CodeMap = Record<string, { codes: Codes; mid: MidCodeMap }>;
+
+// 科目番号の配列
 export const allCodeTypes = (() => {
-  // undergraduate
-  const undergrad = structuredClone(codeTypes);
-
-  // graduated
-  // convert custom format to CodeTypes
-  const grad: CodeTypes = {
-    大学院開設授業科目: {
-      codes: ["0"],
-      "except-codes": [],
-      childs: {},
-    },
-  };
-
-  for (const [key, values] of Object.entries(gradCodeTypes)) {
-    grad.大学院開設授業科目.childs[key] = {
-      codes: [],
-      "except-codes": [],
-      childs: {},
-    };
-    const parentCodes = [];
-    for (const [subKey, codes] of Object.entries(values)) {
-      grad.大学院開設授業科目.childs[key].childs[subKey] = {
-        codes: codes,
-        "except-codes": [],
-      };
-      parentCodes.push(...codes);
-    }
-    grad.大学院開設授業科目.childs[key].codes = [
-      ...new Set<string>(parentCodes),
-    ];
-  }
-  return { ...undergrad, ...grad } as CodeTypes;
+  // 学群
+  const undergrad = codeTypesUndergrad as unknown as CodeArray;
+  const grad = codeTypesGrad as unknown as MidCodeArray;
+  return [...undergrad, { name: "大学院開設授業科目一覧", children: grad }];
 })();
 
+// 科目番号のマップ
+export const allCodeMap: CodeMap = (() => {
+  const map: CodeMap = {};
+
+  // 大分類
+  for (const large of allCodeTypes) {
+    map[large.name] = { codes: [], mid: {} };
+    const largeMap = map[large.name];
+
+    // 中分類が存在しない場合
+    if (typeof large.children[0] === "string") {
+      largeMap.codes = large.children as Codes;
+      continue;
+    }
+    // 中分類
+    for (const mid of large.children as MidCodeArray) {
+      largeMap.mid[mid.name] = { codes: [], small: {} };
+      const midMap = largeMap.mid[mid.name];
+
+      // 小分類が存在しない場合
+      if (typeof mid.children[0] === "string") {
+        midMap.codes = mid.children as Codes;
+        largeMap.codes.push(...(mid.children as Codes));
+        continue;
+      }
+      // 小分類
+      for (const small of mid.children as SmallCodeArray) {
+        midMap.small[small.name] = { codes: small.children };
+        largeMap.codes.push(...small.children);
+        midMap.codes.push(...small.children);
+      }
+    }
+  }
+  return map;
+})();
+
+/**
+ * 指定された科目番号が指定された要件を満たすかどうかを返す
+ * @param code 科目番号
+ * @param reqA 大分類
+ * @param reqB 中分類
+ * @param reqC 小分類
+ * @returns 指定された番号が指定された要件を満たすかどうか
+ */
 export const matchesCodeRequirement = (
   code: string,
   reqA: string | null,
   reqB: string | null,
-  reqC: string | null,
+  reqC: string | null
 ) => {
-  const matches = (codeType: { codes: string[]; "except-codes": string[] }) =>
-    codeType.codes.some((inCode) => code.startsWith(inCode)) &&
-    !codeType["except-codes"].some((inCode) => code.startsWith(inCode));
-
-  if (reqA && reqB && reqC && allCodeTypes[reqA]?.childs[reqB]?.childs[reqC]) {
-    return matches(allCodeTypes[reqA].childs[reqB].childs[reqC]);
+  // 指定なし
+  if (reqA === null) {
+    return true;
   }
-  if (reqA && reqB && allCodeTypes[reqA]?.childs[reqB]) {
-    return matches(allCodeTypes[reqA].childs[reqB]);
+  // 大分類
+  if (reqB === null) {
+    return allCodeMap[reqA]?.codes.some((c) => code.startsWith(c));
   }
-  if (reqA && allCodeTypes[reqA]) {
-    return matches(allCodeTypes[reqA]);
+  // 中分類
+  if (reqC === null) {
+    return allCodeMap[reqA]?.mid[reqB]?.codes.some((c) => code.startsWith(c));
   }
-  return true;
+  // 小分類
+  return allCodeMap[reqA]?.mid[reqB]?.small[reqC]?.codes.some((c) =>
+    code.startsWith(c)
+  );
 };
